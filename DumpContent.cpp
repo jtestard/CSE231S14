@@ -16,11 +16,20 @@ namespace {
     map<string,int> instructionMap;
 
     virtual bool runOnModule(Module &M) {
-    	for (Module::iterator m = M.begin(), e = M.end() ; e != m ; ++m) {
+		Module::iterator F = M.begin();
+		for (int i = 0 ; i < 37 ; i++)
+			F++;
+        for (Module::iterator E = M.end(); F!= E; ++F) {
+        	errs() << "Function : " << F->getName() << "\n";
+        }
+		Module::iterator m = M.begin();
+		for (int i = 0 ; i < 37 ; i++)
+			m++;
+    	for (Module::iterator e = M.end() ; e != m ; ++m) {
 			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
 				errs() << *I << "\n";
 			}
-			}
+		}
     	return false;
     }
   };

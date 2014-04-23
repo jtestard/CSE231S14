@@ -25,18 +25,19 @@ namespace {
 
                 //Function names follow linking order and order of functions in file.
                 Module::iterator Fit = M.begin();
+                for (int i = 0 ; i < 4 ; i++)
+                	Fit++;
                 countingFunctionName = Fit->getName(); //get name for counting function from helper.cpp
                 Fit++;
                 printFunctionName = Fit->getName(); //get name for print function from helper.cpp
 
-                for (Module::iterator F = M.begin(), E = M.end(); F!= E; ++F) {
-                	errs() << "Function : " << F->getName() << "\n";
-                }
-
                 hookFunc = M.getFunction(countingFunctionName);
                 if (hookFunc) {
 					hookCount= cast<Function>(hookFunc);
-					for(Module::iterator F = M.begin(), E = M.end(); F!= E; ++F) {
+					Module::iterator F = M.begin();
+					for (int i = 0 ; i < 37 ; i++)
+						F++;
+					for(Module::iterator E = M.end(); F!= E; ++F) {
 						if (!F->getName().equals(printFunctionName) && !F->getName().equals(countingFunctionName))
 							for(Function::iterator BB = F->begin(), E = F->end(); BB != E; ++BB) {
 								DynamicInstructionCount::runOnBasicBlock(BB);
