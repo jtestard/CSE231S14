@@ -1,7 +1,5 @@
-
-
 #include "llvm/Pass.h"
-#include "llvm/IR/Function.h"
+#include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/InstIterator.h"
 #include <map>
@@ -11,46 +9,24 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-  struct DynamicInstructionCount : public FunctionPass {
+  struct DynamicInstructionCount : public ModulePass {
     static char ID;
-
-    DynamicInstructionCount() : FunctionPass(ID) {}
-
-    virtual bool doInitialization(Module & M) {
-    	return false;
-    }
+    DynamicInstructionCount() : ModulePass(ID) {}
 
     map<string,int> instructionMap;
 
-    virtual bool runOnFunction(Function &F) {
-    	for (inst_iterator I = inst_begin(F), E = inst_end(F) ; I != E ; ++I) {
-        		string opcode = I->getOpcodeName();
-        		if (instructionMap[opcode]) {
-        			instructionMap[opcode]++;
-        		} else {
-        			instructionMap[opcode] = 1;
-        		}
-        	}
+    virtual bool runOnModule(Module &M) {
+    	for (Module::iterator m = M.begin(), e = M.end() ; e != m ; ++m) {
+    			errs() << *m << "\n";
+//			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
+//					errs() << *I << "\n";
+//				}
+			}
     	return false;
     }
 
-  	virtual bool doFinalization(Module &M) {
-    	int total = 0;
-    	for (map<string,int>::iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
-    		errs() << it->first << "\t\t" << it->second << "\n";
-    		total += it->second;
-    	}
-    	errs() << "TOTAL\t\t" << total << "\n";
-    	return false;
-  	}
   };
 }
 
 char DynamicInstructionCount::ID = 0;
-static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount World Pass", false, false);
-
-
-
-
-
-
+static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount Pass", false, false);
