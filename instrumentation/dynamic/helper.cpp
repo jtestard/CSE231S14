@@ -8,6 +8,6 @@ void counting(){
 }
 
 void print() {
-	printf("Count : %d", count);
+	printf("Count : %d\n", count);
 	count++;
 }
