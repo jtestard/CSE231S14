@@ -2,7 +2,12 @@
 
 int count;
 
+void print()
+{
+	printf("Load/store instruction \n");
+}
+
 void sample() {
-    printf("Count = %d\n", count);
+    printf("Co unt = %d\n", count);
     count++;
 }

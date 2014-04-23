@@ -24,6 +24,7 @@ namespace {
 
     virtual bool runOnFunction(Function &F) {
     	for (inst_iterator I = inst_begin(F), E = inst_end(F) ; I != E ; ++I) {
+
         		string opcode = I->getOpcodeName();
         		if (instructionMap[opcode]) {
         			instructionMap[opcode]++;
