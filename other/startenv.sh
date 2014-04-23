@@ -14,7 +14,7 @@ if [ -n "${VTENV}" ]; then
     return 1
 fi
 
-export VTENV="${BASE}/../../../../../"
+export VTENV="${BASE}/../../../../.."
 export VTENV_NAME="${PROJ}"
 export CSE231ROOT="${VTENV}"
 export LLVMBIN="${VTENV}/llvm/build/Release+Asserts/bin"

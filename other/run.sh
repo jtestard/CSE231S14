@@ -1,8 +1,8 @@
 #!/bin/bash
 source startenv.sh
-export CSE231SRC="${CSE231ROOT}llvm/src/lib/CSE231"
+export CSE231SRC="${CSE231ROOT}/llvm/src/lib/CSE231"
 export INSTRUMENTATION="${CSE231SRC}/instrumentation"
-make llvm
+make all
 echo "------------------------"
 echo "PART 1"
 echo "------------------------"
