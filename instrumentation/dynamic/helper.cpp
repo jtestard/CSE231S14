@@ -9,5 +9,4 @@ void counting(){
 
 void print() {
 	printf("Count : %d\n", count);
-	count++;
 }

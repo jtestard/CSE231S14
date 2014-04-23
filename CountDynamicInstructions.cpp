@@ -13,9 +13,10 @@ using namespace std;
 namespace {
   struct DynamicInstructionCount : public ModulePass {
     static char ID;
-    llvm::Function* hook;		//Required that you have a llvm Function to call
+    llvm::Function* hookCount;		//Required that you have a llvm Function to call
+    llvm::Function* hookPrint;
 
-    DynamicInstructionCount() : ModulePass(ID) {hook = NULL;}
+    DynamicInstructionCount() : ModulePass(ID) {hookCount = NULL; hookPrint = NULL;}
 
     virtual bool runOnModule(Module &M){
                 Constant *hookFunc;
@@ -32,9 +33,9 @@ namespace {
                 	errs() << "Function : " << F->getName() << "\n";
                 }
 
-                hookFunc = M.getFunction(printFunctionName);
+                hookFunc = M.getFunction(countingFunctionName);
                 if (hookFunc) {
-					hook= cast<Function>(hookFunc);
+					hookCount= cast<Function>(hookFunc);
 					for(Module::iterator F = M.begin(), E = M.end(); F!= E; ++F) {
 						if (!F->getName().equals(printFunctionName) && !F->getName().equals(countingFunctionName))
 							for(Function::iterator BB = F->begin(), E = F->end(); BB != E; ++BB) {
@@ -42,13 +43,27 @@ namespace {
 							}
 					}
                 }
+                hookFunc = M.getFunction(printFunctionName);
+                if (hookFunc) {
+                	hookPrint = cast<Function>(hookFunc);
+                	Module::iterator F = M.end();
+                	F--;
+                	Function::iterator BB = F->end();
+                	BB--;
+                	BasicBlock::iterator BI = BB->end();
+                	BI--;
+                	Instruction *CI = dyn_cast<Instruction>(BI);
+                	Instruction *newInst = CallInst::Create(hookPrint, "");
+                	BB->getInstList().insert(CI, newInst);
+                }
+
                 return false;
             }
 
     virtual bool runOnBasicBlock(Function::iterator &BB) {
                 for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
                 	Instruction *CI = dyn_cast<Instruction>(BI);
-                	Instruction *newInst = CallInst::Create(hook, "");
+                	Instruction *newInst = CallInst::Create(hookCount, "");
                 	BB->getInstList().insert(CI, newInst);
                 }
                 return true;
