@@ -1,1 +1,2 @@
 .project
+instrumentation/dynamic/*.bc
