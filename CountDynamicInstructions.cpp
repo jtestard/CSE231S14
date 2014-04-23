@@ -101,9 +101,3 @@ namespace {
 
 char DynamicInstructionCount::ID = 0;
 static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount World Pass", false, false);
-
-
-
-
-
-
