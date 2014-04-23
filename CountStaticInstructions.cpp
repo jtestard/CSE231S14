@@ -15,18 +15,6 @@ namespace {
 
     map<string,int> instructionMap;
 
-<<<<<<< HEAD
-    virtual bool runOnFunction(Function &F) {
-    	for (inst_iterator I = inst_begin(F), E = inst_end(F) ; I != E ; ++I) {
-
-        		string opcode = I->getOpcodeName();
-        		if (instructionMap[opcode]) {
-        			instructionMap[opcode]++;
-        		} else {
-        			instructionMap[opcode] = 1;
-        		}
-        	}
-=======
     virtual bool runOnModule(Module &M) {
     	for (Module::iterator m = M.begin(), e = M.end() ; e != m ; ++m) {
 			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
@@ -38,7 +26,6 @@ namespace {
 					}
 				}
 			}
->>>>>>> de99601a54609e5d940f284fa0be8576f9173faf
     	return false;
     }
 

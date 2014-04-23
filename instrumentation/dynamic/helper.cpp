@@ -1,20 +1,13 @@
-<<<<<<< HEAD
+
 #include <stdio.h>
 
-int count;
+int count = 0;
 
-void print()
-{
-	printf("Load/store instruction \n");
+void counting(){
+	count++;
 }
 
-void sample() {
-    printf("Co unt = %d\n", count);
-    count++;
-=======
-int module() {
-	int count = 0;
+void print() {
+	printf("Count : %d", count);
 	count++;
-	return count;
->>>>>>> de99601a54609e5d940f284fa0be8576f9173faf
 }

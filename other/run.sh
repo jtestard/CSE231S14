@@ -25,23 +25,9 @@ echo "WELCOME EXAMPLE (LINK FIRST)"
 CPPFLAGS=
 LDFLAGS=
 clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/dynamic/helper.cpp -o $INSTRUMENTATION/dynamic/helper.bc
-llvm-link $BENCHMARKS/welcome/welcome.bc $INSTRUMENTATION/dynamic/helper.bc -o $BENCHMARKS/welcome/welcome.linked.bc
+llvm-link $INSTRUMENTATION/dynamic/helper.bc $BENCHMARKS/welcome/welcome.bc -o $BENCHMARKS/welcome/welcome.linked.bc
 opt -load $LLVMLIB/CSE231.so -dynamicInstructionCount < $BENCHMARKS/welcome/welcome.linked.bc > $BENCHMARKS/welcome/welcome_instrumented.bc
+opt -load $LLVMLIB/CSE231.so -dumpContent < $BENCHMARKS/welcome/welcome_instrumented.bc > /dev/null
 llc -filetype=obj $BENCHMARKS/welcome/welcome_instrumented.bc -o=$BENCHMARKS/welcome/welcome.o
 g++ $BENCHMARKS/welcome/welcome.o $LDFLAGS -o $BENCHMARKS/welcome/welcome.exe
 $BENCHMARKS/welcome/welcome.exe
-
-
-
-
-
-
-
-
-#echo "WELCOME EXAMPLE (LINK AFTER)"
-#clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/dynamic/helper.cpp -o $INSTRUMENTATION/dynamic/helper.bc
-#opt -load $LLVMLIB/CSE231.so -dynamicInstructionCount < $BENCHMARKS/welcome/welcome.bc > $BENCHMARKS/welcome/welcome_instrumented.bc
-#llvm-link $BENCHMARKS/welcome/welcome_instrumented.bc $INSTRUMENTATION/dynamic/helper.bc -o $BENCHMARKS/welcome/welcome.linked.bc
-#llc -filetype=obj $BENCHMARKS/welcome/welcome.linked.bc -o=$BENCHMARKS/welcome/welcome.o
-#g++ $BENCHMARKS/welcome/welcome.o $LDFLAGS -o $BENCHMARKS/welcome/welcome.exe
-#$BENCHMARKS/welcome/welcome.exe
