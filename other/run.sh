@@ -26,8 +26,8 @@ echo "WELCOME EXAMPLE"
 CPPFLAGS=
 LDFLAGS=
 clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/dynamic/helper.cpp -o $INSTRUMENTATION/dynamic/helper.bc
-opt -load $LLVMLIB/CSE231.so -dynamicInstructionCount < $BENCHMARKS/welcome/welcome.bc > $BENCHMARKS/welcome/welcome_instrumented.bc
-llvm-link $BENCHMARKS/welcome/welcome_instrumented.bc $INSTRUMENTATION/dynamic/helper.bc -o $BENCHMARKS/welcome/welcome.linked.bc
+llvm-link $BENCHMARKS/welcome/welcome.bc $INSTRUMENTATION/dynamic/helper.bc -o $BENCHMARKS/welcome/welcome.linked.bc
+opt -load $LLVMLIB/CSE231.so -dynamicInstructionCount < $BENCHMARKS/welcome/welcome.linked.bc > $BENCHMARKS/welcome/welcome_instrumented.bc
 llc -filetype=obj $BENCHMARKS/welcome/welcome.linked.bc -o=$BENCHMARKS/welcome/welcome.o
 g++ $BENCHMARKS/welcome/welcome.o $LDFLAGS -o $BENCHMARKS/welcome/welcome.exe
 $BENCHMARKS/welcome/welcome.exe
