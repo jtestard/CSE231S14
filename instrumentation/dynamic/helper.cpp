@@ -19,8 +19,8 @@ void counting(char* s){
 //}
 
 void print() {
-	for (std::map<char*,int>::const_iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
-		printf("%s\t\t%d\n",it->first,it->second);
-	}
+//	for (std::map<char*,int>::const_iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
+//		printf("%s\t\t%d\n",it->first,it->second);
+//	}
 	printf("TOTAL %d\n", count);
 }

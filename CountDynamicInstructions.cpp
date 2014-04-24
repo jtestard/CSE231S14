@@ -7,6 +7,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
+#define HELPER_FUNCTIONS 91
 
 using namespace llvm;
 using namespace std;
