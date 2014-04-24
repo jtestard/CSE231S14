@@ -5,16 +5,19 @@
 
 int count = 0;
 
-std::map<char*,int> instructionMap;
 void counting(char* s){
 //	if (instructionMap[s]) {
 //		instructionMap[s]++;
 //	} else {
 //		instructionMap[s] = 1;
 //	}
-//	count++;
-//	printf("%s\n",s);
+	count++;
 }
+
+//void counting(){
+//	count++;
+//}
+
 void print() {
 	for (std::map<char*,int>::const_iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
 		printf("%s\t\t%d\n",it->first,it->second);

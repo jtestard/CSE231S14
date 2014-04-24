@@ -7,8 +7,6 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
-#define HELPER_FUNCTIONS 91
-#define COUNT_FUNCTION_IDX 4
 
 using namespace llvm;
 using namespace std;
@@ -25,9 +23,19 @@ namespace {
                 Constant *hookFunc;
                 StringRef countingFunctionName;
                 StringRef printFunctionName;
-                hookFunc = M.getOrInsertFunction("counting",Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
+
+                //Function names follow linking order and order of functions in file.
+                Module::iterator Fit = M.begin();
+                for (int i = 0 ; i < 4 ; i++)
+                	Fit++;
+                countingFunctionName = Fit->getName(); //get name for counting function from helper.cpp
+                Fit++;
+                printFunctionName = Fit->getName(); //get name for print function from helper.cpp
+
+                hookFunc = M.getOrInsertFunction(countingFunctionName,Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
-					hookCount = cast<Function>(hookFunc);
+					hookCount= cast<Function>(hookFunc);
+					hookCount->setCallingConv(CallingConv::C);
 					Module::iterator F = M.begin();
 					for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 						F++;
@@ -39,7 +47,7 @@ namespace {
 							}
 					}
                 }
-                hookFunc = M.getOrInsertFunction("print",Type::getVoidTy(M.getContext()),(Type*)0);
+                hookFunc = M.getOrInsertFunction(printFunctionName,Type::getVoidTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
                 	hookPrint = cast<Function>(hookFunc);
                 	Module::iterator F = M.end();
@@ -57,37 +65,15 @@ namespace {
             }
 
     virtual bool runOnBasicBlock(Function::iterator &BB) {
-                IRBuilder<> builder(BB);
-                string result = "";
-    			for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
+    			IRBuilder<> builder(BB);
+    			string result = "";
+                for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
                 	Instruction *CI = dyn_cast<Instruction>(BI);
-                	const char * opcodeName = CI->getOpcodeName();
-                	//Value* argument = ConstantDataArray::getString(context,StringRef(opcodeName));
-//                	result.append(opcodeName);
-//                	result.append("|");
-                	//Value* argument = ConstantFP::get(Type::getInt32Ty(context),StringRef(opcodeName));
-                	//Value * argument = ConstantInt::get(Type::getInt32Ty(context),1);
-//                	vector<Value*> args = vector<Value*>();
-//                	args.push_back(argument);
-//                	ArrayRef<Value*> Args(args);
-//                	argument->dump();
-//                	FunctionType *FTy = cast<FunctionType>(cast<PointerType>(hookCount->getType())->getElementType());
-//                	errs() << Args.size() << "\t" << FTy->getNumParams() << "\n";
-//                	for (unsigned i = 0; i != Args.size(); ++i) {
-//                		errs() << *FTy->getParamType(i) << "\t";
-//                		errs() << *Args[i]->getType() << "\n";
-//                	}
-                	//argument->dump();
-                	//Instruction *newInst = CallInst::Create(hookCount,args);
-                	//Instruction *newInst = builder.CreateCall(hookCount,argument);
-                	//BB->getInstList().insert(CI, newInst);
+                	result.append(CI->getOpcodeName());
+                	result.append("|");
                 }
-//    			BasicBlock::iterator BI = BB->end();
-//    			BI--;
-//            	builder.SetInsertPoint(BB,BI);
-//            	Value* argument = builder.CreateGlobalStringPtr(StringRef(result),"myStr");
-//            	argument->dump();
-//            	builder.CreateCall(hookCount,argument);
+                Value* myStr = builder.CreateGlobalString(result,"myStr");
+                builder.CreateCall(hookCount,myStr);
                 return true;
     }
   };
