@@ -11,6 +11,7 @@ void counting(char* s){
 //	} else {
 //		instructionMap[s] = 1;
 //	}
+	//printf("Instructions : %s", s);
 	count++;
 }
 
