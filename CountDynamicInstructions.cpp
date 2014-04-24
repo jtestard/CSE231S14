@@ -7,6 +7,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
+#define HELPER_FUNCTIONS 0
 
 using namespace llvm;
 using namespace std;
@@ -37,7 +38,7 @@ namespace {
 					hookCount= cast<Function>(hookFunc);
 					hookCount->setCallingConv(CallingConv::C);
 					Module::iterator F = M.begin();
-					for (int i = 0 ; i < 37 ; i++)
+					for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 						F++;
 					for(Module::iterator E = M.end(); F!= E; ++F) {
 						if (!F->getName().equals(printFunctionName) && !F->getName().equals(countingFunctionName))

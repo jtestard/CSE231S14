@@ -4,7 +4,7 @@
 #include "llvm/Support/InstIterator.h"
 #include <map>
 #include <string>
-#define HELPER_FUNCTIONS 50
+#define HELPER_FUNCTIONS 0
 
 using namespace llvm;
 using namespace std;
