@@ -1,3 +1,5 @@
+# Costas Zarifis (A53054234)
+
 ## Superoptimizer --  A Look at the Smallest Program
 
 1. **Summary of the paper:**
