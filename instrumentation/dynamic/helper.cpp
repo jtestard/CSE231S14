@@ -1,25 +1,23 @@
 
 #include <stdio.h>
 #include <map>
-#include <string>
 
 
 int count = 0;
-std::map<std::string,int> instructionMap;
 
-//void counting(std::string &s){
+std::map<char*,int> instructionMap;
+void counting(char* s){
 //	if (instructionMap[s]) {
 //		instructionMap[s]++;
 //	} else {
 //		instructionMap[s] = 1;
 //	}
 //	count++;
-//}
-
-void counting(){
-	count++;
+//	printf("%s\n",s);
 }
-
 void print() {
-	printf("Count : %d\n", count);
+	for (std::map<char*,int>::const_iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
+		printf("%s\t\t%d\n",it->first,it->second);
+	}
+	printf("TOTAL %d\n", count);
 }
