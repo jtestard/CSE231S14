@@ -6,6 +6,7 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
+#include "llvm/IR/IRBuilder.h"
 
 using namespace llvm;
 using namespace std;
@@ -31,9 +32,10 @@ namespace {
                 Fit++;
                 printFunctionName = Fit->getName(); //get name for print function from helper.cpp
 
-                hookFunc = M.getFunction(countingFunctionName);
+                hookFunc = M.getOrInsertFunction(countingFunctionName,Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
 					hookCount= cast<Function>(hookFunc);
+					hookCount->setCallingConv(CallingConv::C);
 					Module::iterator F = M.begin();
 					for (int i = 0 ; i < 37 ; i++)
 						F++;
@@ -44,7 +46,7 @@ namespace {
 							}
 					}
                 }
-                hookFunc = M.getFunction(printFunctionName);
+                hookFunc = M.getOrInsertFunction(printFunctionName,Type::getVoidTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
                 	hookPrint = cast<Function>(hookFunc);
                 	Module::iterator F = M.end();
@@ -62,15 +64,19 @@ namespace {
             }
 
     virtual bool runOnBasicBlock(Function::iterator &BB) {
+    			IRBuilder<> builder(BB);
+    			string result = "";
                 for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
                 	Instruction *CI = dyn_cast<Instruction>(BI);
-                	Instruction *newInst = CallInst::Create(hookCount, "");
-                	BB->getInstList().insert(CI, newInst);
+                	result.append(CI->getOpcodeName());
+                	result.append("|");
                 }
+                Value* myStr = builder.CreateGlobalString(result,"myStr");
+                builder.CreateCall(hookCount,myStr);
                 return true;
     }
   };
 }
 
 char DynamicInstructionCount::ID = 0;
-static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount World Pass", false, false);
+static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount", false, false);
