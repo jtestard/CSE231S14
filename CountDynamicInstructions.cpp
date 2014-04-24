@@ -71,7 +71,10 @@ namespace {
                 	result.append(CI->getOpcodeName());
                 	result.append("|");
                 }
-                Value* myStr = builder.CreateGlobalString(result,"myStr");
+                BasicBlock::iterator BE = BB->end();
+                BE--;
+                builder.SetInsertPoint(BB,BE);
+                Value* myStr = builder.CreateGlobalStringPtr(result,"myStr");
                 builder.CreateCall(hookCount,myStr);
                 return true;
     }
