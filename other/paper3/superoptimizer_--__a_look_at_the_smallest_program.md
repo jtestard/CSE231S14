@@ -9,6 +9,6 @@
    * Difficult to use boolean expression with pointers since it might point anywhere.
    * Currently, only the 68020 version of the superoptimizer runs the probabilistic test, the machine independent version is limited to very short programs.
    
-3.  ** Future Work: **
+3.  **Future Work:**
 
 	The author hopes to furtherly explore the idea of the relations between arithmetic and logical instructions and be able to compile a list of useful arithmetic-logican idioms that can be used to form optimal programs.
