@@ -25,8 +25,6 @@ namespace {
                 Constant *hookFunc;
                 StringRef countingFunctionName;
                 StringRef printFunctionName;
-                LLVMContext &Context = getGlobalContext();
-
                 hookFunc = M.getOrInsertFunction("counting",Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
 					hookCount = cast<Function>(hookFunc);
@@ -37,7 +35,7 @@ namespace {
 						errs() <<  F->getName() << "\n";
 						if (!F->getName().equals(printFunctionName) && !F->getName().equals(countingFunctionName))
 							for(Function::iterator BB = F->begin(), E = F->end(); BB != E; ++BB) {
-								DynamicInstructionCount::runOnBasicBlock(BB,Context);
+								DynamicInstructionCount::runOnBasicBlock(BB);
 							}
 					}
                 }
@@ -58,7 +56,7 @@ namespace {
                 return false;
             }
 
-    virtual bool runOnBasicBlock(Function::iterator &BB, LLVMContext &context) {
+    virtual bool runOnBasicBlock(Function::iterator &BB) {
                 IRBuilder<> builder(BB);
                 string result = "";
     			for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
@@ -96,4 +94,4 @@ namespace {
 }
 
 char DynamicInstructionCount::ID = 0;
-static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount World Pass", false, false);
+static RegisterPass<DynamicInstructionCount> X("dynamicInstructionCount", "DynamicInstructionCount", false, false);
