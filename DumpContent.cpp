@@ -4,6 +4,7 @@
 #include "llvm/Support/InstIterator.h"
 #include <map>
 #include <string>
+#define HELPER_FUNCTIONS 160
 
 using namespace llvm;
 using namespace std;
@@ -17,13 +18,13 @@ namespace {
 
     virtual bool runOnModule(Module &M) {
 		Module::iterator F = M.begin();
-		for (int i = 0 ; i < 37 ; i++)
+		for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 			F++;
         for (Module::iterator E = M.end(); F!= E; ++F) {
         	errs() << "Function : " << F->getName() << "\n";
         }
 		Module::iterator m = M.begin();
-		for (int i = 0 ; i < 37 ; i++)
+		for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 			m++;
     	for (Module::iterator e = M.end() ; e != m ; ++m) {
 			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {

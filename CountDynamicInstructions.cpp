@@ -7,6 +7,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/IRBuilder.h"
+#define HELPER_FUNCTIONS 160
 
 using namespace llvm;
 using namespace std;
@@ -24,20 +25,12 @@ namespace {
                 StringRef countingFunctionName;
                 StringRef printFunctionName;
 
-                //Function names follow linking order and order of functions in file.
-                Module::iterator Fit = M.begin();
-                for (int i = 0 ; i < 4 ; i++)
-                	Fit++;
-                countingFunctionName = Fit->getName(); //get name for counting function from helper.cpp
-                Fit++;
-                printFunctionName = Fit->getName(); //get name for print function from helper.cpp
-
-                hookFunc = M.getOrInsertFunction(countingFunctionName,Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
+                hookFunc = M.getOrInsertFunction("_Z8countingPc",Type::getVoidTy(M.getContext()),Type::getInt8PtrTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
 					hookCount= cast<Function>(hookFunc);
 					hookCount->setCallingConv(CallingConv::C);
 					Module::iterator F = M.begin();
-					for (int i = 0 ; i < 37 ; i++)
+					for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 						F++;
 					for(Module::iterator E = M.end(); F!= E; ++F) {
 						if (!F->getName().equals(printFunctionName) && !F->getName().equals(countingFunctionName))
@@ -46,7 +39,7 @@ namespace {
 							}
 					}
                 }
-                hookFunc = M.getOrInsertFunction(printFunctionName,Type::getVoidTy(M.getContext()),(Type*)0);
+                hookFunc = M.getOrInsertFunction("_Z5printv",Type::getVoidTy(M.getContext()),(Type*)0);
                 if (hookFunc) {
                 	hookPrint = cast<Function>(hookFunc);
                 	Module::iterator F = M.end();
@@ -54,7 +47,8 @@ namespace {
                 	Function::iterator BB = F->end();
                 	BB--;
                 	BasicBlock::iterator BI = BB->end();
-                	BI--;
+                	if (BI != BB->begin())
+                		BI--;
                 	Instruction *CI = dyn_cast<Instruction>(BI);
                 	Instruction *newInst = CallInst::Create(hookPrint, "");
                 	BB->getInstList().insert(CI, newInst);
@@ -69,10 +63,11 @@ namespace {
                 for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI) {
                 	Instruction *CI = dyn_cast<Instruction>(BI);
                 	result.append(CI->getOpcodeName());
-                	result.append("|");
+                	result.append(" ");
                 }
                 BasicBlock::iterator BE = BB->end();
-                BE--;
+                if (BE != BB->begin())
+                	BE--;
                 builder.SetInsertPoint(BB,BE);
                 Value* myStr = builder.CreateGlobalStringPtr(result,"myStr");
                 builder.CreateCall(hookCount,myStr);
