@@ -12,7 +12,6 @@ int count = 0;
 std::map<std::string,int> instructionMap;
 
 void counting(char* s){
-	//printf("I am in!\n");
 	std::string in(s);
     std::string str(in);
     std::string buf; // Have a buffer string
