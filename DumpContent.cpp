@@ -20,18 +20,18 @@ namespace {
 		Module::iterator F = M.begin();
 		for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 			F++;
-        for (Module::iterator E = M.end(); F!= E; ++F) {
-        	errs() << "Function : " << F->getName() << "\n";
-        }
+        	for (Module::iterator E = M.end(); F!= E; ++F) {
+        		errs() << "Function : " << F->getName() << "\n";
+        	}
 		Module::iterator m = M.begin();
 		for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
 			m++;
-    	for (Module::iterator e = M.end() ; e != m ; ++m) {
-			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
-				errs() << *I << "\n";
+    		for (Module::iterator e = M.end() ; e != m ; ++m) {
+				for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
+	//				errs() << *I << "\n";
+				}
 			}
-		}
-    	return false;
+    		return false;
     }
   };
 }

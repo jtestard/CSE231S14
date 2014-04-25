@@ -55,3 +55,14 @@ opt -load $LLVMLIB/CSE231.so -dynamicInstructionCount < $BENCHMARKS/hadamard/had
 llc -filetype=obj $BENCHMARKS/hadamard/hadamard_instrumented.bc -o=$BENCHMARKS/hadamard/hadamard.o
 g++ $BENCHMARKS/hadamard/hadamard.o $LDFLAGS -o $BENCHMARKS/hadamard/hadamard
 $BENCHMARKS/hadamard/hadamard >> $OUTPUTLOGS/hadamard/hadamard.dynamic.log
+
+echo "PART 3"
+echo "-----------------------"
+echo "GCD EXAMPLE"
+clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/branchbias/helper.cpp -o $INSTRUMENTATION/branchbias/helper.bc
+llvm-link $INSTRUMENTATION/branchbias/helper.bc $BENCHMARKS/gcd/gcd.bc -o $BENCHMARKS/gcd/gcd.linked.bc
+opt -load $LLVMLIB/CSE231.so -branchbias < $BENCHMARKS/gcd/gcd.linked.bc > $BENCHMARKS/gcd/gcd_instrumented.bc
+opt -load $LLVMLIB/CSE231.so -dumpContent < $BENCHMARKS/gcd/gcd_instrumented.bc > /dev/null
+llc -filetype=obj $BENCHMARKS/gcd/gcd_instrumented.bc -o=$BENCHMARKS/gcd/gcd.o
+g++ $BENCHMARKS/gcd/gcd.o $LDFLAGS -o $BENCHMARKS/gcd/gcd
+$BENCHMARKS/gcd/gcd

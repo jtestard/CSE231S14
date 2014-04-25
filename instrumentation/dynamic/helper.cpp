@@ -4,15 +4,13 @@
 #include <sstream>
 #include <vector>
 
-//using namespace std;
-
 void print();
 
 int count = 0;
 std::map<std::string,int> instructionMap;
 
 void counting(char* s){
-	std::string in(s);
+    std::string in(s);
     std::string str(in);
     std::string buf; // Have a buffer string
     std::stringstream ss(str); // Insert the string into a stream
