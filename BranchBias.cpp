@@ -8,7 +8,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/IRBuilder.h"
 #include <iostream>
-#define HELPER_FUNCTIONS 160
+#define HELPER_FUNCTIONS 0
 
 using namespace std;
 
@@ -44,9 +44,9 @@ namespace {
             branchTaken->setCallingConv(CallingConv::C);
             branchFound->setCallingConv(CallingConv::C);
 
-	    Module::iterator F = M.begin();
-	    for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
-		F++;
+			Module::iterator F = M.begin();
+			for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
+				F++;
 
             for(Module::iterator E = M.end(); F!= E; ++F)
             {
