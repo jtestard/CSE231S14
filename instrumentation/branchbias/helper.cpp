@@ -29,14 +29,19 @@ void branchFound(char * function) {
 	//printf("function : %s",fn.c_str());
 }
 
-void print() { // na grapso statement na tupono oti dn vrethikan branches
-	for (std::map<string,int>::iterator it=branchFoundMap.begin() ; it!=branchFoundMap.end() ; it++) {
-		string fn = it->first;
+void print() {
+	if (!branchFoundMap.empty()){
 		printf("FunctionName\tBias\tTaken\tFound\n");
-		if (branchFoundMap[fn] && branchTakenMap[fn]) {
-			float f = ((float) (branchFoundMap[fn]) / (float) (branchTakenMap[fn]));
-			printf("%s\t%f\t%d\t%d\n",fn.c_str(),f,branchFoundMap[fn],branchTakenMap[fn]);
+		for (std::map<string,int>::iterator it=branchFoundMap.begin() ; it!=branchFoundMap.end() ; it++) {
+			string fn = it->first;
+			if (branchFoundMap[fn] && branchTakenMap[fn]) {
+				float f = ( (float) (branchTakenMap[fn])/ (float) (branchFoundMap[fn]));
+				printf("%s\t%f\t%d\t%d\n",fn.c_str(),f,branchTakenMap[fn],branchFoundMap[fn]);
+			}
 		}
+	}
+	else{
+		printf("No branches found!");
 	}
 	//for (std::map<std::string,int>::const_iterator it=instructionMap.begin() ; it!=instructionMap.end() ; it++) {
 	//	printf("%s\t\t%d\n",it->first.c_str(),it->second);
