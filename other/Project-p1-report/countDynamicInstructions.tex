@@ -1,52 +1,65 @@
-\textbf{Problem statement: }Write a pass that instruments an input benchmark to count the number of times each instruction executes
-\textbf{Problem instance: }
-\begin{itemize}
-\item count program instructions at runtime
-\item output-per instruction count
-\end{itemize}
+%\textbf{Problem statement: } \texit{Write a pass that counts the number of times each instruction is used when a program is executed.} \\
+%\textbf{Problem instance:}
 
-\subsection{Pass description}
-The pass differs from the prior pass in that it instruments the target byte code to perform an analysis on itself. After instrumentation, the benchmark program executes and dynamically counts instructions, outputting the total at termination. This dynamic analysis is therefore two phase with phase 1 being the opt pass and phase 2 being program execution.\\
-First we describe the intended instrumented binary diagrammatically in Figure\ref{Part2transform}\\
+\subsection{Pass Algorithm Description}
+We want to write a pass which counts the number of times each instruction is used when a program is executed. We cannot do this by a simple static analysis of the program, we need to instrument its bitcode by adding instructions that will count each instruction in the initial program whenever it is used during the execution, while making sure the instructions we added are not counted themselves.
+
+\begin{algorithm}[here]
+%\SetKwFunction{count}{count}
+%\SetKwFunction{print}{print}
+\textbf{count}(Instructions $I_B$)  \Begin {
+	\ForEach{$i \in I_B$}{
+	 	\If{$M$.containsKey($i$)} {
+ 			$M$.valueForKey($i$)+=1
+	 	}
+ 		\Else {
+ 			$M$.insertKeyValuePair($<i$,$1>$)
+ 		}
+	}
+}
+\textbf{print}() \Begin{
+	$t = 0$ \\
+	 \ForAll{keyValuePair $\in M$} {
+ 		print("Found "keyValuePair.value() "counts of: "keyValuePair.key())\\
+	 	$t$ += keyValuePair.value()
+	 }
+	 print("total instructions: "$t$)
+}
+
+\caption{Functions inserted in the input program; $I_B$ is the set of instruction for a given basic block}
+\end{algorithm}
+
+To achieve this purpose, we insert a counting function and a printing function (both of which can be seen on algorithm 2) in the input programs, as well as calls to that function at the end of each basic block (see figure 1). Given that all instructions in a basic block are executed atomically, a single call to the counting function is sufficient.
 
 \begin{figure}[here]
-\includegraphics[width=0.4\textwidth]{CompilersProj1Part2Diag.png}
-\caption{Required bytecode transformation}
-\label{Part2transform}
+\includegraphics[width=0.4\textwidth]{instructionbitcode}
+\caption{bitcode instrumentation}
 \end{figure}
 
-With a target binary defined we describe a code transformation that the opt pass must perform:
-\begin{algorithm}
- \KwIn{$I$}
- $x \gets 0$\\
- $i \gets$ ref($I$.at(0)) \\
- \While{$i + 1 \neq 0$}
- { 
- 	
- 	$i' \gets$ \textbf{Count}(valAt($i$))\\ 
- 	$i$.insertBefore($i'$)\\
- 	$i$ += 1\\
- }
- $i \gets$ ref($I$.last())\\
- $i$.insertBefore(\textbf{print}())
+\subsection{Physical Implementation Description}
 
- \caption{Dynamic instruction count instrumentation pass}
-\end{algorithm}
-where:\\
-$I$ is an input program instruction list in LLVM byte code (.bc) format\\
-$i$ is an individual instruction iterator $I$\\
+Functions shown on algorithm 2 are written in C++, compiled separately and then linked to the input program later (as described in the instructions), but calls to these functions have to be inserted using the \code{opt} pass.
 
-The \textit{count()} function can be recycled from section the \textit{static count} pass. Similarly the \textit{Print()} function can be recycled.
+Again, we used the \code{ModulePass} class and \code{RunOnModule(Module \&M)} method for the implementation. First, we iterate through each basic block (using the \code{Module} and \code{Function} iterators) and collect the instructions for that block using the \code{CI.getOpcodeName()} method provided by the LLVM library for each instruction \code{CI}. We then concatenate all of these instructions into some comma separated string called \code{result}. Finally, we use the following code snippet to call the linked function :
 
-\subsection{Instrumentation pass implementation summary}
-Besides the skills used for the static pass, implementation of the dynamic pass presented challenges of inserting instrumentation functions to the test bench code and further augmenting that code to call inserted functions.\\
-Ensuring instrumentation functions were in scope during the opt pass was documented in the one of the project breif "hints" sections. Counting sorted lists of instructions was a probem solved during the static instruction count problem. Therefore the major challenges were: 
-\begin{itemize}
-\item Finding a function signature in LLVM byte code
-\item Inserting a call to a function signature above a byte code instruction
-\item Passing parameters to an inserted function call
-\end{itemize}
+\begin{frame}[fragile]
+%\frametitle{Inserting source code}
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{cool}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+\begin{lstlisting}
+// BE points to the end of the BB
+builder.SetInsertPoint(BB,BE);
+Value* myStr = 
+builder.CreateGlobalStringPtr(result);
+builder.CreateCall(hookCount,myStr);
+\end{lstlisting}
+\end{frame}
+As can be seen from this snippet, we used an \code{IRBuilder} class to help constructing the call insertion. We did not have to concatenate instructions (we could have used an array of strings), but strings are easier to pass to call instructions using the LLVM library than arrays of strings. Notice that the C++ implementation of the \code{count} function accepts a \code{char*} as input, accordingly.
 
-Finding a function signature \textbf{COSTAS IMPROVED THIS, I WILL SAY NO MORE}\\
+\subsection{Benchmark Analysis}
 
-Inserting a function call 

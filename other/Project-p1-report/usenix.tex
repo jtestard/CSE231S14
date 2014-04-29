@@ -1,7 +1,7 @@
 %INSTALL Pygments sudo apt-get install python-pygments
 
 
-\documentclass[letterpaper,twocolumn,11pt]{article}
+\documentclass[letterpaper,twocolumn,10pt]{article}
 \usepackage{usenix,epsfig,endnotes, upgreek, beamerarticle}
 	\setbeamercovered{transparent}
 \usepackage{listings}
@@ -10,6 +10,7 @@
 \usepackage{amssymb}
 \usepackage{parskip}
 \usepackage{color}
+\definecolor{cool}{rgb}{0.5,0.2,0.5}
 \usepackage{graphicx}
 \newcommand{\code}[1]{\texttt{#1}}
 \usepackage[noend,linesnumbered]{algorithm2e}
@@ -41,35 +42,21 @@ University of California, San Diego
 % Comment it out when you first submit the paper for review.
 \thispagestyle{empty}
 
-
-\subsection*{Abstract}
-This report describes the implementation and experimental results of custom LLVM passes applied to supplied benchmark programs. The high level concept of each pass is discussed, followed by key implementation details. Finally we offer conjecture on experimental application of these passes. %This is the structure of the benchmark code is evaluated with respect to pass output 
+%\subsection*{Abstract}
+%This report describes the implementation and experimental results of custom LLVM passes applied to supplied benchmark programs. The high level concept of each pass is discussed, followed by key implementation details. Finally we offer conjecture on experimental application of these passes. %This is the structure of the benchmark code is evaluated with respect to pass output 
 
 \section{Introduction}
-
 \input{introduction}
- 
 \section{Static instruction count}
-
 \input{countStaticInstructions}
-
 \section{Dynamic instruction count}
-
 \input{countDynamicInstructions}
-
 \section{Profiling branch bias}
-
 \input{branchBias.tex}
-
-\subsection{Conclusions}
-
 \input{conclusion}
-
 {\footnotesize \bibliographystyle{acm}
 \bibliography{sample.bib}}
-
 \theendnotes
-
 \end{document}
 
 

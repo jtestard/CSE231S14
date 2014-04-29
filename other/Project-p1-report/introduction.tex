@@ -1,7 +1,7 @@
 LLVM is a collection of modular compiler tools. The projects original goal was a flexible compilation strategy for arbitrary programming languages able to perform both static and dynamic compilation.\\
 This language flexibility is mainly achieved with a common intermediate program representation during the compilation known as LLVM byte code. Source language and target machine independent optimisations can be made to the LLVM byte code, which is the 231 course project subject of interest.\\
 %The price of this flexibility is complexity. End to end, using LLVM requires arranging a subset of its modules into a tool-chain sourcing a specific language and targeting a specific machine. The machine may be virtual 
-Our prescribed source language is C++ and our target architecture is x86. The project goal is to profile a set of LLVM compiled C++ benchmarks programs using the \textbf{pass} feature of the \textbf{opt} LLVM module.
+Our prescribed source language is C++ and our target architecture is x86. The project goal is to profile a set of LLVM compiled C++ benchmarks programs using the \textbf{pass} feature of the \code{opt} LLVM module.
 Three pass functionalities are required:
 \begin{itemize}
 \item{Collecting static instruction counts}
@@ -11,7 +11,7 @@ Three pass functionalities are required:
 The required depth of understanding and proficiency in LLVM module code increases incrementally with each of these three functionalities. Therefore the report is split into three mini-reports to focus on the self contained lessons learned from implementing them. Mini-reports have the following sub sections:\\
 \begin{itemize}
 \item{\textbf{Pass Algorithm Description: }A high level description of an \textit{algorithm} used to implement functionality.}
-\item{\textbf{Physical Implementation summary: }Details on key LLVM concepts and api's used to implement the functionality \textit{algorithm} as an \textit{opt pass}.}
-\item{\textbf{Benchmark Analysis: }Conjecture based running the \textit{opt pass}.}
+\item{\textbf{Physical Implementation Description: }Details on key LLVM concepts and api's used to implement the functionality \textit{algorithm} as an \code{opt} pass.}
+\item{\textbf{Benchmark Analysis: }Conjecture based running the \code{opt} pass.}
 %\item{\textbf{Learning outcome: }Description of new skills acquired during the task}
 \end{itemize}
