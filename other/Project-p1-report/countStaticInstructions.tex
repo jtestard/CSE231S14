@@ -1,0 +1,89 @@
+
+\textbf{Problem statement: }\textit{Write a pass that counts the number of static instructions in a program.}
+\textbf{Problem instance:}
+\begin{itemize}
+\item output total number of instructions
+\item output per-instruction count
+\end{itemize}
+
+\subsection{Pass description}
+
+Because the functionality is a static analysis, it is sufficient to run a pass on the compiled code of each benchmark.
+We store instruction op codes and their corresponding count in a C++ map structure. Each time an instruction is found in the source code, it is either added to an existing map entry or a new entry is created and initialized to 1.
+
+A high level algorithm description would be:\\
+
+\begin{algorithm}
+ \KwIn{$M$,$I$}
+ $t \gets 0$\\
+ \ForAll{$i \in I$}
+ { 
+ 	\If{$M$.containsKey($i$)}
+ 	{
+ 		$M$.valueForKey($i$)+=1\\
+ 	}
+ 	\Else
+ 	{
+ 		$M$.insertKeyValuePair($<i$,$1>$)\\
+ 	}
+ }
+ \ForAll{keyValuePair $\in M$}
+ {
+ 	print("Found "keyValuePair.value() "counts of: "keyValuePair.key())\\
+ 	$t$ += keyValuePair.value()\\
+ }
+ print("total instructions: "$t$)
+ \caption{Static instruction count algorithm}
+\end{algorithm}
+where:\\
+$I$ is an input program instruction list in LLVM byte code (.bc) format\\
+$i$ is an individual instruction within $I$\\
+$M$ is a C++ map of the form <string,int>
+
+\subsection{Static pass implementation summary}
+Besides a working proficiency in C++, translating the algorithm to LLVM required an understanding of:
+\begin{itemize}
+\item how to build and run an opt module on a target benchmark program
+\item how to output data in human readable format from an opt module
+\item how instructions are represented by LLVM
+\item how instructions are accessed by opt modules
+\end{itemize}
+
+The most challenging of the above was understanding how instructions are represented by LLVM and accessing them from opt modules.\\
+
+Our opt pass is able to iterate through the source module by implementing the \textbf{runOnModule()} virtual function of a \textbf{ModulePass} class.
+
+\begin{frame}[fragile]
+%\frametitle{Inserting source code}
+\lstset{language=C++,
+    basicstyle=\ttfamily,
+    keywordstyle=\bfseries,
+    showstringspaces=false,
+    morekeywords={runOnModule}                
+}
+\begin{lstlisting}
+    virtual bool runOnModule(Module &M)()
+\end{lstlisting}
+\end{frame}
+
+Accessing instructions was accomplished by iterating through the \textbf{input source} \textbf{Module} using an \textbf{inst\_iterator}. The Module contains all instructions from the compiled benchmark and the inst\_iterator points at individual instructions.\\
+
+\begin{frame}[fragile]
+%\frametitle{Inserting source code}
+\lstset{language=C++,
+                basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{red}\ttfamily,
+                commentstyle=\color{green}\ttfamily,
+                morecomment=[l][\color{magenta}]{\#}
+}
+\begin{lstlisting}
+    	for (Module::iterator m = M.begin(), e = M.end() ; e != m ; ++m) {
+			for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {...}
+\end{lstlisting}
+\end{frame}
+
+
+\subsection{Benchmark analysis}
+
+%\subsection{Learning outcomes}
