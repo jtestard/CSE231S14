@@ -1,17 +1,18 @@
 
-\textbf{Problem statement: }\textit{Write a pass that counts the number of static instructions in a program.}
-\textbf{Problem instance:}
-\begin{itemize}
-\item output total number of instructions
-\item output per-instruction count
-\end{itemize}
+\textbf{Problem statement: } \textit{Write a pass that counts the number of static instructions in a program.} \\
+\textbf{Problem instance:} \textit{Output for each instruction the number of times it appears in the program.}
 
-\subsection{Pass description}
+\subsection{Pass Algorithm description}
 
 Because the functionality is a static analysis, it is sufficient to run a pass on the compiled code of each benchmark.
 We store instruction op codes and their corresponding count in a C++ map structure. Each time an instruction is found in the source code, it is either added to an existing map entry or a new entry is created and initialized to 1.
 
-A high level algorithm description would be:\\
+A high level algorithm description is given on algorithm 1, where :
+\begin{itemize}
+\item {$I$ is an input program instruction list in LLVM byte code (.bc) format}
+\item{$i$ is an individual instruction within $I$}
+\item{$M$ is a C++ map of the form \code{<string,int>}}
+\end{itemize}
 
 \begin{algorithm}
  \KwIn{$M$,$I$}
@@ -35,19 +36,19 @@ A high level algorithm description would be:\\
  print("total instructions: "$t$)
  \caption{Static instruction count algorithm}
 \end{algorithm}
-where:\\
-$I$ is an input program instruction list in LLVM byte code (.bc) format\\
-$i$ is an individual instruction within $I$\\
-$M$ is a C++ map of the form <string,int>
 
 \subsection{Static pass implementation summary}
-Besides a working proficiency in C++, translating the algorithm to LLVM required an understanding of:
-\begin{itemize}
-\item how to build and run an opt module on a target benchmark program
-\item how to output data in human readable format from an opt module
-\item how instructions are represented by LLVM
-\item how instructions are accessed by opt modules
-\end{itemize}
+%Besides a working proficiency in C++, translating the algorithm to LLVM required an understanding of:
+%\begin{itemize}
+%\item how to build and run an opt module on a target benchmark program
+%\item how to output data in human readable format from an opt module
+%\item how instructions are represented by LLVM
+%\item how instructions are accessed by opt modules
+%\end{itemize}
+
+While the above is the abstract description of what we are trying to achieve, we have to adapt our algorithms to the syntax and semantics of an LLVM opt pass framework. The general purpose of an opt pass is to instrument an input bitcode file and ouptut its instrumentation. This process is done using different C++ classes (and methods) depending on the scope of the instrumentation. We chose to use the \code{ModulePass} class (and \code{RunOnModule(Module \&M)} method) which gives us simultaneous access to all the functions in the input file, make are counting task easier. \\
+
+In order to represent the 
 
 The most challenging of the above was understanding how instructions are represented by LLVM and accessing them from opt modules.\\
 
@@ -85,5 +86,13 @@ Accessing instructions was accomplished by iterating through the \textbf{input s
 
 
 \subsection{Benchmark analysis}
+We analysed module performance by comparing the logged instruction count with manual and automatic counts of the intermediate .ll byte code of each compiled benchmark. The automated counts were performed with the grep command:\\
+\textbf{>>cat [benchmark-name.ll] | grep [instruction-name] -c}\\
+The counts were accurate, confirming the pass' correct functionality.
+\begin{figure}[here]
+\includegraphics[width=0.4\textwidth]{StaticInst}
+\caption{Example correct pass output}
+\label{StaticInstCount}
+\end{figure}
 
 %\subsection{Learning outcomes}
