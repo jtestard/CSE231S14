@@ -8,7 +8,7 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/IR/IRBuilder.h"
 #include <iostream>
-#define HELPER_FUNCTIONS 160
+#define HELPER_FUNCTIONS 0
 
 using namespace std;
 
@@ -21,126 +21,116 @@ namespace {
         BranchBias() : ModulePass (ID) {}
 
         virtual bool runOnModule (Module &M) {
-            // Pointers to the helper functions
-      	    Function *branchFound; //Keeps the total counter
-            Function *branchTaken; // Keeps a counter of Taken branches
-            Function *printFunction; // Prints Statistics
-            StringRef functionName; // The name of the function being currently analyzed
+            // These are the helper functions for this part
+      	    Function *bFound; //count the number of branches
+            Function *bTaken; // count the taken branches
+            Function *printStats; // Print method of the helper. Print stats.
+            StringRef functionName; // Name of the function that gets analyzed currently. We'll need to print this name.
 
-            // Initialize the pointers to the functions
-            branchTaken = cast<Function> (M.getOrInsertFunction("_Z11branchTakenPc", 
+            // function ptrs. We have a pass called DumpContent.cpp that prints the name of the functions
+            // so we used it to figure out the appropriate function names of the helper
+            bTaken = cast<Function> (M.getOrInsertFunction("_Z11branchTakenPc",
                                           Type::getVoidTy(M.getContext()), 
                                           Type::getInt8PtrTy(M.getContext()), 
                                           (Type*)0));
-            branchFound = cast<Function> (M.getOrInsertFunction("_Z11branchFoundPc", 
+            bFound = cast<Function> (M.getOrInsertFunction("_Z11branchFoundPc",
                                           Type::getVoidTy(M.getContext()), 
                                           Type::getInt8PtrTy(M.getContext()), 
                                           (Type*)0));
-            printFunction = cast<Function> (M.getOrInsertFunction("_Z5printv", 
+            printStats = cast<Function> (M.getOrInsertFunction("_Z5printv",
                                             Type::getVoidTy(M.getContext()), 
                                             (Type*)0));
 
-            // Not sure if these are necessary
-            branchTaken->setCallingConv(CallingConv::C);
-            branchFound->setCallingConv(CallingConv::C);
-
-	    Module::iterator F = M.begin();
-	    for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
-		F++;
+            Module::iterator F = M.begin();
+            // We initially run this pass on the linked .bc so we had to iterate over all the
+            // functions of the helper (160 in total), we don't really need to do this any more since we no longer
+            // use the linked bc...
+			//for (int i = 0 ; i < HELPER_FUNCTIONS ; i++)
+			//	F++;
 
             for(Module::iterator E = M.end(); F!= E; ++F)
             {
-                // Keep the function name in global variable
+                // name of curr function
                 functionName = (*F).getName();
-                
-                // Loop over all Basic Blocks
+                // let's go through all the basic blocks.
                 for(Function::iterator BB = F->begin(), E = F->end(); BB != E; ++BB) {
-                    BranchBias::runOnBasicBlock(BB, branchFound, branchTaken, functionName);
+                    BranchBias::runOnBasicBlock(BB, bFound, bTaken, functionName);
                 }
 
-                // Add the print helper function before the program's end 
-                // (last Basic Block of Main function)
+                // Let's add a call to the print functions to see the stats.
+                // We have to do it before the return statement.
                 if ((*F).getName() == "main") {
                     Function::iterator lastBlock = F->end();
                     lastBlock--;
-                    BranchBias::addPrintCall(lastBlock, printFunction);
+                    BranchBias::addPrintCall(lastBlock, printStats);
                 }
             }
             return false;
         }
-
-        virtual bool runOnBasicBlock (Function::iterator &BB, Function * branchFound, Function * branchTaken, StringRef functionName) {
+        // Run this to spot branches
+        virtual bool runOnBasicBlock (Function::iterator &BB, Function * bFound, Function * bTaken, StringRef functionName) {
             
             Value *myStr;
             bool isFirst = true;
 
             for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI)
             {
-                //Only operate on Branch Instructions
+                //Found a branch instruction
                 if(isa<BranchInst>(&(*BI)) ) {
                     BranchInst *CI = dyn_cast<BranchInst>(BI);
-                    // We only care about conditional branches
+                    // check if it's an unconditional branch.
                     if (CI->isUnconditional()) {
                         continue;
                     }
 
-                    // It's either Taken or Not so it must have 
-                    // exactly two successor blocks
+                    // It's either Taken or Not.
                     if (CI->getNumSuccessors() != 2) {
                         continue;
                     }
 
-                    // INSTRUMENTATION
 
-                    // Create a call to branchTaken when the branch is taken
-                    // Successor 0 is the "Taken" basic block
 
-                    // Get the "Taken" Basic Block and move to its first instruction
+                    // getSuccessor(0) is the "taken" basic block. Perform the instrumentation
+                    // add a call to the function that increases the "taken" counter.
                     BasicBlock *block = CI->getSuccessor(0);
-                    BasicBlock::iterator takenIns = block->getFirstInsertionPt();
-                    //takenIns++;
+                    BasicBlock::iterator takenInsertPt = block->getFirstInsertionPt();
 
-                    // Create an IRBuilder instance and set the insert point 
-                    // to the beginning of the "Taken" basic block
+
+                    // The insert point for this counter is the first command of the
+                    // taken branch...
                     IRBuilder<> builder(block);
-                    builder.SetInsertPoint(takenIns);
+                    builder.SetInsertPoint(takenInsertPt);
 
-                    // Create a globally visible string with the function name and 
-                    // call the branchTaken function with it
 
-                    // Only create the string on the first block
                     if (isFirst) {
                         myStr = builder.CreateGlobalStringPtr(functionName, "myStr");
                         isFirst = false;
                     }
-                    builder.CreateCall (branchTaken, myStr);
+                    builder.CreateCall (bTaken, myStr);
 
-                    /* CALL TO BRANCH TAKEN COMPLETED */
 
-                    // Create a call to branchFound function to keep track of the 
-                    // total number of branches
 
-                    // Set the insert point at the current instruction and place 
-                    // a call instruction
+                    // We found a conditional branch, let's call the appropriate function
+                    // to increase the counter of the "found" branches
                     builder.SetInsertPoint(CI);
-                    builder.CreateCall (branchFound, myStr);
+                    builder.CreateCall (bFound, myStr);
 
-                    /* INSTRUMENTATION COMPLETED */
+
                 }
             }
             return true;
         }
 
-        virtual void addPrintCall (Function::iterator BB, Function* printFunction) {
+        virtual void addPrintCall (Function::iterator BB, Function* printStats) {
             // Create an IRBuilder instance and set the insert point 
-            // to the very last instruction of main
+            // to the very last instruction of main (before return)
             IRBuilder<> builder(BB);
             BasicBlock::iterator lastIns = BB->end();
             lastIns--;
             builder.SetInsertPoint(lastIns);
 
-            // Create a call to the printFunction with no arguments
-            builder.CreateCall (printFunction, "");
+            // call function that prints results...
+            builder.CreateCall (printStats, "");
         }
     };
 }
