@@ -1,14 +1,14 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  28 APR 2014 21:56
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2014.1.10)  29 APR 2014 02:17
 entering extended mode
- \write18 enabled.
+ restricted \write18 enabled.
  %&-line parsing enabled.
 **usenix.tex
 (./usenix.tex
 LaTeX2e <2011/06/27>
-Babel <3.9f> and hyphenation patterns for 78 languages loaded.
-(/usr/local/texlive/2013/texmf-dist/tex/latex/base/article.cls
+Babel <3.9f> and hyphenation patterns for 2 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/local/texlive/2013/texmf-dist/tex/latex/base/size10.clo
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -23,7 +23,7 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 ) (./usenix.sty
-(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/mathptmx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/mathptmx.sty
 Package: mathptmx 2005/04/12 PSNFSS-v9.2a Times w/ Math, improved (SPQR, WaS) 
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 28.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -59,34 +59,34 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 35.
 LaTeX Info: Redefining \hbar on input line 50.
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/graphics/epsfig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/epsfig.sty
 Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/latexconfig/graphics.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/graphics.cfg
 File: graphics.cfg 2010/04/23 v1.9 graphics configuration of TeX Live
 )
 Package graphics Info: Driver file: pdftex.def on input line 91.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
 
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count87
@@ -97,31 +97,31 @@ Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 \epsfxsize=\dimen105
 \epsfysize=\dimen106
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/endnotes/endnotes.sty
+(/usr/share/texlive/texmf-dist/tex/latex/endnotes/endnotes.sty
 \c@endnote=\count88
 \endnotesep=\dimen107
 \@enotes=\write3
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/was/upgreek.sty
+(/usr/share/texlive/texmf-dist/tex/latex/was/upgreek.sty
 Package: upgreek 2003/02/12 v2.0 (WaS)
 Package upgreek Info: Using Euler Roman for upright Greek on input line 31.
 \symugrf@m=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `ugrf@m' in version `bold'
 (Font)                  U/eur/m/n --> U/eur/b/n on input line 38.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerarticle.sty
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasercs.sty
-Package: beamerbasercs 2013/01/04 (rcs-revision 9a97a4eee358)
+(/usr/share/texmf/tex/latex/beamer/base/beamerarticle.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasercs.sty
+Package: beamerbasercs 2012/11/13 (rcs-revision cb16a617839f)
 )
 Package: beamerarticle 2012/04/15 (rcs-revision cc6557182d97)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasemodes.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasemodes.sty
 Package: beamerbasemodes 2012/04/15 (rcs-revision cc6557182d97)
 \beamer@tempbox=\box26
 \beamer@tempcount=\count89
 \c@beamerpauses=\count90
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasedecode.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasedecode.sty
 Package: beamerbasedecode 2010/05/01 (rcs-revision efa082c6111d)
 \beamer@slideinframe=\count91
 \beamer@minimum=\count92
@@ -129,16 +129,16 @@ Package: beamerbasedecode 2010/05/01 (rcs-revision efa082c6111d)
 \beamer@commentbox=\box27
 \beamer@modecount=\count93
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasearticle.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasearticle.sty
 Package: beamerbasearticle 2012/04/15 (rcs-revision cc6557182d97)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseoptions.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseoptions.sty
 Package: beamerbaseoptions 2010/04/27 (rcs-revision 982469101dd6)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/xcolor/xcolor.sty
+(/usr/share/texmf/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2007/01/21 v2.11 LaTeX color extensions (UK)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/latexconfig/color.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/color.cfg
 File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 )
 Package xcolor Info: Package option `override' ignored on input line 216.
@@ -153,19 +153,19 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1358.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1359.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1360.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaserequires.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaserequires.sty
 Package: beamerbaserequires 2010/05/01 (rcs-revision efa082c6111d)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasecompatibility.st
-y
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasecompatibility.sty
 Package: beamerbasecompatibility 2012/05/01 (rcs-revision 67c48b3b652d)
-) (/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasefont.sty
+)
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasefont.sty
 Package: beamerbasefont 2012/09/19 (rcs-revision 733629cd0c6c)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks15
 \symAMSa=\mathgroup7
@@ -173,91 +173,90 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 )))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetranslator.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetranslator.sty
 Package: beamerbasetranslator 2010/06/11 (rcs-revision 85fd1cc7fc42)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/translator.sty
+(/usr/share/texmf/tex/latex/beamer/base/translator/translator.sty
 Package: translator 2010/06/12 ver 1.10
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/translator-lang
-uage-mappings.tex)))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasemisc.sty
+(/usr/share/texmf/tex/latex/beamer/base/translator/translator-language-mappings
+.tex))) (/usr/share/texmf/tex/latex/beamer/base/beamerbasemisc.sty
 Package: beamerbasemisc 2012/02/24 (rcs-revision 2ff5461be705)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetwoscreens.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetwoscreens.sty
 Package: beamerbasetwoscreens 2010/05/01 (rcs-revision efa082c6111d)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseoverlay.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseoverlay.sty
 Package: beamerbaseoverlay 2012/11/11 (rcs-revision 6afbc49b1109)
 \beamer@argscount=\count94
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetitle.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetitle.sty
 Package: beamerbasetitle 2010/09/21 (rcs-revision f0446ed0b6ae)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasesection.sty
-Package: beamerbasesection 2013/01/04 (rcs-revision 54309ceef997)
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasesection.sty
+Package: beamerbasesection 2012/11/11 (rcs-revision 0056eef6f17f)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseframe.sty
-Package: beamerbaseframe 2012/12/26 (rcs-revision 1443917db2cf)
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseframe.sty
+Package: beamerbaseframe 2012/09/13 (rcs-revision dcd846607320)
 \c@framenumber=\count95
-LaTeX Info: Redefining \\ on input line 757.
+LaTeX Info: Redefining \\ on input line 756.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseverbatim.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseverbatim.sty
 Package: beamerbaseverbatim 2012/08/30 (rcs-revision dfdb135076b3)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseframesize.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseframesize.sty
 Package: beamerbaseframesize 2011/09/12 (rcs-revision 70f9d8411e54)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseframecomponents.
-sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseframecomponents.sty
 Package: beamerbaseframecomponents 2012/09/13 (rcs-revision dcd846607320)
-) (/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasecolor.sty
+)
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasecolor.sty
 Package: beamerbasecolor 2010/06/06 (rcs-revision d1a9b48be06d)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasenotes.sty
-Package: beamerbasenotes 2012/12/19 (rcs-revision 1686da3db3c9)
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasenotes.sty
+Package: beamerbasenotes 2010/05/01 (rcs-revision efa082c6111d)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetoc.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetoc.sty
 Package: beamerbasetoc 2012/10/02 (rcs-revision 5ed0f4010e8a)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetemplates.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetemplates.sty
 Package: beamerbasetemplates 2010/05/01 (rcs-revision efa082c6111d)
 \beamer@sbttoks=\toks16
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaseauxtemplates.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaseauxtemplates.sty
 Package: beamerbaseauxtemplates 2012/05/01 (rcs-revision 67c48b3b652d)
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbaselocalstructure.s
-ty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbaselocalstructure.sty
 Package: beamerbaselocalstructure 2012/11/13 (rcs-revision ddfba79dac19)
- (/usr/local/texlive/2013/texmf-dist/tex/latex/tools/enumerate.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
 Package: enumerate 1999/03/05 v3.00 enumerate extensions (DPC)
 \@enLab=\toks17
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasenavigation.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasenavigation.sty
 Package: beamerbasenavigation 2012/04/03 (rcs-revision 42a0f21a412d)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasetheorems.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasetheorems.sty
 Package: beamerbasetheorems 2010/06/06 (rcs-revision 7e7cc5e53e9d)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsmath/amsmath.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2013/01/14 v2.14 AMS math features
 \@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0
 \@emptytoks=\toks18
 \ex@=\dimen108
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d
 \pmbraise@=\dimen109
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
 \inf@bad=\count96
@@ -298,7 +297,7 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/amscls/amsthm.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2004/08/06 v2.20
 \thm@style=\toks23
 \thm@bodyfont=\toks24
@@ -312,10 +311,10 @@ Package: amsthm 2004/08/06 v2.20
 )
 \c@theorem=\count108
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/beamerbasethemes.sty
+(/usr/share/texmf/tex/latex/beamer/base/beamerbasethemes.sty
 Package: beamerbasethemes 2010/05/01 (rcs-revision efa082c6111d)
 )))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/listings.sty
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count109
 \lst@gtempboxa=\box30
 \lst@token=\toks29
@@ -329,18 +328,18 @@ Package: beamerbasethemes 2010/05/01 (rcs-revision efa082c6111d)
 \lst@lineno=\count114
 \lst@maxwidth=\dimen120
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2013/07/10 1.5 (Carsten Heinz)
 \c@lstnumber=\count115
 \lst@skipnumbers=\count116
 \lst@framebox=\box31
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/listings.cfg
-File: listings.cfg 2007/02/22 1.4 listings configuration
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+File: listings.cfg 2013/06/27 1.5pre1 listings configuration
 ))
-Package: listings 2007/02/22 1.4 (Carsten Heinz)
+Package: listings 2013/07/10 1.5 (Carsten Heinz)
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/pxfonts.sty
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/pxfonts.sty
 Package: pxfonts 2008/01/22 v1.1.1
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 21.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -431,20 +430,20 @@ LaTeX Info: Redefining \not on input line 997.
 LaTeX Info: Redefining \textsquare on input line 1017.
 LaTeX Info: Redefining \openbox on input line 1018.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/parskip/parskip.sty
+(/usr/share/texlive/texmf-dist/tex/latex/parskip/parskip.sty
 Package: parskip 2001/04/09 non-zero parskip adjustments
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+(/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
 Package: algorithm2e 2013/01/06 v5.00 algorithms environments
 \c@AlgoLine=\count117
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/base/ifthen.sty
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/tools/xspace.sty
+(/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2009/10/20 v1.13 Space after command names (DPC,MH)
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/relsize/relsize.sty
+(/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
 )
 ********************************************************
@@ -493,8 +492,7 @@ subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
 LaTeX Font Info:    Checking defaults for OML/pxmi/m/it on input line 15.
 LaTeX Font Info:    Try loading font information for OML+pxmi on input line 15.
 
-
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/omlpxmi.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/pxfonts/omlpxmi.fd
 File: omlpxmi.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    ... okay on input line 15.
@@ -506,7 +504,7 @@ LaTeX Font Info:    Checking defaults for OMS/pxsy/m/n on input line 15.
 LaTeX Font Info:    Try loading font information for OMS+pxsy on input line 15.
 
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/omspxsy.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/omspxsy.fd
 File: omspxsy.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    ... okay on input line 15.
@@ -514,23 +512,23 @@ LaTeX Font Info:    Checking defaults for OMX/pxex/m/n on input line 15.
 LaTeX Font Info:    Try loading font information for OMX+pxex on input line 15.
 
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/omxpxex.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/omxpxex.fd
 File: omxpxex.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    ... okay on input line 15.
 LaTeX Font Info:    Checking defaults for U/pxexa/m/n on input line 15.
 LaTeX Font Info:    Try loading font information for U+pxexa on input line 15.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/upxexa.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/upxexa.fd
 File: upxexa.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    ... okay on input line 15.
 LaTeX Font Info:    Try loading font information for OT1+pxr on input line 15.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/ot1pxr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/ot1pxr.fd
 File: ot1pxr.fd 2000/12/14 v1.0
 )
-(/usr/local/texlive/2013/texmf-dist/tex/context/base/supp-pdf.mkii
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count121
 \scratchdimen=\dimen127
@@ -543,15 +541,15 @@ File: ot1pxr.fd 2000/12/14 v1.0
 \MPnumerator=\count125
 \makeMPintoPDFobject=\count126
 \everyMPtoPDFconversion=\toks31
-) (/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
 Package: pdftexcmds 2011/11/29 v0.20 Utility functions of pdfTeX for LuaTeX (HO
 )
 
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2010/03/01 v1.3 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
@@ -560,22 +558,22 @@ Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2010/08/19 v1.1 Manage graphics extensions (HO)
 
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2011/04/07 v1.3 Define keys (HO)
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2011/06/30 v3.11 Key value format for package options (HO)
 
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2012/04/25 v1.16 Key value parser (HO)
 
-(/usr/local/texlive/2013/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2011/02/16 v1.5 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
@@ -587,39 +585,39 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 452.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-basic-dictionary/translator-basic-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-basic-dicti
+onary/translator-basic-dictionary-English.dict
 Dictionary: translator-basic-dictionary, Language: English 
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-bibliography-dictionary/translator-bibliography-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-bibliograph
+y-dictionary/translator-bibliography-dictionary-English.dict
 Dictionary: translator-bibliography-dictionary, Language: English 
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-environment-dictionary/translator-environment-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-environment
+-dictionary/translator-environment-dictionary-English.dict
 Dictionary: translator-environment-dictionary, Language: English 
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-months-dictionary/translator-months-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-months-dict
+ionary/translator-months-dictionary-English.dict
 Dictionary: translator-months-dictionary, Language: English 
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-numbers-dictionary/translator-numbers-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-numbers-dic
+tionary/translator-numbers-dictionary-English.dict
 Dictionary: translator-numbers-dictionary, Language: English 
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/beamer/translator/dicts/translato
-r-theorem-dictionary/translator-theorem-dictionary-English.dict
+(/usr/share/texmf/tex/latex/beamer/base/translator/dicts/translator-theorem-dic
+tionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
 LaTeX Info: Redefining \includegraphics on input line 15.
 \c@lstlisting=\count127
 LaTeX Font Info:    Try loading font information for OT1+ptm on input line 35.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
@@ -630,28 +628,26 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 35.
 LaTeX Font Info:    Try loading font information for U+pxsya on input line 35.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/upxsya.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/upxsya.fd
 File: upxsya.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Try loading font information for U+pxsyb on input line 35.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/upxsyb.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/upxsyb.fd
 File: utxsyb.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Try loading font information for U+pxmia on input line 35.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/upxmia.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/upxmia.fd
 File: upxmia.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Try loading font information for U+pxsyc on input line 35.
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/upxsyc.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/upxsyc.fd
 File: upxsyc.fd 2000/12/14 v1.0
-)
-(./introduction.tex
+) (./introduction.tex
 LaTeX Font Info:    Try loading font information for OMS+pxr on input line 7.
-
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/omspxr.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/omspxr.fd
 File: omspxr.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Font shape `OMS/pxr/m/n' in size <10> not available
@@ -672,7 +668,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 17.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 17.
-[1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
@@ -685,19 +681,19 @@ Underfull \hbox (badness 10000) in paragraph at lines 52--53
 
  []
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2013/06/27 1.5pre1 listings language file
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/lstlang1.sty
-File: lstlang1.sty 2004/09/05 1.3 listings language file
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2013/06/27 1.5pre1 listings language file
 )
-(/usr/local/texlive/2013/texmf-dist/tex/latex/listings/lstmisc.sty
-File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2013/07/10 1.5 (Carsten Heinz)
 )
 LaTeX Font Info:    Try loading font information for OT1+pxtt on input line 64.
 
 
-(/usr/local/texlive/2013/texmf-dist/tex/latex/pxfonts/ot1pxtt.fd
+(/usr/share/texlive/texmf-dist/tex/latex/pxfonts/ot1pxtt.fd
 File: ot1pxtt.fd 2000/12/14 v1.0
 )
 LaTeX Font Info:    Font shape `OT1/pxtt/bx/n' in size <10> not available
@@ -724,72 +720,141 @@ Overfull \hbox (368.1623pt too wide) in paragraph at lines 82--83
 ][][][] 
  []
 
-) (./countDynamicInstructions.tex
-
-LaTeX Warning: Reference `Part2transform' on page 2 undefined on input line 10.
-
-
-
+<StaticInst.png, id=12, 443.6575pt x 222.8325pt>
+File: StaticInst.png Graphic file (type png)
+ <use StaticInst.png>
+Package pdftex.def Info: StaticInst.png used on input line 92.
+(pdftex.def)             Requested size: 187.89912pt x 94.37444pt.
+)
+(./countDynamicInstructions.tex
 Underfull \hbox (badness 10000) in paragraph at lines 9--11
 
  []
 
-<CompilersProj1Part2Diag.png, id=12, 1324.95pt x 662.475pt>
+<CompilersProj1Part2Diag.png, id=13, 1324.95pt x 662.475pt>
 File: CompilersProj1Part2Diag.png Graphic file (type png)
 
 <use CompilersProj1Part2Diag.png>
 Package pdftex.def Info: CompilersProj1Part2Diag.png used on input line 13.
 (pdftex.def)             Requested size: 187.89912pt x 93.94878pt.
 
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 18--38
 
  []
 
-[2 <./CompilersProj1Part2Diag.png>]
+[2 <./StaticInst.png>]
 Underfull \hbox (badness 10000) in paragraph at lines 50--51
 
  []
 
-) (./branchBias.tex) (./conclusion.tex) (./usenix.bbl
+) (./branchBias.tex
+Overfull \hbox (24.74014pt too wide) in paragraph at lines 20--20
+[]|[]$\OML/pxmi/m/it/10 t$\OT1/pxr/m/n/10 .insertInstructionAbove($$\OML/pxmi/m
+/it/10 Call\OT1/pxr/m/n/10 %[]\OML/pxmi/m/it/10 ncTakenBranches$\OT1/pxr/m/n/10
+ )  
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 2--28
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 30--31
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--37
+
+ []
+
+[3 <./CompilersProj1Part2Diag.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 41--42
+
+ []
+
+
+Overfull \hbox (224.16083pt too wide) in paragraph at lines 53--54
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
+] 
+ []
+
+
+Overfull \hbox (2.15857pt too wide) in paragraph at lines 54--55
+[][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (74.1593pt too wide) in paragraph at lines 55--56
+[][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (74.1593pt too wide) in paragraph at lines 58--59
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Underfull \hbox (badness 1102) in paragraph at lines 62--63
+\OT1/pxr/m/n/10 con-sume the $\OML/pxmi/m/it/10 CI$ \OT1/pxr/m/n/10 pointer cre
+-ated pre-vi-ously to
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 62--63
+
+ []
+
+
+Overfull \hbox (14.15869pt too wide) in paragraph at lines 73--74
+[][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (290.1615pt too wide) in paragraph at lines 74--75
+[][][][][][][][][][][][][][][][][][][] 
+ []
+
+) (./conclusion.tex) (./usenix.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
 ) (./usenix.ent
+Underfull \vbox (badness 1565) has occurred while \output is active []
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
-) [3] (./usenix.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+) [4]
+(./usenix.aux) ) 
 Here is how much of TeX's memory you used:
- 7877 strings out of 493315
- 119081 string characters out of 6137903
- 218415 words of memory out of 5000000
- 11043 multiletter control sequences out of 15000+600000
- 46087 words of font info for 138 fonts, out of 8000000 for 9000
- 957 hyphenation exceptions out of 8191
- 56i,15n,58p,604b,1118s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2013/texmf-dist/fonts/type1/public/pxfonts/pxsy.pfb></usr/local/texlive/
-2013/texmf-dist/fonts/type1/public/pxfonts/pxsyc.pfb></usr/local/texlive/2013/t
-exmf-dist/fonts/type1/public/pxfonts/rpxi.pfb></usr/local/texlive/2013/texmf-di
-st/fonts/type1/public/pxfonts/rpxmi.pfb></usr/local/texlive/2013/texmf-dist/fon
-ts/type1/public/pxfonts/rpxr.pfb></usr/local/texlive/2013/texmf-dist/fonts/type
-1/public/txfonts/txbtt.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/publ
-ic/txfonts/txtt.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/palatin
-o/uplb8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/palatino/uplr8
-a.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-
-Output written on usenix.pdf (3 pages, 126595 bytes).
+ 7912 strings out of 495031
+ 117787 string characters out of 6181531
+ 214191 words of memory out of 5000000
+ 10830 multiletter control sequences out of 15000+600000
+ 46974 words of font info for 140 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 56i,16n,58p,898b,1118s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</us
+r/share/texlive/texmf-dist/fonts/type1/public/pxfonts/pxsy.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/pxfonts/pxsyc.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/pxfonts/rpxi.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/pxfonts/rpxmi.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+pxfonts/rpxr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txbt
+t.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfonts/txtt.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on usenix.pdf (4 pages, 146233 bytes).
 PDF statistics:
- 58 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
+ 62 PDF objects out of 1000 (max. 8388607)
+ 42 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 

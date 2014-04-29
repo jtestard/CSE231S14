@@ -1,0 +1,80 @@
+\subsection{Pass description}
+Our pass tests the exit point of all basic blocks for conditional branches.\\
+Should one be found, an instrument is added to increment a global counter of total branches.\\
+We then locate the 'taken' target of the branch in .ll byte code and instrument that to increment a second global counter of taken branch.\\
+\begin{algorithm}
+ \KwIn{$I$}
+ \ForAll{$i \in I$}
+ { 
+ 	\If{$i$.isEqualTo(toInstruction($ConditionalBranch$))}
+ 	{
+ 		$i$.insertInstructionAbove($\$Call \%_incBranches$)\\
+ 		$t \gets i$.getTakenBlockEntryInstruction()\\
+ 		$t$.insertInstructionAbove($\$Call \%_incTakenBranches$)\\
+ 		 		 
+ 	}
+ 	%\Else
+ 	%{
+ 	%	$M$.insertKeyValuePair($<i$,$1>$)\\
+ 	%}
+ }
+
+ \caption{Branch bias algorithm}
+\end{algorithm}
+where:\\
+$I$ is an input program instruction list in LLVM byte code (.bc) format\\
+$i$ is an individual instruction within $I$\\
+%$M$ is a C++ map of the form <string,int>
+
+
+The helper functions for house-keeping, counter incrementing and output formatting are not described, being recycled code slightly modified from functions used in the previous passes.\\ 
+
+\subsection{Instrumentation pass implementation summary}
+This opt pass builds on the dynamic instrumentation methods applied to the previous pass.\\
+The additional requirement is run-time analysis of program logic rather than the run-time observation of it performed previously.\\
+In addition to all skills of previous passes, analysing logic requires:\\ 
+\begin{itemize}
+\item The ability to instrument a particular instruction
+\item An ability to dynamically consume target code control flow data
+\end{itemize}
+
+Our opt pass locates conditional branches using the basic block iterator to evaluate instructions and a simple logic test of a dynamic cast and class member test to locate conditional branches:\\
+
+\begin{frame}[fragile]
+%\frametitle{Inserting source code}
+\lstset{language=C++,
+	commentstyle=\color{green}\ttfamily,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{magenta}\bfseries,
+    showstringspaces=false,
+    morekeywords={BasicBlock,BranchInst}                
+}
+\begin{lstlisting}
+for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI){
+	if(isa<BranchInst>(&(*BI)) ) {
+    	BranchInst *CI = dyn_cast<BranchInst>(BI);
+        if (CI->isUnconditional())
+        	continue; 
+		//Else conditional branch found...
+\end{lstlisting}
+\end{frame}
+
+We dynamically consume control flow data by instrumenting the 'taken' conditional branch of interest. In .ll code a taken branch is the 0'th successor instruction of a conditional branch. We consume the $CI$ pointer created previously to instrument the 'taken' target basic block.\\
+
+\begin{frame}[fragile]
+\lstset{language=C++,
+	commentstyle=\color{green}\ttfamily,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{magenta}\bfseries,
+    showstringspaces=false,
+    morekeywords={BasicBlock,iterator}                
+}
+\begin{lstlisting}
+BasicBlock *block = CI->getSuccessor(0);
+                    BasicBlock::iterator takenInsertPt = block->getFirstInsertionPt();
+\end{lstlisting}
+\end{frame}
+  
+%The purpose of this part is to write a dynamic analysis that computes the per function branch bias. Specifically, we had to count the total number of branches and the number of taken branches that appear in each function and compute the ratio: taken branches/ total branches. In order to achieve this functionality, we once again declared two helper functions and used two C++ map structures to store the number of total and taken branches. Both of these functions get a function name as an attribute and utilize it as the key of the map structure. The helper function branchFound gets injected into the benchmark code every time a conditional branch with two successors (taken and non-taken branch) is spotted. Similarly, the branchTaken helper function gets injected into the taken branch. If these functions get called for the first time in a single function
+
+\subsection{Benchmark Analysis}

@@ -85,5 +85,13 @@ Accessing instructions was accomplished by iterating through the \textbf{input s
 
 
 \subsection{Benchmark analysis}
+We analysed module performance by comparing the logged instruction count with manual and automatic counts of the intermediate .ll byte code of each compiled benchmark. The automated counts were performed with the grep command:\\
+\textbf{>>cat [benchmark-name.ll] | grep [instruction-name] -c}\\
+The counts were accurate, confirming the pass' correct functionality.
+\begin{figure}[here]
+\includegraphics[width=0.4\textwidth]{StaticInst}
+\caption{Example correct pass output}
+\label{StaticInstCount}
+\end{figure}
 
 %\subsection{Learning outcomes}
