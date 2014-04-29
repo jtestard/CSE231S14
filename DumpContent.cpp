@@ -28,7 +28,7 @@ namespace {
 			m++;
     		for (Module::iterator e = M.end() ; e != m ; ++m) {
 				for (inst_iterator I = inst_begin(m), E = inst_end(m) ; I != E ; ++I) {
-	//				errs() << *I << "\n";
+					errs() << *I << "\n";
 				}
 			}
     		return false;
