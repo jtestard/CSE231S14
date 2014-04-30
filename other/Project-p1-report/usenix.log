@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  29 APR 2014 16:08
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  29 APR 2014 21:18
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -734,52 +734,41 @@ Overfull \hbox (2.15857pt too wide) in paragraph at lines 58--59
  []
 
 ) (./branchBias.tex
-Overfull \hbox (24.74014pt too wide) in paragraph at lines 20--20
-[]|[]$\OML/pxmi/m/it/10 t$\OT1/pxr/m/n/10 .insertInstructionAbove($$\OML/pxmi/m
-/it/10 Call\OT1/pxr/m/n/10 %[]\OML/pxmi/m/it/10 ncTakenBranches$\OT1/pxr/m/n/10
- )  
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \hbox (badness 1394) in paragraph at lines 32--32
+[]\OT1/pxr/bx/n/12 Physical Im-ple-men-ta-tion De-scrip-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2--28
+Underfull \hbox (badness 1221) in paragraph at lines 33--36
+\OT1/pxr/m/n/10 ad-di-tional re-quire-ment is run-time anal-y-sis of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 33--36
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 30--31
-
- []
+Underfull \vbox (badness 1231) has occurred while \output is active []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 33--37
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 41--42
+Underfull \hbox (badness 10000) in paragraph at lines 39--40
 
  []
 
 LaTeX Font Info:    Font shape `OT1/pxtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/pxtt/b/n' tried instead on input line 53.
+(Font)              Font shape `OT1/pxtt/b/n' tried instead on input line 51.
 
-Overfull \hbox (224.16083pt too wide) in paragraph at lines 53--54
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-] 
- []
-
-
-Overfull \hbox (2.15857pt too wide) in paragraph at lines 54--55
-[][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (74.1593pt too wide) in paragraph at lines 55--56
+Overfull \hbox (26.15881pt too wide) in paragraph at lines 51--52
 [][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (74.1593pt too wide) in paragraph at lines 58--59
+Overfull \hbox (8.15863pt too wide) in paragraph at lines 58--59
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
@@ -794,34 +783,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 62--63
 
  []
 
-
+[3]
 Overfull \hbox (14.15869pt too wide) in paragraph at lines 73--74
 [][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (290.1615pt too wide) in paragraph at lines 74--75
-[][][][][][][][][][][][][][][][][][][] 
- []
-
-) (./conclusion.tex) (./usenix.bbl [3]
-
-LaTeX Warning: Empty `thebibliography' environment on input line 3.
-
-) (./usenix.ent
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
 ) [4
 
 ] (./usenix.aux) ) 
 Here is how much of TeX's memory you used:
- 7921 strings out of 493315
- 119628 string characters out of 6137903
+ 7883 strings out of 493315
+ 119174 string characters out of 6137903
  221136 words of memory out of 5000000
- 11085 multiletter control sequences out of 15000+600000
- 47880 words of font info for 142 fonts, out of 8000000 for 9000
+ 11059 multiletter control sequences out of 15000+600000
+ 39309 words of font info for 116 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  56i,18n,58p,898b,1099s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2013/texmf-dist/fonts/enc/dvips/base/8r.e
@@ -833,7 +808,7 @@ ve/2013/texmf-dist/fonts/type1/public/txfonts/txbtt.pfb></usr/local/texlive/201
 -dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2013/texmf-dist/f
 onts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/ty
 pe1/urw/palatino/uplri8a.pfb>
-Output written on usenix.pdf (4 pages, 123214 bytes).
+Output written on usenix.pdf (4 pages, 122682 bytes).
 PDF statistics:
  114 PDF objects out of 1000 (max. 8388607)
  71 compressed objects within 1 object stream

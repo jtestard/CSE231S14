@@ -1,43 +1,41 @@
-\subsection{Pass description}
-Our pass tests the exit point of all basic blocks for conditional branches.\\
-Should one be found, an instrument is added to increment a global counter of total branches.\\
-We then locate the 'taken' target of the branch in .ll byte code and instrument that to increment a second global counter of taken branch.\\
-\begin{algorithm}
- \KwIn{$I$}
- \ForAll{$i \in I$}
- { 
- 	\If{$i$.isEqualTo(toInstruction($ConditionalBranch$))}
- 	{
- 		$i$.insertInstructionAbove($\$Call \%_incBranches$)\\
- 		$t \gets i$.getTakenBlockEntryInstruction()\\
- 		$t$.insertInstructionAbove($\$Call \%_incTakenBranches$)\\
- 		 		 
- 	}
- 	%\Else
- 	%{
- 	%	$M$.insertKeyValuePair($<i$,$1>$)\\
- 	%}
- }
+\subsection{Pass Algorithm Description}
 
- \caption{Branch bias algorithm}
+We want to write a pass which helps us predict, for each function of the input program, what is the bias that any branch in the function is taken during the execution. Similarly to the previous section, we need bitcode instrumentation to accomplish this task. As done previously, we insert independent functions to the input program described in algorithm 3.
+
+These functions expect a function name as the input and increment the found or taken count for that function. This count is eventually displayed when the program terminates. We insert a call instruction to the \code{branchFound} function right above a branch instruction and the \code{branchTaken} function right above the first instruction of the basic block reached when the branch is taken.
+
+\begin{algorithm}[here]
+\textbf{branchFound}($fName$) \Begin{
+	\If{$Found.containsKey(fName)$}{
+		$Found.valueForKey(fName) += 1$ 
+	} \Else {
+		$Found.insertKeyValuePair(< fName , 1 > )$
+	}
+}
+\textbf{branchTaken}($fName$) \Begin{
+	\If{$Taken.containsKey(fName)$}{
+		$Taken.valueForKey(fName) += 1$ 
+	} \Else {
+		$Taken.insertKeyValuePair(< fName , 1 > )$
+	}
+}
+\textbf{print}() \Begin{
+	\ForEach{$ fName \in Found.keys() $}{
+		$v_f \gets Found.valueForKey(fName)$ \\
+		$v_t \gets Taken.valueForKey(fName)$ \\
+		$print ( fName + " " + v_f + " " + v_t + " " + \frac{v_t}{v_f})$
+	}
+}
+\caption{where $Found$ and $Taken$ are C++ maps of the form \code{<string,int>} and $fName$ is a string expected to be an functionName from the input}
 \end{algorithm}
-where:\\
-$I$ is an input program instruction list in LLVM byte code (.bc) format\\
-$i$ is an individual instruction within $I$\\
-%$M$ is a C++ map of the form <string,int>
 
-
-The helper functions for house-keeping, counter incrementing and output formatting are not described, being recycled code slightly modified from functions used in the previous passes.\\ 
-
-\subsection{Instrumentation pass implementation summary}
-This opt pass builds on the dynamic instrumentation methods applied to the previous pass.\\
-The additional requirement is run-time analysis of program logic rather than the run-time observation of it performed previously.\\
+\subsection{Physical Implementation Description}
+This opt pass builds on the dynamic instrumentation methods applied to the previous pass. The additional requirement is run-time analysis of program logic rather than the run-time observation of it performed previously. \\
 In addition to all skills of previous passes, analysing logic requires:\\ 
 \begin{itemize}
 \item The ability to instrument a particular instruction
 \item An ability to dynamically consume target code control flow data
 \end{itemize}
-
 Our opt pass locates conditional branches using the basic block iterator to evaluate instructions and a simple logic test of a dynamic cast and class member test to locate conditional branches:\\
 
 \begin{frame}[fragile]
@@ -50,12 +48,14 @@ Our opt pass locates conditional branches using the basic block iterator to eval
     morekeywords={BasicBlock,BranchInst}                
 }
 \begin{lstlisting}
-for(BasicBlock::iterator BI = BB->begin(), BE = BB->end(); BI != BE; ++BI){
-	if(isa<BranchInst>(&(*BI)) ) {
-    	BranchInst *CI = dyn_cast<BranchInst>(BI);
-        if (CI->isUnconditional())
-        	continue; 
-		//Else conditional branch found...
+for(BasicBlock::iterator BI = BB->begin(),
+BE = BB->end(); BI != BE; ++BI){
+   if(isa<BranchInst>(&(*BI)) ) {
+     BranchInst *CI = 
+     dyn_cast<BranchInst>(BI);
+     if (CI->isUnconditional())
+       continue; 
+     //Else conditional branch found...
 \end{lstlisting}
 \end{frame}
 
@@ -71,7 +71,8 @@ We dynamically consume control flow data by instrumenting the 'taken' conditiona
 }
 \begin{lstlisting}
 BasicBlock *block = CI->getSuccessor(0);
-                    BasicBlock::iterator takenInsertPt = block->getFirstInsertionPt();
+BasicBlock::iterator takenInsertPt
+= block->getFirstInsertionPt();
 \end{lstlisting}
 \end{frame}
   
