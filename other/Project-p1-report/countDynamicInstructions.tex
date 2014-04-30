@@ -63,3 +63,4 @@ As can be seen from this snippet, we used an \code{IRBuilder} class to help cons
 
 \subsection{Benchmark Analysis}
 
+In the execution of the gcd example, the main function calls the \code{gcd()} function on input \code{(72,32)}. We can easily predict that the \code{gcd} will be called twice recursively before returning to main, which in turn will return at the end of execution. No other function calls are made. As such we should expect the \code{ret} instruction to be called 4 times, which is precisely the number of times it is called in the benchmark we generated.
