@@ -1,6 +1,6 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  29 APR 2014 21:18
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  29 APR 2014 21:38
 entering extended mode
- \write18 enabled.
+ restricted \write18 enabled.
  %&-line parsing enabled.
 **usenix.tex
 (./usenix.tex
@@ -793,8 +793,8 @@ Overfull \hbox (14.15869pt too wide) in paragraph at lines 73--74
 ] (./usenix.aux) ) 
 Here is how much of TeX's memory you used:
  7883 strings out of 493315
- 119174 string characters out of 6137903
- 221136 words of memory out of 5000000
+ 119174 string characters out of 6137904
+ 221137 words of memory out of 5000000
  11059 multiletter control sequences out of 15000+600000
  39309 words of font info for 116 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -808,7 +808,7 @@ ve/2013/texmf-dist/fonts/type1/public/txfonts/txbtt.pfb></usr/local/texlive/201
 -dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2013/texmf-dist/f
 onts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2013/texmf-dist/fonts/ty
 pe1/urw/palatino/uplri8a.pfb>
-Output written on usenix.pdf (4 pages, 122682 bytes).
+Output written on usenix.pdf (4 pages, 123862 bytes).
 PDF statistics:
  114 PDF objects out of 1000 (max. 8388607)
  71 compressed objects within 1 object stream
