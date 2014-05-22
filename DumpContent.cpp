@@ -2,6 +2,7 @@
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/InstIterator.h"
+#include "StaticAnalysisPass.hpp"
 #include <map>
 #include <string>
 #define HELPER_FUNCTIONS 160
@@ -10,7 +11,7 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-  struct DumpContent : public ModulePass {
+  struct DumpContent : public StaticAnalysisPass {
     static char ID;
     DumpContent() : ModulePass(ID) {}
 
