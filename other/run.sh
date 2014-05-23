@@ -9,7 +9,7 @@ echo "------------------------"
 echo "PART 1"
 echo "------------------------"
 echo "WELCOME EXAMPLE"
-opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/welcome/welcome.bc -analyze >> $OUTPUTLOGS/welcome.static.log
+opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/welcome/welcome.bc -analyze #>> $OUTPUTLOGS/welcome.static.log
 
 echo "COMPRESSION EXAMPLE"
 opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/compression/compression.bc -analyze >> $OUTPUTLOGS/compression.static.log

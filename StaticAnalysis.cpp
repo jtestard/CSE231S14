@@ -6,7 +6,7 @@
 //
 //
 
-#include "StaticAnalysisPass.h"
+#include "StaticAnalysis.hpp"
 #include "llvm/Pass.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
@@ -17,15 +17,15 @@
 using namespace llvm;
 using namespace std;
 
-class StaticAnalysis {
-    virtual void runWorklist(Module &M){
-        //Worklist algorithm code
-    }
-    virtual void flowFunction(Instruction &inst) {
-        // Flow Inset = inst.getSet();
-        // if (inst.opcode == 'blah') {
-        //      flowFunctionBlah()
-        // } else if ...
-        //
-    }
-}
+//class StaticAnalysis {
+//    virtual void runWorklist(Module &M){
+//        //Worklist algorithm code
+//    }
+//    virtual void flowFunction(Instruction &inst) {
+//        // Flow Inset = inst.getSet();
+//        // if (inst.opcode == 'blah') {
+//        //      flowFunctionBlah()
+//        // } else if ...
+//        //
+//    }
+//}
