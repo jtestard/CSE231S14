@@ -1,38 +1,42 @@
 /**
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
- * 	-	The template T correspond to an element of the domain defined by the client (examples) :
- * 		-	Intra Procedural Pointer Analysis : a variable
- * 		-	Range Analysis : a tuple (min,max) of integers
+ * 	-	The listNode structure is used to store the results of the analysis.
  */
 
-//#define Setvalue map<Variable,vector<T>>
-#include "llvm/Pass.h"
+#ifndef STATIC_ANALYSIS
 #include "llvm/IR/Module.h"
-#include "llvm/Support/raw_ostream.h"
-#include "llvm/Support/InstIterator.h"
 #include "Variable.h"
+#include "DomainElement.h"
 #include <map>
 #include <vector>
+#define STATIC_ANALYSIS
+#endif
 
 using namespace llvm;
 using namespace std;
 
-class StaticAnalysis/*<T>*/ {
+class StaticAnalysis {
 
-//	//Should be made a class.
-//	typedef struct lnode {
-//		map<Variable,vector<T>> in;
-//		BasicBlock * bb;
-//		bool dirty;
-//	} ListNode;
-//
-//	static char ID;
-//	virtual static map<Variable, vector<T>> top; // A variable may point to multiple elements of the domain
-//	virtual static map<Variable, vector<T>> bottom;
-//
-//	//This function implements our worklist
-//	virtual void runWorklist(Module &M);
+public :
+	//Used to build the context flow graph
+	typedef struct lnode {
+		map<Variable,vector<DomainElement> > in;
+		vector<lnode> succs;
+		bool dirty;
+	} ListNode;
+
+	//This function implements our worklist. This class should not be overwritten.
+	void runWorklist(Module &M);
+	ListNode getCFG();
+
+protected:
+	static map<Variable, vector<DomainElement> > top; // A variable may point to multiple elements of the domain
+	static map<Variable, vector<DomainElement> > bottom;
+
+private:
+	void buildCFG(Module &M);
+	ListNode contextFlowGraph;
 //
 //	/**
 //	 *  bbeval returns true if the basic block (listnode) is dirty (child node should be pushed on the worklist).
