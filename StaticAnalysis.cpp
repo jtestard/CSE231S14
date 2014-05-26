@@ -6,9 +6,9 @@
 //
 //
 
-#include "StaticAnalysis.hpp"
+#include "StaticAnalysis.h"
+#include <iostream>
 
-using namespace llvm;
 using namespace std;
 
 StaticAnalysis::ListNode StaticAnalysis::getCFG(){
@@ -16,9 +16,22 @@ StaticAnalysis::ListNode StaticAnalysis::getCFG(){
 }
 
 void StaticAnalysis::runWorklist(Module &M) {
+	cout << "Worklist algorithm started...\n";
 	buildCFG(M);
 }
 
 void StaticAnalysis::buildCFG(Module &M){
-	StaticAnalysis::ListNode root();
+	cout << "Building context flow graph...\n";
+//	StaticAnalysis::ListNode node();
+//	this->contextFlowGraph = &node;
+	this->contextFlowGraph.dirty = true;
+	cout << "Dirty flag is : " << this->contextFlowGraph.dirty << "\n";
+}
+
+StaticAnalysis::StaticAnalysis(){
+	this->contextFlowGraph = StaticAnalysis::ListNode();
+}
+
+StaticAnalysis::~StaticAnalysis(){
+
 }

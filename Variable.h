@@ -1,6 +1,5 @@
 #ifndef VARIABLE
 #define VARIABLE
-#endif
 #include <string>
 
 using namespace std;
@@ -14,3 +13,4 @@ public :
 	~Variable();
 	string GetName();
 };
+#endif

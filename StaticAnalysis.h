@@ -2,16 +2,19 @@
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
+ *
+ * 	Notice that the base static analysis forces the use of the ModulePass. We might want to reconsider this
+ * 	for analyses such as intraprocedural pointer analysis which does not require a module scope, but just a
+ * 	function scope.
  */
 
 #ifndef STATIC_ANALYSIS
+#define STATIC_ANALYSIS
 #include "llvm/IR/Module.h"
 #include "Variable.h"
 #include "DomainElement.h"
 #include <map>
 #include <vector>
-#define STATIC_ANALYSIS
-#endif
 
 using namespace llvm;
 using namespace std;
@@ -20,15 +23,19 @@ class StaticAnalysis {
 
 public :
 	//Used to build the context flow graph
-	typedef struct lnode {
-		map<Variable,vector<DomainElement> > in;
-		vector<lnode> succs;
+	typedef struct ListNode {
+		map<Variable,vector<DomainElement> > * in;
+		vector<ListNode> * succs;
+		BasicBlock *bb;
 		bool dirty;
+		ListNode(){}
 	} ListNode;
 
 	//This function implements our worklist. This class should not be overwritten.
 	void runWorklist(Module &M);
 	ListNode getCFG();
+	StaticAnalysis();
+	~StaticAnalysis();
 
 protected:
 	static map<Variable, vector<DomainElement> > top; // A variable may point to multiple elements of the domain
@@ -51,3 +58,4 @@ private:
 //	//should on be called by the print(raw_ostream &OS, const Module*) from LLVM.
 //	virtual void printJSON();
 };
+#endif
