@@ -17,8 +17,10 @@ fi
 export VTENV="${BASE}/../../../../.."
 export VTENV_NAME="${PROJ}"
 export CSE231ROOT="${VTENV}"
-export LLVMBIN="${VTENV}/llvm/build/Release+Asserts/bin"
-export LLVMLIB="${VTENV}/llvm/build/Release+Asserts/lib"
+#export LLVMBIN="${VTENV}/llvm/build/Release+Asserts/bin"
+#export LLVMLIB="${VTENV}/llvm/build/Release+Asserts/lib"
+export LLVMBIN="${VTENV}/llvm/build/Debug+Asserts/bin"
+export LLVMLIB="${VTENV}/llvm/build/Debug+Asserts/lib"
 export BENCHMARKS="${VTENV}/extra/benchmarks"
 export INSTRUMENTATION="${VTENV}/extra/instrumentation"
 export OUTPUTLOGS="${VTENV}/logs"
@@ -54,7 +56,9 @@ deactivate_vtenv() {
     fi
 }
 
-export PATH="${VTENV}/llvm/build/Release+Asserts/bin:${PATH}"
+#export PATH="${VTENV}/llvm/build/Release+Asserts/bin:${PATH}"
+export PATH="${VTENV}/llvm/build/Debug+Asserts/bin:${PATH}"
+
 
 export PS1="[${VTENV_NAME}]${PS1}"
 

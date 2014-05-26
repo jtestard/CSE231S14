@@ -5,20 +5,20 @@ export INSTRUMENTATION="${CSE231SRC}/instrumentation"
 make all
 
 
-echo "------------------------"
-echo "PART 1"
-echo "------------------------"
-echo "WELCOME EXAMPLE"
-opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/welcome/welcome.bc -analyze #>> $OUTPUTLOGS/welcome.static.log
+#echo "------------------------"
+#echo "PART 1"
+#echo "------------------------"
+#echo "WELCOME EXAMPLE"
+#opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/welcome/welcome.bc -analyze #>> $OUTPUTLOGS/welcome.static.log
 
-echo "COMPRESSION EXAMPLE"
-opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/compression/compression.bc -analyze >> $OUTPUTLOGS/compression.static.log
+#echo "COMPRESSION EXAMPLE"
+#opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/compression/compression.bc -analyze >> $OUTPUTLOGS/compression.static.log
 
-echo "GCD EXAMPLE"
-opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/gcd/gcd.bc > /dev/null -analyze >> $OUTPUTLOGS/gcd.static.log
+#echo "GCD EXAMPLE"
+#opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/gcd/gcd.bc > /dev/null -analyze >> $OUTPUTLOGS/gcd.static.log
 
-echo "HADAMARD EXAMPLE"
-opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/hadamard/hadamard.bc -analyze >> $OUTPUTLOGS/hadamard.static.log
+#echo "HADAMARD EXAMPLE"
+#opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/hadamard/hadamard.bc -analyze >> $OUTPUTLOGS/hadamard.static.log
 
 #echo "------------------------"
 #echo "PART 2"
@@ -115,14 +115,18 @@ opt -load $LLVMLIB/CSE231.so -staticInstructionCount < $BENCHMARKS/hadamard/hada
 #g++ $BENCHMARKS/hadamard/hadamard.o $LDFLAGS -o $BENCHMARKS/hadamard/hadamard
 #$BENCHMARKS/hadamard/hadamard >> $OUTPUTLOGS/hadamard.branchbias.log
 
-echo "GCD EXAMPLE"
-cd $BENCHMARKS/gcd/
-clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/branchbias/helper.cpp -o $INSTRUMENTATION/branchbias/helper.bc
-opt -load $LLVMLIB/CSE231.so -branchbias < $BENCHMARKS/gcd/gcd.bc > $BENCHMARKS/gcd/gcd_instrumented.bc
-llvm-link $INSTRUMENTATION/branchbias/helper.bc $BENCHMARKS/gcd/gcd_instrumented.bc -o $BENCHMARKS/gcd/gcd.linked.bc
+#echo "GCD EXAMPLE"
+##cd $BENCHMARKS/gcd/
+#clang $CPPFLAGS -O0 -emit-llvm -c $INSTRUMENTATION/branchbias/helper.cpp -o $INSTRUMENTATION/branchbias/helper.bc
+#opt -load $LLVMLIB/CSE231.so -branchbias < $BENCHMARKS/gcd/gcd.bc > $BENCHMARKS/gcd/gcd_instrumented.bc
+#llvm-link $INSTRUMENTATION/branchbias/helper.bc $BENCHMARKS/gcd/gcd_instrumented.bc -o $BENCHMARKS/gcd/gcd.linked.bc
 #opt -load $LLVMLIB/CSE231.so -dumpContent < $BENCHMARKS/gcd/gcd_instrumented.bc > /dev/null
-llc -filetype=obj $BENCHMARKS/gcd/gcd.linked.bc -o=$BENCHMARKS/gcd/gcd.o
-g++ $BENCHMARKS/gcd/gcd.o $LDFLAGS -o $BENCHMARKS/gcd/gcd
-$BENCHMARKS/gcd/gcd >> $OUTPUTLOGS/gcd.branchbias.log
+#llc -filetype=obj $BENCHMARKS/gcd/gcd.linked.bc -o=$BENCHMARKS/gcd/gcd.o
+#g++ $BENCHMARKS/gcd/gcd.o $LDFLAGS -o $BENCHMARKS/gcd/gcd
+#$BENCHMARKS/gcd/gcd >> $OUTPUTLOGS/gcd.branchbias.log
 
-
+#opt -load $LLVMLIB/CSE231.so -constProp < $BENCHMARKS/welcome/welcome.bc #-analyze #>> $OUTPUTLOGS/welcome.static.log
+#echo "-load $LLVMLIB/CSE231.so -constProp < $BENCHMARKS/welcome/welcome.bc #-analyze #>> $OUTPUTLOGS/welcome.static.log
+#" | gdb opt
+#echo "--args -load $LLVMLIB/CSE231.so -constProp < $BENCHMARKS/welcome/welcome.bc -analyze" | gdb opt 
+#gdb --args opt "-load $LLVMLIB/CSE231.so -constProp < $BENCHMARKS/welcome/welcome.bc -analyze"

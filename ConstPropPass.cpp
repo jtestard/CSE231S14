@@ -22,10 +22,11 @@ namespace {
     DummyOptimizationPass() : ModulePass(ID) {}
 
     virtual bool runOnModule(Module &M) {
-    	printf("MIMO \n");
+    	//printf("MIMO \n");
     	return false;
     }
 
+    //CAlled on the analyze flag (does not transform the code I beleive)
     void print(raw_ostream &OS, const Module*) const {
     	string example = "example";
     	Variable v(example);
@@ -36,4 +37,4 @@ namespace {
 }
 
 char DummyOptimizationPass::ID = 0;
-static RegisterPass<DummyOptimizationPass> X("dummyOptimization", "Dummy Optimization Pass", false, false);
+static RegisterPass<DummyOptimizationPass> X("constProp", "Constant propagation Pass", false, false);
