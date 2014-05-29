@@ -11,30 +11,46 @@
 #ifndef STATIC_ANALYSIS
 #define STATIC_ANALYSIS
 #include "llvm/IR/Module.h"
+#include "llvm/IR/Function.h"
 #include "Variable.h"
 #include "DomainElement.h"
 #include <map>
 #include <vector>
+#include <cstdlib>
+#include <queue>
+#include <sstream>
+#include <set>
 
 using namespace llvm;
 using namespace std;
 
+//Auto increment counter. Need a better way. For now sticking to rand() for id generation.
+//int cnt = 0;
+//int succ() { return cnt++;}
+
+//Static Analysis class
 class StaticAnalysis {
 
 public :
 	//Used to build the context flow graph
 	typedef struct ListNode {
-		map<Variable,vector<DomainElement> > * in;
-		vector<ListNode> * succs;
+		int id;
+		map<Variable,vector<DomainElement> > in;
+		vector<ListNode> succs;
 		BasicBlock *bb;
 		bool dirty;
-		ListNode(){}
+		ListNode(){
+			id = rand();
+			dirty = true;
+		}
+		//Not sure if we need a destructor
 	} ListNode;
 
 	//This function implements our worklist. This class should not be overwritten.
 	void runWorklist(Module &M);
 	ListNode getCFG();
-	StaticAnalysis();
+	string JSONCFG(); //Returns the context graph in JSON format.
+	StaticAnalysis(Module &M);
 	~StaticAnalysis();
 
 protected:
