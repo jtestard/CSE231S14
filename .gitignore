@@ -3,3 +3,5 @@ instrumentation/dynamic/*.bc
 *~
 *.pdf
 *.synctex.gz
+*.bc
+*.ll

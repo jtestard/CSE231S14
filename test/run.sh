@@ -3,7 +3,7 @@ source startenv.sh
 export CSE231SRC="${CSE231ROOT}/llvm/src/lib/CSE231"
 export INSTRUMENTATION="${CSE231SRC}/instrumentation"
 export TEST="${CSE231SRC}/test"
-export PROJ2BENCHMARKS="${CSE231ROOT}/proj2/benchmarks"
+export PROJ2BENCHMARKS="${CSE231SRC}/benchmarks"
 make all
 
 #Compile benchmarks
