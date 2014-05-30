@@ -3,15 +3,15 @@
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
  *
- * 	Notice that the base static analysis forces the use of the ModulePass. We might want to reconsider this
- * 	for analyses such as intraprocedural pointer analysis which does not require a module scope, but just a
- * 	function scope.
+ * 	Notice that we assume all static analyses use a function scope, in accordance with the Professor's instructions.
  */
 
 #ifndef STATIC_ANALYSIS
 #define STATIC_ANALYSIS
-#include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Instruction.h"
+#include "llvm/Support/raw_ostream.h"
 #include "Variable.h"
 #include "DomainElement.h"
 #include <map>
@@ -24,33 +24,30 @@
 using namespace llvm;
 using namespace std;
 
-//Auto increment counter. Need a better way. For now sticking to rand() for id generation.
-//int cnt = 0;
-//int succ() { return cnt++;}
-
 //Static Analysis class
 class StaticAnalysis {
 
 public :
 	//Used to build the context flow graph
 	typedef struct ListNode {
-		int id;
-		map<Variable,vector<DomainElement> > in;
-		vector<ListNode> succs;
-		BasicBlock *bb;
+		int index;
+		map<Variable,vector<DomainElement> > out;
+		vector<ListNode*> succs;
+		Instruction *inst; //uniquely identifies the node
 		bool dirty;
-		ListNode(){
-			id = rand();
+		ListNode(int idx){
 			dirty = true;
+			index = idx;
 		}
 		//Not sure if we need a destructor
 	} ListNode;
 
 	//This function implements our worklist. This class should not be overwritten.
-	void runWorklist(Module &M);
-	ListNode getCFG();
-	string JSONCFG(); //Returns the context graph in JSON format.
-	StaticAnalysis(Module &M);
+	void runWorklist();
+	ListNode* getCFG();
+	StringRef getFunctionName();
+	void JSONCFG(raw_ostream &OS); //Returns the context graph in JSON format.
+	StaticAnalysis(Function &F);
 	~StaticAnalysis();
 
 protected:
@@ -58,8 +55,9 @@ protected:
 	static map<Variable, vector<DomainElement> > bottom;
 
 private:
-	void buildCFG(Module &M);
-	ListNode contextFlowGraph;
+	void buildCFG(Function &F);
+	ListNode* contextFlowGraph;
+	StringRef functionName;
 //
 //	/**
 //	 *  bbeval returns true if the basic block (listnode) is dirty (child node should be pushed on the worklist).
@@ -71,7 +69,7 @@ private:
 //	virtual void split(ListNode &ln) = 0; //unsure if needed.
 //
 //	//Flow output for each instruction should be printable in JSON. This function
-//	//should on be called by the print(raw_ostream &OS, const Module*) from LLVM.
+//	//should on be called by the print(raw_ostream &OS, const Function*) from LLVM.
 //	virtual void printJSON();
 };
 #endif

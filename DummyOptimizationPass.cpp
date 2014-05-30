@@ -12,6 +12,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/InstIterator.h"
 #include <string>
+#include <vector>
 
 using namespace llvm;
 using namespace std;
@@ -23,17 +24,17 @@ using namespace std;
  *
  */
 namespace {
-  struct DummyOptimizationPass : public ModulePass {
+  struct DummyOptimizationPass : public FunctionPass {
     static char ID;
-    StaticAnalysis * staticAnalysis;
-    DummyOptimizationPass() : ModulePass(ID) {}
+    vector<StaticAnalysis *>staticAnalyses;
+    DummyOptimizationPass() : FunctionPass(ID) {}
 
-    virtual bool runOnModule(Module &M) {
+    virtual bool runOnFunction(Function &F) {
     	//initialize analysis
-    	staticAnalysis = new StaticAnalysis(M);
+    	staticAnalyses.push_back(new StaticAnalysis(F));
 
     	//Run worklist algorithm
-    	staticAnalysis->runWorklist(M);
+    	staticAnalyses.back()->runWorklist();
     	return false;
     }
 
@@ -48,10 +49,14 @@ namespace {
     	OS << "I created a new variable with name : " << v.GetName() << "\n";
 
     	//The pure static analysis. Functional testing
-    	OS << "STATIC ANALYSIS test : \n";
-    	OS << "ID of root : " << staticAnalysis->getCFG().id << "\n";
-    	OS << "Successors of CFG root : " << staticAnalysis->getCFG().succs.front().id << "\n";
-    	OS << "Print CFG : " << staticAnalysis->JSONCFG() << "\n";
+    	OS << "STATIC ANALYSES test : \n";
+    	for (unsigned int i = 0 ; i < staticAnalyses.size() ; i++){
+        	OS << "Function Name : " << staticAnalyses[i]->getFunctionName() << "\n";
+        	OS << "First Instruction Name : " << staticAnalyses[i]->getCFG()->succs[0]->inst->getName().str() << "\n";
+        	OS << "Print CFG : " << "\n";
+        	staticAnalyses[i]->JSONCFG(OS);
+    	}
+
   	}
   };
 }
