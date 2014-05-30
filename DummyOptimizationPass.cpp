@@ -6,7 +6,6 @@
 //
 //
 #include "llvm/Pass.h"
-#include "Variable.h"
 #include "StaticAnalysis.h"
 #include "llvm/IR/Module.h"
 #include "llvm/Support/raw_ostream.h"
@@ -39,11 +38,6 @@ namespace {
     void print(raw_ostream &OS, const Module*) const {
 
     	// ========== TESTING ==============
-    	//Test that variable class is properly linked (test can be removed later).
-    	string example = "example";
-    	Variable v(example);
-    	OS << "VARIABLE test : ";
-    	OS << "I created a new variable with name : " << v.GetName() << "\n";
 
     	//The pure static analysis. Functional testing
     	OS << "STATIC ANALYSES test : \n";

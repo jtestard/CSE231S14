@@ -14,3 +14,6 @@ llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 #Dummy optimization
 echo "DUMMY OPTIMIZATION"
 opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+
+echo "POINTER ANALYSIS OPTIMIZATION"
+opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze

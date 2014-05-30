@@ -70,9 +70,14 @@ protected:
 	 */
 	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
 
-private:
+	/**
+	 * This method builds the context flow graph on which the analysis is run.
+	 */
 	void buildCFG(Function &F);
+
 	ListNode* contextFlowGraph;
+
 	StringRef functionName;
+
 };
 #endif
