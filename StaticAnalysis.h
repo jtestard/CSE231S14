@@ -31,7 +31,7 @@ public :
 	//Used to build the context flow graph
 	typedef struct ListNode {
 		int index;
-		Flow out;
+		Flow in;
 		vector<ListNode*> succs;
 		Instruction *inst; //uniquely identifies the node
 		bool dirty;
@@ -39,7 +39,11 @@ public :
 			dirty = true;
 			index = idx;
 		}
-		//Not sure if we need a destructor
+		~ListNode(){
+			for(unsigned int i = 0 ; i < succs.size(); i++) {
+				delete succs[i];
+			}
+		}
 	} ListNode;
 
 	//This function implements our worklist. This class should not be overwritten.
@@ -51,27 +55,24 @@ public :
 	virtual ~StaticAnalysis();
 
 protected:
-	//Would be better if those two were static, but this is not possible in C++.
+	//Would be better if those two were const static, but this is not possible in C++, so please don't change them :).
 	Flow top;
 	Flow bottom;
-	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out); //Is called by the run worklist algorithm
+
+	/**
+	 * This method is called by the run worklist algorithm.
+	 * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
+	 * that instruction.
+	 * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
+	 *
+	 * WARNING : the output might not be empty to begin with. If it is not, then the output must be joined with the result of the processing
+	 * of the input.
+	 */
+	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
 
 private:
 	void buildCFG(Function &F);
 	ListNode* contextFlowGraph;
 	StringRef functionName;
-//
-//	/**
-//	 *  bbeval returns true if the basic block (listnode) is dirty (child node should be pushed on the worklist).
-//	 *  bbeval operates on the basic block level and executes all flow functions within the basic block.
-//	 */
-//	virtual bool bbeval(ListNode &listNode,BasicBlock &bb) = 0;
-//	virtual void flowFunction(map<Variable, vector<T>> &in, Instruction &inst, map<Variable, vector<T>> &out) = 0;
-//	virtual void join(ListNode &ln1, ListNode &ln2) = 0;
-//	virtual void split(ListNode &ln) = 0; //unsure if needed.
-//
-//	//Flow output for each instruction should be printable in JSON. This function
-//	//should on be called by the print(raw_ostream &OS, const Function*) from LLVM.
-//	virtual void printJSON();
 };
 #endif

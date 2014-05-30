@@ -18,12 +18,36 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
 
 /**
  * The run worklist is not much more than a classic BFS.
+ * Notice that it processes one instruction at a time. Processing multiple instructions at a time will be much harder.
  */
 void StaticAnalysis::runWorklist() {
 	queue<ListNode*> worklist;
-	worklist.push(this->contextFlowGraph->succs[0]);
+	ListNode* firstNode = this->contextFlowGraph->succs[0];
+
+	//Top must be defined in order for the worklist to work.
+	//This step uses the operator= from the Flow class.
+	firstNode->in = top;
+
+	worklist.push(firstNode);
 	while(!worklist.empty()){
+		//It is assumed that any node popped from the worklist has a complete "in" flow.
 		ListNode* current = worklist.front();
+
+		//This will executed the flow function
+		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
+			errs() << "[" << current->index << "," << current->succs[i]->index << "]:==[" << current->in.jsonString() << "," << current->succs[i]->in.jsonString() << "]";
+			//Execute flow function and push back on the queue if the flows are different.
+			//This step uses the operator== from the Flow class.
+			if(!(current->in==current->succs[i]->in)){
+				//The successor's input is updated with the processing of the current node's input
+				//by the flow function corresponding to the instruction.
+				//In case of loops, the successor's input will not be empty at this step. It must
+				//be joined with the result of the processing of the current node's input.
+				executeFlowFunction(current->in, *(current->inst), current->succs[i]->in);
+				worklist.push(current->succs[i]);
+			}
+		}
+
 		worklist.pop();
 	}
 }
@@ -84,7 +108,7 @@ void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 		ListNode* current = bfs.front();
 		OS << "\"" << current->index << "\" : {\n"; //index
 		OS << "\t\"representation\" : \"" << *(current->inst) << "\",\n"; //string representation
-		OS << "\t\"out\" : " << current->out.jsonString() << ",\n"; //flow output
+		OS << "\t\"in\" : " << current->in.jsonString() << ",\n"; //flow output
 		OS << "\t\"successors\" : [";
 		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
 			OS << current->succs[i]->index;

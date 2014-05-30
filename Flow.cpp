@@ -9,10 +9,10 @@
 #include "Flow.h"
 
 /**
- * For the basic static analysis, we assume all flows are equal.
+ * For the basic static analysis, just compare strings.
  */
 bool Flow::operator==(const Flow& other) const{
-	return true;
+	return basic==other.basic;
 }
 
 string Flow::jsonString(){
