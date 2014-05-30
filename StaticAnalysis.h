@@ -3,59 +3,76 @@
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
  *
- * 	Notice that the base static analysis forces the use of the ModulePass. We might want to reconsider this
- * 	for analyses such as intraprocedural pointer analysis which does not require a module scope, but just a
- * 	function scope.
+ * 	Notice that we assume all static analyses use a function scope, in accordance with the Professor's instructions.
  */
 
 #ifndef STATIC_ANALYSIS
 #define STATIC_ANALYSIS
-#include "llvm/IR/Module.h"
-#include "Variable.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/Instructions.h"
+#include "llvm/IR/Instruction.h"
+#include "llvm/Support/raw_ostream.h"
+#include "Flow.h"
 #include "DomainElement.h"
 #include <map>
 #include <vector>
+#include <cstdlib>
+#include <queue>
+#include <sstream>
+#include <set>
 
 using namespace llvm;
 using namespace std;
 
+//Static Analysis class
 class StaticAnalysis {
 
 public :
 	//Used to build the context flow graph
 	typedef struct ListNode {
-		map<Variable,vector<DomainElement> > * in;
-		vector<ListNode> * succs;
-		BasicBlock *bb;
+		int index;
+		Flow in;
+		vector<ListNode*> succs;
+		Instruction *inst; //uniquely identifies the node
 		bool dirty;
-		ListNode(){}
+		ListNode(int idx){
+			dirty = true;
+			index = idx;
+		}
+		~ListNode(){
+			for(unsigned int i = 0 ; i < succs.size(); i++) {
+				delete succs[i];
+			}
+		}
 	} ListNode;
 
 	//This function implements our worklist. This class should not be overwritten.
-	void runWorklist(Module &M);
-	ListNode getCFG();
-	StaticAnalysis();
-	~StaticAnalysis();
+	void runWorklist();
+	ListNode* getCFG();
+	StringRef getFunctionName();
+	void JSONCFG(raw_ostream &OS); //Returns the context graph in JSON format.
+	StaticAnalysis(Function &F);
+	virtual ~StaticAnalysis();
 
 protected:
-	static map<Variable, vector<DomainElement> > top; // A variable may point to multiple elements of the domain
-	static map<Variable, vector<DomainElement> > bottom;
+	//Would be better if those two were const static, but this is not possible in C++, so please don't change them :).
+	Flow top;
+	Flow bottom;
+
+	/**
+	 * This method is called by the run worklist algorithm.
+	 * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
+	 * that instruction.
+	 * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
+	 *
+	 * WARNING : the output might not be empty to begin with. If it is not, then the output must be joined with the result of the processing
+	 * of the input.
+	 */
+	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
 
 private:
-	void buildCFG(Module &M);
-	ListNode contextFlowGraph;
-//
-//	/**
-//	 *  bbeval returns true if the basic block (listnode) is dirty (child node should be pushed on the worklist).
-//	 *  bbeval operates on the basic block level and executes all flow functions within the basic block.
-//	 */
-//	virtual bool bbeval(ListNode &listNode,BasicBlock &bb) = 0;
-//	virtual void flowFunction(map<Variable, vector<T>> &in, Instruction &inst, map<Variable, vector<T>> &out) = 0;
-//	virtual void join(ListNode &ln1, ListNode &ln2) = 0;
-//	virtual void split(ListNode &ln) = 0; //unsure if needed.
-//
-//	//Flow output for each instruction should be printable in JSON. This function
-//	//should on be called by the print(raw_ostream &OS, const Module*) from LLVM.
-//	virtual void printJSON();
+	void buildCFG(Function &F);
+	ListNode* contextFlowGraph;
+	StringRef functionName;
 };
 #endif

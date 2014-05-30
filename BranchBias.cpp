@@ -88,8 +88,6 @@ namespace {
                         continue;
                     }
 
-
-
                     // getSuccessor(0) is the "taken" basic block. Perform the instrumentation
                     // add a call to the function that increases the "taken" counter.
                     BasicBlock *block = CI->getSuccessor(0);
