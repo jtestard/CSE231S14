@@ -32,9 +32,6 @@ namespace {
     virtual bool runOnFunction(Function &F) {
     	//initialize analysis
     	staticAnalyses.push_back(new StaticAnalysis(F));
-
-    	//Run worklist algorithm
-    	staticAnalyses.back()->runWorklist();
     	return false;
     }
 
@@ -54,6 +51,12 @@ namespace {
         	OS << "Function Name : " << staticAnalyses[i]->getFunctionName() << "\n";
         	OS << "First Instruction Name : " << staticAnalyses[i]->getCFG()->succs[0]->inst->getName().str() << "\n";
         	OS << "Print CFG : " << "\n";
+
+        	//Check graph once. Everything flow should be empty.
+        	staticAnalyses[i]->JSONCFG(OS);
+        	//Run worklist algorithm
+        	staticAnalyses.back()->runWorklist();
+        	//Check graph again. Everything flow should say top.
         	staticAnalyses[i]->JSONCFG(OS);
     	}
 

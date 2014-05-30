@@ -35,7 +35,6 @@ void StaticAnalysis::runWorklist() {
 
 		//This will executed the flow function
 		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
-			errs() << "[" << current->index << "," << current->succs[i]->index << "]:==[" << current->in.jsonString() << "," << current->succs[i]->in.jsonString() << "]";
 			//Execute flow function and push back on the queue if the flows are different.
 			//This step uses the operator== from the Flow class.
 			if(!(current->in==current->succs[i]->in)){
