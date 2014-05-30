@@ -43,14 +43,13 @@ void StaticAnalysis::buildCFG(Function &F){
    		Instruction* inst = it->first;
    		StaticAnalysis::ListNode* node = it->second;
    		if(isa<BranchInst>(inst)){
-   			errs() << "Branch found!\n";
    			//Several successors
    			BranchInst * br = dyn_cast<BranchInst>(inst);
    			for (unsigned int i = 0 ; i < br->getNumSuccessors() ; i++) {
    				BasicBlock * bb = br->getSuccessor(i); //Get successor basic block
    				Instruction * nextInst = bb->getFirstNonPHIOrDbgOrLifetime(); // Gets the first legitimate instruction.
    				if (nextInst!=0)
-   					if (helper.find(inst->getNextNode())!=helper.end())
+   					if (helper.find(nextInst)!=helper.end())
    						node->succs.push_back(helper[nextInst]); //Add its node to the successors
    			}
    		} else {
