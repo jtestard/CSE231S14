@@ -8,6 +8,8 @@
  * 		-	Intra Procedural Pointer Analysis : a variable
  * 		-	Range Analysis : a tuple (min,max) of integers
  *
+ * 		THIS CLASS IS DEPRECATED. PLEASE SEE THE FLOW CLASS.
+ *
  */
 
 #ifndef DOMAINELEMENT_H_

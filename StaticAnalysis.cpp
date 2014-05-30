@@ -16,8 +16,16 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
 	return this->contextFlowGraph;
 }
 
+/**
+ * The run worklist is not much more than a classic BFS.
+ */
 void StaticAnalysis::runWorklist() {
-
+	queue<ListNode*> worklist;
+	worklist.push(this->contextFlowGraph->succs[0]);
+	while(!worklist.empty()){
+		ListNode* current = worklist.front();
+		worklist.pop();
+	}
 }
 
 void StaticAnalysis::buildCFG(Function &F){
@@ -76,7 +84,7 @@ void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 		ListNode* current = bfs.front();
 		OS << "\"" << current->index << "\" : {\n"; //index
 		OS << "\t\"representation\" : \"" << *(current->inst) << "\",\n"; //string representation
-		OS << "\t\"out\" : [],\n"; //flow output
+		OS << "\t\"out\" : " << current->out.jsonString() << ",\n"; //flow output
 		OS << "\t\"successors\" : [";
 		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
 			OS << current->succs[i]->index;
@@ -98,7 +106,17 @@ StringRef StaticAnalysis::getFunctionName(){
 	return this->functionName;
 }
 
+/**
+ * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
+ * This method is expected to do much more when overloaded.
+ */
+void StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst, Flow &out){
+	out = top;
+}
+
 StaticAnalysis::StaticAnalysis(Function &F){
+	top = Flow("top");
+	bottom = Flow("bottom");
 	this->contextFlowGraph = new StaticAnalysis::ListNode(0);
 	this->functionName = F.getName();
 	buildCFG(F);

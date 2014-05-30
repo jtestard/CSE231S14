@@ -12,7 +12,7 @@
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/raw_ostream.h"
-#include "Variable.h"
+#include "Flow.h"
 #include "DomainElement.h"
 #include <map>
 #include <vector>
@@ -31,7 +31,7 @@ public :
 	//Used to build the context flow graph
 	typedef struct ListNode {
 		int index;
-		map<Variable,vector<DomainElement> > out;
+		Flow out;
 		vector<ListNode*> succs;
 		Instruction *inst; //uniquely identifies the node
 		bool dirty;
@@ -48,11 +48,13 @@ public :
 	StringRef getFunctionName();
 	void JSONCFG(raw_ostream &OS); //Returns the context graph in JSON format.
 	StaticAnalysis(Function &F);
-	~StaticAnalysis();
+	virtual ~StaticAnalysis();
 
 protected:
-	static map<Variable, vector<DomainElement> > top; // A variable may point to multiple elements of the domain
-	static map<Variable, vector<DomainElement> > bottom;
+	//Would be better if those two were static, but this is not possible in C++.
+	Flow top;
+	Flow bottom;
+	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out); //Is called by the run worklist algorithm
 
 private:
 	void buildCFG(Function &F);
