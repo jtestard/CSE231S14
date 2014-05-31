@@ -70,7 +70,7 @@ protected:
 	 */
 	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
 
-private:
+//private:
 	void buildCFG(Function &F);
 	ListNode* contextFlowGraph;
 	StringRef functionName;

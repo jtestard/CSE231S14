@@ -1,6 +1,7 @@
 #include "ConstProp.h"
 
-ConstProp::ConstProp(Function &F){
+ConstProp::ConstProp(Function &F):StaticAnalysis(F){
+
 
 	top = Flow("top");
 

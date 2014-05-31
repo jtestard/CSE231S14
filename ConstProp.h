@@ -8,7 +8,6 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/raw_ostream.h"
 #include "Flow.h"
-#include "DomainElement.h"
 #include <map>
 #include <vector>
 #include <cstdlib>
@@ -26,9 +25,9 @@ public:
 
 
 	ConstProp();
-	ConstProp(Function &F/*put arguments here*/):StaticAnalysis(F){
+	ConstProp(Function &F/*put arguments here*/);//:StaticAnalysis(F){
 
-	}
+	//}
 	~ConstProp();
 
 protected:
