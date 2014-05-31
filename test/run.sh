@@ -12,5 +12,8 @@ clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o 
 llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 
 #Dummy optimization
-echo "DUMMY OPTIMIZATION"
-opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+#echo "DUMMY OPTIMIZATION"
+#opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+echo "DUMMY CONST PROP"
+opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/constantProp/simplecp.bc -analyze
+
