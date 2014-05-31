@@ -8,8 +8,8 @@
 
 #include "Flow.h"
 
-const string Flow::TOP;
-const string Flow::BOTTOM;
+const string Flow::TOP = "top";
+const string Flow::BOTTOM = "bottom";
 
 /**
  * For the basic static analysis, just compare strings.
@@ -23,7 +23,7 @@ string Flow::jsonString(){
 }
 
 Flow & Flow::operator=(const Flow &rhs){
-	basic = rhs.basic;
+	this->basic = rhs.basic;
 	return *this;
 }
 
