@@ -1,8 +1,8 @@
 #include "StaticAnalysis.h"
 
 
-#ifndef STATIC_ANALYSIS
-#define STATIC_ANALYSIS
+#ifndef CONSTPROP
+#define CONSTPROP
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Instruction.h"
@@ -24,9 +24,10 @@ class ConstProp : public StaticAnalysis
 
 public:
 
-	~ConstProp();
+
 	ConstProp();
-	ConstProp(int t_base,/*put arguments here*/);
+	ConstProp(Function &F/*put arguments here*/);
+	~ConstProp();
 
 protected:
 
@@ -44,3 +45,5 @@ protected:
 
 
 #endif
+
+
