@@ -21,14 +21,17 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
  * Notice that it processes one instruction at a time. Processing multiple instructions at a time will be much harder.
  */
 void StaticAnalysis::runWorklist() {
+	//We are using a queue for the worklist, but it could be any type of structure, really.
 	queue<ListNode*> worklist;
-	ListNode* firstNode = this->contextFlowGraph->succs[0];
 
-	//Top must be defined in order for the worklist to work.
+	//Set each edge to bottom :
+	//Top and bottom must be defined in order for the worklist to work.
 	//This step uses the operator= from the Flow class.
-	firstNode->in = top;
+	for (unsigned int i = 0; i < CFGarray.size(); i++) {
+		CFGarray[i]->in = bottom;
+		worklist.push(CFGarray[i]);
+	}
 
-	worklist.push(firstNode);
 	while(!worklist.empty()){
 		//It is assumed that any node popped from the worklist has a complete "in" flow.
 		ListNode* current = worklist.front();
@@ -37,7 +40,7 @@ void StaticAnalysis::runWorklist() {
 		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
 			//Execute flow function and push back on the queue if the flows are different.
 			//This step uses the operator== from the Flow class.
-			if(!(current->out==current->succs[i]->in)){
+			if(!(current->in==current->succs[i]->in)){
 				//The successor's input is updated with the processing of the current node's input
 				//by the flow function corresponding to the instruction.
 				//In case of loops, the successor's input will not be empty at this step. It must
@@ -66,6 +69,7 @@ void StaticAnalysis::buildCFG(Function &F){
 			StaticAnalysis::ListNode* node = new StaticAnalysis::ListNode(counter++);
 			node->inst = instruction;
 			helper.insert(pair<Instruction*,StaticAnalysis::ListNode*>(instruction,node));
+			CFGarray.push_back(node);
 		}
    	}
 

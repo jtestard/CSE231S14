@@ -28,7 +28,7 @@ using namespace std;
 class StaticAnalysis {
 
 public :
-	//Used to build the context flow graph
+	//Used for the nodes of the context flow graph
 	typedef struct ListNode {
 		int index;
 		Flow in;
@@ -45,6 +45,13 @@ public :
 			}
 		}
 	} ListNode;
+
+	//Use for the edges of the context flow graph
+	typedef struct ListEdge{
+		Flow flow;
+		ListNode* source;
+		ListNode* dest;
+	} ListEdge;
 
 	//This function implements our worklist. This class should not be overwritten.
 	void runWorklist();
@@ -70,9 +77,9 @@ protected:
 	 */
 	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
 
-private:
 	void buildCFG(Function &F);
 	ListNode* contextFlowGraph;
+	vector<ListNode*> CFGarray;
 	StringRef functionName;
 };
 #endif
