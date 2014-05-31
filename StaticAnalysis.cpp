@@ -45,10 +45,13 @@ void StaticAnalysis::runWorklist() {
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
 			inputFlows.push_back(current->incoming[i]->flow);
 		}
+
+		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
 		Flow in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
 			in = in.join(inputFlows[i]);
 		}
+
 
 		//EXECUTE THE FLOW FUNCTION
 		Flow out = executeFlowFunction(in,*(current->inst));
@@ -86,6 +89,13 @@ void StaticAnalysis::buildCFG(Function &F){
 		}
    	}
 
+   	//Make the root point to the first instruction
+   	this->contextFlowGraph = CFGNodes[0];
+   	//Create incoming edge for the first node (does not exist otherwise.
+   	StaticAnalysis::ListEdge* firstEdge = new StaticAnalysis::ListEdge(CFGNodes[0],CFGNodes[0]);
+   	CFGNodes[0]->incoming.push_back(firstEdge);
+   	CFGEdges.push_back(firstEdge);
+
    	//Go through each key value mapping and update the successor list.
    	for (map<Instruction*,StaticAnalysis::ListNode*>::const_iterator it = helper.begin(); it != helper.end() ; ++it) {
    		Instruction* inst = it->first;
@@ -119,9 +129,6 @@ void StaticAnalysis::buildCFG(Function &F){
    			//Weird bug here. getNextNode can point to a basic block instead of an instruction. Should be taken care of by the key check.
    		}
    	}
-
-   	//Make the root point to the first instruction
-   	this->contextFlowGraph = CFGNodes[0];
 }
 
 //Prints out the graph data using BFS and avoiding cycles.
