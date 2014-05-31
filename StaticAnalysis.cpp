@@ -37,7 +37,7 @@ void StaticAnalysis::runWorklist() {
 		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
 			//Execute flow function and push back on the queue if the flows are different.
 			//This step uses the operator== from the Flow class.
-			if(!(current->in==current->succs[i]->in)){
+			if(!(current->out==current->succs[i]->in)){
 				//The successor's input is updated with the processing of the current node's input
 				//by the flow function corresponding to the instruction.
 				//In case of loops, the successor's input will not be empty at this step. It must

@@ -50,13 +50,13 @@ namespace {
     	for (unsigned int i = 0 ; i < staticAnalyses.size() ; i++){
         	OS << "Function Name : " << staticAnalyses[i]->getFunctionName() << "\n";
         	OS << "First Instruction Name : " << staticAnalyses[i]->getCFG()->succs[0]->inst->getName().str() << "\n";
-        	OS << "Print CFG : " << "\n";
-
+        	OS << "Print CFG (without flow) : " << "\n";
         	//Check graph once. Everything flow should be empty.
         	staticAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
-        	staticAnalyses.back()->runWorklist();
+        	staticAnalyses[i]->runWorklist();
         	//Check graph again. Everything flow should say top.
+        	OS << "\nPrint CFG (with flow) : " << "\n";
         	staticAnalyses[i]->JSONCFG(OS);
     	}
 
