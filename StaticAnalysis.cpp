@@ -138,8 +138,8 @@ void StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst, Flow &out)
 }
 
 StaticAnalysis::StaticAnalysis(Function &F){
-	top = Flow("top");
-	bottom = Flow("bottom");
+	top = Flow("top");//Ahould be changed by subclasses of Flow
+	bottom = Flow("bottom");//Ahould be changed by subclasses of Flow
 	this->contextFlowGraph = new StaticAnalysis::ListNode(0);
 	this->functionName = F.getName();
 	buildCFG(F);

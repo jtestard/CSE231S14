@@ -41,6 +41,7 @@ public :
 	//You do not have to overload these constructors. You can create additional constructors with different signatures as well in your subclasses.
 	Flow();
 	Flow(string input);
+	//ConstantPropFlow(map<variable,int>());
 
 	//Destructor must be virtual.
 	virtual ~Flow();
