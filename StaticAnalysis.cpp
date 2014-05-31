@@ -21,37 +21,51 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
  * Notice that it processes one instruction at a time. Processing multiple instructions at a time will be much harder.
  */
 void StaticAnalysis::runWorklist() {
-//	//We are using a queue for the worklist, but it could be any type of structure, really.
-//	queue<ListNode*> worklist;
-//
-//	//Set each edge to bottom :
-//	//Top and bottom must be defined in order for the worklist to work.
-//	//This step uses the operator= from the Flow class.
-//	for (unsigned int i = 0; i < CFGarray.size(); i++) {
-//		CFGarray[i]->in = bottom;
-//		worklist.push(CFGarray[i]);
-//	}
-//
-//	while(!worklist.empty()){
-//		//It is assumed that any node popped from the worklist has a complete "in" flow.
-//		ListNode* current = worklist.front();
-//
-//		//This will executed the flow function
-//		for(unsigned int i = 0 ; i < current->succs.size(); i++) {
-//			//Execute flow function and push back on the queue if the flows are different.
-//			//This step uses the operator== from the Flow class.
-//			if(!(current->in==current->succs[i]->in)){
-//				//The successor's input is updated with the processing of the current node's input
-//				//by the flow function corresponding to the instruction.
-//				//In case of loops, the successor's input will not be empty at this step. It must
-//				//be joined with the result of the processing of the current node's input.
-//				executeFlowFunction(current->in, *(current->inst), current->succs[i]->in);
-//				worklist.push(current->succs[i]);
-//			}
-//		}
-//
-//		worklist.pop();
-//	}
+	//We are using a queue for the worklist, but it could be any type of structure, really.
+	queue<ListNode*> worklist;
+
+	//Set each edge to bottom :
+	//Top and bottom must be defined in order for the worklist to work.
+	//This step uses the operator= from the Flow class.
+	for (unsigned int i = 0; i < CFGEdges.size(); i++) {
+		CFGEdges[i]->flow = bottom;
+	}
+
+	//Add each node to the worklist
+	for (unsigned int i = 0 ; i < CFGNodes.size(); i++) {
+		worklist.push(CFGNodes[i]);
+	}
+
+	while(!worklist.empty()){
+		//It is assumed that any node popped from the worklist has a complete "in" flow.
+		ListNode* current = worklist.front();
+
+		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
+		vector<Flow> inputFlows;
+		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
+			inputFlows.push_back(current->incoming[i]->flow);
+		}
+		Flow in = inputFlows[0];
+		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
+			in = in.join(inputFlows[i]);
+		}
+
+		//EXECUTE THE FLOW FUNCTION
+		Flow out = executeFlowFunction(in,*(current->inst));
+
+		//This will executed the flow function
+		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
+			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
+			Flow new_out = out.join(current->outgoing[i]->flow);
+
+			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
+			if (!(new_out==current->outgoing[i]->flow)){
+				current->outgoing[i]->flow = new_out;
+				worklist.push(current->outgoing[i]->destination);
+			}
+		}
+		worklist.pop();
+	}
 }
 
 void StaticAnalysis::buildCFG(Function &F){
@@ -131,7 +145,7 @@ void StaticAnalysis::JSONEdge(raw_ostream &OS, ListEdge* edge) {
 void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
 	OS << "\t\"" << node->index << "\" : {\n\t\t";
 	OS << "\"representation\" : \"" << *(node->inst) << "\",\n\t\t";
-	OS << "\"incoming\" : [\n\t\t";
+	OS << "\"incoming\" : [\n";
 	for (unsigned int i = 0 ; i < node->incoming.size() ; i++) {
 		OS << "\t\t\t";
 		StaticAnalysis::JSONEdge(OS,node->incoming[i]);
@@ -139,7 +153,7 @@ void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
 			OS << ",\n";
 	}
 	OS << "\n\t\t],\n";
-	OS << "\t\t\"outgoing\" : [\n\t\t";
+	OS << "\t\t\"outgoing\" : [\n";
 	for (unsigned int i = 0 ; i < node->outgoing.size() ; i++) {
 		OS << "\t\t\t";
 		StaticAnalysis::JSONEdge(OS,node->outgoing[i]);
@@ -158,8 +172,8 @@ StringRef StaticAnalysis::getFunctionName(){
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-void StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst, Flow &out){
-	out = top;
+Flow StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
+	return top;
 }
 
 StaticAnalysis::StaticAnalysis(Function &F){

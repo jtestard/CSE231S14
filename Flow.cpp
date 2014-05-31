@@ -36,7 +36,7 @@ Flow::Flow(string input){
 }
 
 //Most basic join operation possible.
-Flow Flow::join(const Flow &other){
+Flow Flow::join(Flow &other){
 	//join bottom-bottom gives you bottom. Anything else gives you top.
 	if (this->basic==BOTTOM && other.basic==BOTTOM)
 		return Flow(BOTTOM);

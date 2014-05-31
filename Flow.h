@@ -45,7 +45,7 @@ public :
 	/**
 	 * The join function must be overloaded by the Flow subclasses.
 	 */
-	virtual Flow join(const Flow &other);
+	virtual Flow join(Flow &other);
 
 	//You do not have to overload these constructors. You can create additional constructors with different signatures as well in your subclasses.
 	Flow();

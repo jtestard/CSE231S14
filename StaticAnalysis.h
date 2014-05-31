@@ -70,10 +70,9 @@ public :
 	 * that instruction.
 	 * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
 	 *
-	 * WARNING : the output might not be empty to begin with. If it is not, then the output must be joined with the result of the processing
-	 * of the input.
+	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
+	virtual Flow executeFlowFunction(Flow &in, Instruction &inst);
 
 private:
 	void buildCFG(Function &F);
