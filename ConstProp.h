@@ -26,7 +26,9 @@ public:
 
 
 	ConstProp();
-	ConstProp(Function &F/*put arguments here*/);
+	ConstProp(Function &F/*put arguments here*/):StaticAnalysis(F){
+
+	}
 	~ConstProp();
 
 protected:
