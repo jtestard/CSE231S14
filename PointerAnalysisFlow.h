@@ -50,6 +50,9 @@ protected :
 	//This constructor should be used for top or bottom.
 	PointerAnalysisFlow(string input);
 
+	//Required for type casting within overloaded functions.
+	PointerAnalysisFlow(Flow &flow);
+
 	~PointerAnalysisFlow();
 
 	//This string should only be used to represent TOP or BOTTOM.

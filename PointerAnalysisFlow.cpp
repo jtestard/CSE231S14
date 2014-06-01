@@ -36,13 +36,17 @@ string PointerAnalysisFlow::jsonString(){
 }
 
 void PointerAnalysisFlow::copy(Flow &rhs){
-//	this->basic = ((PointerAnalysisFlow)rhs).basic;
-//	this->value = ((PointerAnalysisFlow)rhs).value;
+	PointerAnalysisFlow f = (PointerAnalysisFlow)rhs;
+	this->basic = f.basic;
+	this->value = f.value;
 }
 
 PointerAnalysisFlow::PointerAnalysisFlow() : Flow() { }
 
 PointerAnalysisFlow::PointerAnalysisFlow(string input) : Flow(input){}
+
+PointerAnalysisFlow::PointerAnalysisFlow(Flow &flow) : Flow(flow.basic){}
+
 
 //Most basic join operation possible.
 Flow PointerAnalysisFlow::join(Flow &other){
