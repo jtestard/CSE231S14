@@ -43,13 +43,11 @@ namespace {
     	OS << "POINTER ANALYSES test : \n";
     	for (unsigned int i = 0 ; i < pointerAnalyses.size() ; i++){
         	OS << "Print CFG (without flow) : " << "\n";
-        	//Check graph once. Everything flow should be empty.
-        	//pointerAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
         	pointerAnalyses[i]->runWorklist();
-        	//Check graph again. Everything flow should say top.
+        	//Check analysis results.
         	OS << "\nPrint CFG (with flow) : " << "\n";
-        	//pointerAnalyses[i]->JSONCFG(OS);
+        	pointerAnalyses[i]->JSONCFG(OS);
     	}
 
   	}

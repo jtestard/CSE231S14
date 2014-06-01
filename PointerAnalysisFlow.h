@@ -56,12 +56,12 @@ public:
 	PointerAnalysisFlow(string input);
 
 	//Required for type casting within overloaded functions.
-	PointerAnalysisFlow(Flow* flow);
+	PointerAnalysisFlow(PointerAnalysisFlow* flow);
 
 	~PointerAnalysisFlow();
 
 	//Variables are represented as strings.
-	map<string, set<string> > value;
+	map<string, set<string> >* value;
 
 };
 
