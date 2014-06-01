@@ -28,7 +28,7 @@ void StaticAnalysis::runWorklist() {
 	//Top and bottom must be defined in order for the worklist to work.
 	//This step uses the operator= from the Flow class.
 	for (unsigned int i = 0; i < CFGEdges.size(); i++) {
-		CFGEdges[i]->flow.copy(bottom);
+		CFGEdges[i]->flow->copy(bottom);
 	}
 
 	//Add each node to the worklist
@@ -41,27 +41,27 @@ void StaticAnalysis::runWorklist() {
 		ListNode* current = worklist.front();
 
 		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
-		vector<Flow> inputFlows;
+		vector<Flow*> inputFlows;
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
 			inputFlows.push_back(current->incoming[i]->flow);
 		}
 
 		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
-		Flow in = inputFlows[0];
+		Flow* in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
-			in = in.join(inputFlows[i]);
+			in = in->join(inputFlows[i]);
 		}
 
 		//EXECUTE THE FLOW FUNCTION
-		Flow out = executeFlowFunction(in,*(current->inst));
+		Flow* out = executeFlowFunction(in,*(current->inst));
 
 		//This will executed the flow function
 				for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
 					//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
-					Flow new_out = out.join(current->outgoing[i]->flow);
+					Flow* new_out = out->join(current->outgoing[i]->flow);
 					//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-					if (!(new_out.equals(current->outgoing[i]->flow))){
-						current->outgoing[i]->flow.copy(new_out);
+					if (!(new_out->equals(current->outgoing[i]->flow))){
+						current->outgoing[i]->flow->copy(new_out);
 						worklist.push(current->outgoing[i]->destination);
 					}
 				}
@@ -144,7 +144,7 @@ void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 
 void StaticAnalysis::JSONEdge(raw_ostream &OS, ListEdge* edge) {
 	OS << "{\"Edge\" : " << "[" << edge->source->index << "," << edge->destination->index << "],";
-	OS << "\"Flow\" : " << edge->flow.jsonString() << "}";
+	OS << "\"Flow\" : " << edge->flow->jsonString() << "}";
 }
 
 void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
@@ -177,7 +177,7 @@ StringRef StaticAnalysis::getFunctionName(){
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
+Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction &inst){
 //	switch(instruction) {
 //	case:
 //
@@ -186,8 +186,8 @@ Flow StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
 }
 
 StaticAnalysis::StaticAnalysis(Function &F){
-	top = Flow(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
-	bottom = Flow(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+	top = new Flow(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
+	bottom = new Flow(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
 	this->functionName = F.getName();
 	buildCFG(F);
 }
@@ -203,4 +203,6 @@ StaticAnalysis::~StaticAnalysis(){
 	for (unsigned int i = 0 ; i < CFGEdges.size() ; i++) {
 		delete CFGEdges[i];
 	}
+	delete top;
+	delete bottom;
 }

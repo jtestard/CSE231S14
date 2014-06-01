@@ -42,12 +42,16 @@ public :
 
 	//Use for the edges of the context flow graph
 	typedef struct ListEdge{
-		Flow flow;
+		Flow* flow;
 		ListNode* source;
 		ListNode* destination;
 		ListEdge(ListNode* src, ListNode* dst){
 			source = src;
 			destination = dst;
+			flow = new Flow();
+		}
+		~ListEdge(){
+			delete flow;
 		}
 	} ListEdge;
 
@@ -61,8 +65,8 @@ public :
 	virtual ~StaticAnalysis();
 
 	//Would be better if those two were const static, but this is not possible in C++, so please don't change them :).
-	Flow top;
-	Flow bottom;
+	Flow* top;
+	Flow* bottom;
 
 	/**
 	 * This method is called by the run worklist algorithm.
@@ -72,7 +76,7 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	virtual Flow executeFlowFunction(Flow &in, Instruction &inst);
+	virtual Flow* executeFlowFunction(Flow *in, Instruction &inst);
 
 //private:
 	void buildCFG(Function &F);

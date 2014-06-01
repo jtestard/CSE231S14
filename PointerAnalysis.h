@@ -1,4 +1,5 @@
-/**
+/*
+ *
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
@@ -30,7 +31,7 @@ class PointerAnalysis : public StaticAnalysis {
 public :
 
 	PointerAnalysis(Function &F);
-	/**
+	/*
 	 * This method is called by the run worklist algorithm.
 	 * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
 	 * that instruction.
@@ -38,6 +39,6 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	Flow executeFlowFunction(Flow &in, Instruction &inst);
+	Flow* executeFlowFunction(Flow* in, Instruction &inst);
 };
 #endif

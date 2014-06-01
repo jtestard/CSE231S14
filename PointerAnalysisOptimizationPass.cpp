@@ -1,3 +1,4 @@
+
 //
 //  PointerAnalysisOptimizationPass.cpp
 //  
@@ -17,12 +18,12 @@
 using namespace llvm;
 using namespace std;
 
-/**
+/*
  * BUGS FOUND AND FIXED :
  * 	-	Avoid static members for the passes. This generates a linking error when making the shared object.
  * 	-	raw_ostream& object does not like to be fed a std::endl symbol. Prefer to user "\n".
- *
  */
+
 namespace {
   struct PointerAnalysisOptimizationPass : public FunctionPass {
     static char ID;
