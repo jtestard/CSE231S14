@@ -13,7 +13,6 @@
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/raw_ostream.h"
 #include "Flow.h"
-#include "DomainElement.h"
 #include <map>
 #include <vector>
 #include <cstdlib>
@@ -58,6 +57,7 @@ public :
 	StringRef getFunctionName();
 	void JSONCFG(raw_ostream &OS); //Returns the context graph in JSON format.
 	StaticAnalysis(Function &F);
+	StaticAnalysis(); //To be called by subclasses
 	virtual ~StaticAnalysis();
 
 	//Would be better if those two were const static, but this is not possible in C++, so please don't change them :).

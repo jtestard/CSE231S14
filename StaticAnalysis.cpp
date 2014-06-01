@@ -192,6 +192,8 @@ StaticAnalysis::StaticAnalysis(Function &F){
 	buildCFG(F);
 }
 
+StaticAnalysis::StaticAnalysis() {}
+
 StaticAnalysis::~StaticAnalysis(){
 	delete this->contextFlowGraph;
 	//Might need to put something else here
