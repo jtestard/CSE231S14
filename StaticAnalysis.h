@@ -74,7 +74,7 @@ public :
 	 */
 	virtual Flow executeFlowFunction(Flow &in, Instruction &inst);
 
-private:
+//private:
 	void buildCFG(Function &F);
 	static void JSONEdge(raw_ostream &OS, ListEdge* edge);
 	static void JSONNode(raw_ostream &OS, ListNode* node);

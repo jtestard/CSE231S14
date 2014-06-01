@@ -56,17 +56,17 @@ void StaticAnalysis::runWorklist() {
 		Flow out = executeFlowFunction(in,*(current->inst));
 
 		//This will executed the flow function
-		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
-			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
-			Flow new_out = out.join(current->outgoing[i]->flow);
+				for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
+					//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
+					Flow new_out = out.join(current->outgoing[i]->flow);
 
-			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-			if (!(new_out==current->outgoing[i]->flow)){
-				current->outgoing[i]->flow = new_out;
-				worklist.push(current->outgoing[i]->destination);
-			}
-		}
-		worklist.pop();
+					//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
+					if (!(new_out==current->outgoing[i]->flow)){
+						current->outgoing[i]->flow = new_out;
+						worklist.push(current->outgoing[i]->destination);
+					}
+				}
+				worklist.pop();
 	}
 }
 
