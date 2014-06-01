@@ -14,7 +14,7 @@ const string Flow::BOTTOM = "bottom";
 /**
  * For the basic static analysis, just compare strings.
  */
-bool Flow::operator==(const Flow& other) const{
+bool Flow::equals(Flow& other){
 	return basic==other.basic;
 }
 
@@ -22,9 +22,8 @@ string Flow::jsonString(){
 	return "\"" + basic + "\"";
 }
 
-Flow & Flow::operator=(const Flow &rhs){
+void Flow::copy(Flow &rhs){
 	this->basic = rhs.basic;
-	return *this;
 }
 
 Flow::Flow(){

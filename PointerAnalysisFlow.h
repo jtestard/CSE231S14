@@ -22,7 +22,7 @@ class PointerAnalysisFlow : public Flow {
 protected :
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
-	bool operator==(const Flow& other) const;
+	bool equals(Flow& other);
 
 	/*
 	 * This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
@@ -37,7 +37,7 @@ protected :
 	/**
 	 * The equality operator must also be overloaded when we want to assign a variable to top or bottom (or something else).
 	 */
-	Flow & operator=(const Flow &rhs);
+	void copy(Flow &rhs);
 
 	/**
 	 * The join function must be overloaded by the Flow subclasses.
