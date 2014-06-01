@@ -19,4 +19,4 @@ opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalys
 
 #opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
 #mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
-3llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
+#llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc

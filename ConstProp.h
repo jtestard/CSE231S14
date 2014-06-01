@@ -41,7 +41,8 @@ protected:
 		 * WARNING : the output might not be empty to begin with. If it is not, then the output must be joined with the result of the processing
 		 * of the input.
 		 */
-	void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
+	Flow executeFlowFunction(Flow &in, Instruction &inst);
+	//virtual Flow executeFlowFunction(Flow &in, Instruction &inst);
 };
 
 
