@@ -11,16 +11,18 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include "llvm/Support/raw_ostream.h"
 #include "Flow.h"
 
 using namespace std;
+using namespace llvm;
 /**
  * This class is the FLow class for the pointer analysis.
  * This is a May-Point-To Analysis.
  */
 class PointerAnalysisFlow : public Flow {
 
-protected :
+public:
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
 	bool equals(Flow& other);
@@ -55,9 +57,6 @@ protected :
 	PointerAnalysisFlow(Flow &flow);
 
 	~PointerAnalysisFlow();
-
-	//This string should only be used to represent TOP or BOTTOM.
-	string basic;
 
 	//Variables are represented as strings.
 	map<string,set<string> > value;

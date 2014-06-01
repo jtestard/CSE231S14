@@ -12,6 +12,9 @@
  */
 bool PointerAnalysisFlow::equals(Flow& otherSuper) {
 	PointerAnalysisFlow other = (PointerAnalysisFlow) otherSuper;
+//	return (*this).value.size() == other.value.size()
+//			&& equal((*this).value.begin(), (*this).value.end(),
+//					other.value.begin());
 //	if (other.value.size()!=this->value.size())
 //		return false;
 //	for (map<string, set<string> >::const_iterator itThis = this->value.begin(), itOther = other.value.begin() ;
@@ -20,16 +23,15 @@ bool PointerAnalysisFlow::equals(Flow& otherSuper) {
 //			string varOther = itOther->first;
 //			set<string> setThis = itThis->second;
 //			set<string> setOther = itOther->second;
-//			if (setThis.size()!=setOther.size())
-//				return false;
-//			for (set<string>::iterator t = setThis.begin(), o = setOther.begin() ; t != setThis.end() ; t++, o++) {
+//			if (varThis==varOther) {
 //
 //			}
+//			if (setThis.size()!=setOther.size())
+//				return false;
+//			if (!(equal(set))
 //	}
-//	return true;
-	return (*this).value.size() == other.value.size()
-			&& equal((*this).value.begin(), (*this).value.end(),
-					other.value.begin());
+	return (*this).basic==other.basic;
+
 }
 
 string PointerAnalysisFlow::jsonString() {
@@ -56,6 +58,7 @@ PointerAnalysisFlow::PointerAnalysisFlow(Flow &flow) :
 
 //Merges flow together.
 Flow PointerAnalysisFlow::join(Flow &otherSuper) {
+	errs()<< "In PointerAnalysisFlow::join()\n";
 	//join bottom-bottom gives you bottom. Anything else gives you top.
 	PointerAnalysisFlow other = (PointerAnalysisFlow) otherSuper;
 
@@ -72,6 +75,7 @@ Flow PointerAnalysisFlow::join(Flow &otherSuper) {
 	if (this->basic == TOP || other.basic == TOP)
 		return PointerAnalysisFlow(TOP);
 
+	//Merge the input from both.
 	PointerAnalysisFlow f;
 	for (map<string, set<string> >::const_iterator itThis = this->value.begin();
 			itThis != this->value.end(); itThis++) {
