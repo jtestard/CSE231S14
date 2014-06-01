@@ -15,10 +15,14 @@ using namespace std;
  * It is a very general class but must overload the functions shown below.
  * It can be anything, but it should be most of the time have an attribute to map
  * each variable to the information computed by the analysis.
+ *
+ * This class is the closest we can get to a lattice definition.
  */
 class Flow {
 
 public :
+	static const string TOP;
+	static const string BOTTOM;
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
 	virtual bool operator==(const Flow& other) const;
@@ -38,14 +42,20 @@ public :
 	 */
 	virtual Flow & operator=(const Flow &rhs);
 
+	/**
+	 * The join function must be overloaded by the Flow subclasses.
+	 */
+	virtual Flow join(Flow &other);
+
 	//You do not have to overload these constructors. You can create additional constructors with different signatures as well in your subclasses.
 	Flow();
 	Flow(string input);
+	//ConstantPropFlow(map<variable,int>());
 
 	//Destructor must be virtual.
 	virtual ~Flow();
 
-	//This string is only here to demonstrate flows. It is not expected to be used by subclasses of Flow.
+	//This string should only be used to represent TOP or BOTTOM.
 	string basic;
 
 };

@@ -38,25 +38,16 @@ namespace {
     //The dummy optimization does not modify the code, but performs various analyses and outputs their result here
     void print(raw_ostream &OS, const Module*) const {
 
-    	// ========== TESTING ==============
-    	//Test that variable class is properly linked (test can be removed later).
-    	string example = "example";
-    	Variable v(example);
-    	OS << "VARIABLE test : ";
-    	OS << "I created a new variable with name : " << v.GetName() << "\n";
-
     	//The pure static analysis. Functional testing
     	OS << "STATIC ANALYSES test : \n";
     	for (unsigned int i = 0 ; i < staticAnalyses.size() ; i++){
-        	OS << "Function Name : " << staticAnalyses[i]->getFunctionName() << "\n";
-        	OS << "First Instruction Name : " << staticAnalyses[i]->getCFG()->succs[0]->inst->getName().str() << "\n";
-        	OS << "Print CFG : " << "\n";
-
+        	OS << "Print CFG (without flow) : " << "\n";
         	//Check graph once. Everything flow should be empty.
         	staticAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
-        	staticAnalyses.back()->runWorklist();
+        	staticAnalyses[i]->runWorklist();
         	//Check graph again. Everything flow should say top.
+        	OS << "\nPrint CFG (with flow) : " << "\n";
         	staticAnalyses[i]->JSONCFG(OS);
     	}
 

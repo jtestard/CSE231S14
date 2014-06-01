@@ -28,23 +28,29 @@ using namespace std;
 class StaticAnalysis {
 
 public :
-	//Used to build the context flow graph
+	struct ListEdge;
+
+	//Used for the nodes of the context flow graph
 	typedef struct ListNode {
 		int index;
-		Flow in;
-		vector<ListNode*> succs;
+		vector<ListEdge*> incoming;
+		vector<ListEdge*> outgoing;
 		Instruction *inst; //uniquely identifies the node
-		bool dirty;
 		ListNode(int idx){
-			dirty = true;
 			index = idx;
 		}
-		~ListNode(){
-			for(unsigned int i = 0 ; i < succs.size(); i++) {
-				delete succs[i];
-			}
-		}
 	} ListNode;
+
+	//Use for the edges of the context flow graph
+	typedef struct ListEdge{
+		Flow flow;
+		ListNode* source;
+		ListNode* destination;
+		ListEdge(ListNode* src, ListNode* dst){
+			source = src;
+			destination = dst;
+		}
+	} ListEdge;
 
 	//This function implements our worklist. This class should not be overwritten.
 	void runWorklist();
@@ -54,7 +60,6 @@ public :
 	StaticAnalysis(Function &F);
 	virtual ~StaticAnalysis();
 
-protected:
 	//Would be better if those two were const static, but this is not possible in C++, so please don't change them :).
 	Flow top;
 	Flow bottom;
@@ -65,14 +70,19 @@ protected:
 	 * that instruction.
 	 * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
 	 *
-	 * WARNING : the output might not be empty to begin with. If it is not, then the output must be joined with the result of the processing
-	 * of the input.
+	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	virtual void executeFlowFunction(Flow &in, Instruction &inst, Flow &out);
+	virtual Flow executeFlowFunction(Flow &in, Instruction &inst);
 
-private:
+//private:
 	void buildCFG(Function &F);
+	static void JSONEdge(raw_ostream &OS, ListEdge* edge);
+	static void JSONNode(raw_ostream &OS, ListNode* node);
+	//The following attributes provide three different ways to circulate through the graph
+	//We might want to remove some stuff when we scale, but for now lets keep everything.
 	ListNode* contextFlowGraph;
+	vector<ListNode*> CFGNodes;
+	vector<ListEdge*> CFGEdges;
 	StringRef functionName;
 };
 #endif

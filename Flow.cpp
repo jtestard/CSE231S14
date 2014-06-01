@@ -8,6 +8,9 @@
 
 #include "Flow.h"
 
+const string Flow::TOP = "top";
+const string Flow::BOTTOM = "bottom";
+
 /**
  * For the basic static analysis, just compare strings.
  */
@@ -20,7 +23,7 @@ string Flow::jsonString(){
 }
 
 Flow & Flow::operator=(const Flow &rhs){
-	basic = rhs.basic;
+	this->basic = rhs.basic;
 	return *this;
 }
 
@@ -32,6 +35,14 @@ Flow::Flow(string input){
 	basic = input;
 }
 
+//Most basic join operation possible.
+Flow Flow::join(Flow &other){
+	//join bottom-bottom gives you bottom. Anything else gives you top.
+	if (this->basic==BOTTOM && other.basic==BOTTOM)
+		return Flow(BOTTOM);
+	else
+		return Flow(TOP);
+}
 
 Flow::~Flow(){
 	//Nothing for basic static analysis
