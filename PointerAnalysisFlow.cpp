@@ -99,7 +99,7 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 	if (this->basic == TOP || other->basic == TOP)
 		return new PointerAnalysisFlow(TOP);
 
-
+	errs() << "No top No bottom : " << this->value.size() << "," << other->value.size() << "\n";
 	//Merge the input from both.
 	PointerAnalysisFlow* f = new PointerAnalysisFlow();
 	//Merges this value with f
@@ -110,14 +110,18 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 		//This lines uses the copy constructor of the STL set class.
 		f->value[varThis].insert(setThis.begin(),setThis.end());
 	}
+	errs() << "this done! other keys : ";
 	//merges other value with f
 	for (map<string, set<string> >::const_iterator itOther =
 			other->value.begin(); itOther != other->value.end(); itOther++) {
 		string varOther = itOther->first;
-		set < string > setOther = itOther->second;
-		f->value[varOther].insert(setOther.begin(),setOther.end());
+		errs() << varOther << ",";
+//		set < string > setOther = itOther->second;
+//		errs() << "set size : " << setOther.size() << "\n";
+//		f->value[varOther].insert(setOther.begin(),setOther.end());
 
 	}
+	errs()<< "\njoin done!\n";
 	return f;
 
 }
