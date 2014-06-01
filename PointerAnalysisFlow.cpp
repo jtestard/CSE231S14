@@ -13,15 +13,15 @@
  */
 bool PointerAnalysisFlow::equals(Flow* otherSuper) {
 	PointerAnalysisFlow* other = static_cast<PointerAnalysisFlow*>(otherSuper);
-	if (other->value->size()!=this->value->size())
+	if (other->value.size()!=this->value.size())
 			return false;
-	for (map<string, set<string> >::const_iterator it = this->value->begin(); it != this->value->end() ; it++) {
+	for (map<string, set<string> >::const_iterator it = this->value.begin(); it != this->value.end() ; it++) {
 		string key = it->first;
 		set<string> thisSet = it->second;
 		//Check if key is found in other
-		if(other->value->find(key)==other->value->end())
+		if(other->value.find(key)==other->value.end())
 			return false;
-		set<string> otherSet = other->value->find(key)->second;
+		set<string> otherSet = other->value.find(key)->second;
 		 for (set<string>::iterator it=thisSet.begin(); it!=thisSet.end(); ++it) {
 			 if(otherSet.find(*it)==otherSet.end()){
 				 return false;
@@ -33,11 +33,11 @@ bool PointerAnalysisFlow::equals(Flow* otherSuper) {
 
 //Represents a pointer analysis value as a JSON string.
 string PointerAnalysisFlow::jsonString() {
-	if (value->size()==0)
+	if (value.size()==0)
 		return "\"" + basic + "\"";
 	//Value has something inside
 	stringstream ss;
-	map<string, set<string> >::const_iterator it = this->value->begin();
+	map<string, set<string> >::const_iterator it = this->value.begin();
 	ss << "\"" << it->first << "\" : [ ";
 	set<string>::iterator its=it->second.begin();
 	ss << *its << " ";
@@ -45,7 +45,7 @@ string PointerAnalysisFlow::jsonString() {
 		ss << ", " << *its;
 	}
 	ss << " ] ";
-	for (; it != this->value->end() ; it++) {
+	for (; it != this->value.end() ; it++) {
 		ss << "\"" << it->first << "\" : [ ";
 		its=it->second.begin();
 		ss << *its << " ";
@@ -60,23 +60,19 @@ string PointerAnalysisFlow::jsonString() {
 void PointerAnalysisFlow::copy(Flow* rhs) {
 	PointerAnalysisFlow* f = static_cast<PointerAnalysisFlow*>(rhs);
 	this->basic = f->basic;
-	delete this->value;
-	this->value = new map<string, set<string> >(*f->value);
+	this->value = f->value;
 }
 
 PointerAnalysisFlow::PointerAnalysisFlow() :
 		Flow() {
-	this->value = new map<string, set<string> >();
 }
 
 PointerAnalysisFlow::PointerAnalysisFlow(string input) :
 		Flow(input) {
-	this->value = new map<string, set<string> >();
 }
 
 PointerAnalysisFlow::PointerAnalysisFlow(PointerAnalysisFlow *flow) :
 		Flow(flow->basic) {
-	this->value = new map<string, set<string> >(*flow->value);
 }
 
 //Merges flow together.
@@ -103,22 +99,24 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 	if (this->basic == TOP || other->basic == TOP)
 		return new PointerAnalysisFlow(TOP);
 
+
 	//Merge the input from both.
 	PointerAnalysisFlow* f = new PointerAnalysisFlow();
 	//Merges this value with f
-	for (map<string, set<string> >::const_iterator itThis = this->value->begin();
-			itThis != this->value->end(); itThis++) {
+	for (map<string, set<string> >::const_iterator itThis = this->value.begin();
+			itThis != this->value.end(); itThis++) {
 		string varThis = itThis->first;
 		set < string > setThis = itThis->second;
 		//This lines uses the copy constructor of the STL set class.
-		(*f->value)[varThis].insert(setThis.begin(),setThis.end());
+		f->value[varThis].insert(setThis.begin(),setThis.end());
 	}
 	//merges other value with f
 	for (map<string, set<string> >::const_iterator itOther =
-			other->value->begin(); itOther != other->value->end(); itOther++) {
+			other->value.begin(); itOther != other->value.end(); itOther++) {
 		string varOther = itOther->first;
 		set < string > setOther = itOther->second;
-		(*f->value)[varOther].insert(setOther.begin(),setOther.end());
+		f->value[varOther].insert(setOther.begin(),setOther.end());
+
 	}
 	return f;
 
@@ -126,5 +124,4 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 
 PointerAnalysisFlow::~PointerAnalysisFlow() {
 	//Nothing for basic static analysis
-	delete value;
 }

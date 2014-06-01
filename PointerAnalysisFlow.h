@@ -61,7 +61,7 @@ public:
 	~PointerAnalysisFlow();
 
 	//Variables are represented as strings.
-	map<string, set<string> >* value;
+	map<string, set<string> > value;
 
 };
 
