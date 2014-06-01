@@ -25,7 +25,7 @@ public :
 	static const string BOTTOM;
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
-	virtual bool operator==(const Flow& other) const;
+	virtual bool equals(Flow& other);
 
 	/*
 	 * This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
@@ -40,7 +40,7 @@ public :
 	/**
 	 * The equality operator must also be overloaded when we want to assign a variable to top or bottom (or something else).
 	 */
-	virtual Flow & operator=(const Flow &rhs);
+	virtual void copy(Flow &rhs);
 
 	/**
 	 * The join function must be overloaded by the Flow subclasses.

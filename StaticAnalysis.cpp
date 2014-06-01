@@ -28,7 +28,7 @@ void StaticAnalysis::runWorklist() {
 	//Top and bottom must be defined in order for the worklist to work.
 	//This step uses the operator= from the Flow class.
 	for (unsigned int i = 0; i < CFGEdges.size(); i++) {
-		CFGEdges[i]->flow = bottom;
+		CFGEdges[i]->flow.copy(bottom);
 	}
 
 	//Add each node to the worklist
@@ -59,10 +59,9 @@ void StaticAnalysis::runWorklist() {
 				for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
 					//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
 					Flow new_out = out.join(current->outgoing[i]->flow);
-
 					//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-					if (!(new_out==current->outgoing[i]->flow)){
-						current->outgoing[i]->flow = new_out;
+					if (!(new_out.equals(current->outgoing[i]->flow))){
+						current->outgoing[i]->flow.copy(new_out);
 						worklist.push(current->outgoing[i]->destination);
 					}
 				}
