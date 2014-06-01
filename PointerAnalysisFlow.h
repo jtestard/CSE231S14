@@ -9,7 +9,8 @@
 #define POINTER_ANALYSIS_FLOW_H_
 #include <string>
 #include <map>
-#include <vector>
+#include <set>
+#include <algorithm>
 #include "Flow.h"
 
 using namespace std;
@@ -59,7 +60,7 @@ protected :
 	string basic;
 
 	//Variables are represented as strings.
-	map<string,vector<string> > value;
+	map<string,set<string> > value;
 
 };
 
