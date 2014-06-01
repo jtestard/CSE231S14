@@ -52,7 +52,6 @@ void StaticAnalysis::runWorklist() {
 			in = in.join(inputFlows[i]);
 		}
 
-
 		//EXECUTE THE FLOW FUNCTION
 		Flow out = executeFlowFunction(in,*(current->inst));
 
@@ -180,6 +179,10 @@ StringRef StaticAnalysis::getFunctionName(){
  * This method is expected to do much more when overloaded.
  */
 Flow StaticAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
+//	switch(instruction) {
+//	case:
+//
+//	}
 	return top;
 }
 
