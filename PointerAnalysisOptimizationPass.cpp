@@ -1,3 +1,4 @@
+
 //
 //  PointerAnalysisOptimizationPass.cpp
 //  
@@ -17,12 +18,12 @@
 using namespace llvm;
 using namespace std;
 
-/**
+/*
  * BUGS FOUND AND FIXED :
  * 	-	Avoid static members for the passes. This generates a linking error when making the shared object.
  * 	-	raw_ostream& object does not like to be fed a std::endl symbol. Prefer to user "\n".
- *
  */
+
 namespace {
   struct PointerAnalysisOptimizationPass : public FunctionPass {
     static char ID;
@@ -42,13 +43,11 @@ namespace {
     	OS << "POINTER ANALYSES test : \n";
     	for (unsigned int i = 0 ; i < pointerAnalyses.size() ; i++){
         	OS << "Print CFG (without flow) : " << "\n";
-        	//Check graph once. Everything flow should be empty.
-        	//pointerAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
         	pointerAnalyses[i]->runWorklist();
-        	//Check graph again. Everything flow should say top.
+        	//Check analysis results.
         	OS << "\nPrint CFG (with flow) : " << "\n";
-        	//pointerAnalyses[i]->JSONCFG(OS);
+        	pointerAnalyses[i]->JSONCFG(OS);
     	}
 
   	}

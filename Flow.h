@@ -8,8 +8,10 @@
 #ifndef FLOW_H_
 #define FLOW_H_
 #include <string>
+#include "llvm/Support/raw_ostream.h"
 
 using namespace std;
+using namespace llvm;
 /**
  * This class is used to represent the information computed by static analyses.
  * It is a very general class but must overload the functions shown below.
@@ -25,7 +27,7 @@ public :
 	static const string BOTTOM;
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
-	virtual bool equals(Flow& other);
+	virtual bool equals(Flow* other);
 
 	/*
 	 * This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
@@ -40,12 +42,12 @@ public :
 	/**
 	 * The equality operator must also be overloaded when we want to assign a variable to top or bottom (or something else).
 	 */
-	virtual void copy(Flow &rhs);
+	virtual void copy(Flow *rhs);
 
 	/**
 	 * The join function must be overloaded by the Flow subclasses.
 	 */
-	virtual Flow join(Flow &other);
+	virtual Flow* join(Flow* other);
 
 	//You do not have to overload these constructors. You can create additional constructors with different signatures as well in your subclasses.
 	Flow();

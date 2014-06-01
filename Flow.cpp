@@ -14,16 +14,16 @@ const string Flow::BOTTOM = "bottom";
 /**
  * For the basic static analysis, just compare strings.
  */
-bool Flow::equals(Flow& other){
-	return basic==other.basic;
+bool Flow::equals(Flow* other){
+	return this->basic==other->basic;
 }
 
 string Flow::jsonString(){
 	return "\"" + basic + "\"";
 }
 
-void Flow::copy(Flow &rhs){
-	this->basic = rhs.basic;
+void Flow::copy(Flow *rhs){
+	this->basic = rhs->basic;
 }
 
 Flow::Flow(){
@@ -35,12 +35,13 @@ Flow::Flow(string input){
 }
 
 //Most basic join operation possible.
-Flow Flow::join(Flow &other){
+Flow* Flow::join(Flow* other){
+	//errs() << "Flow::join called...\n";
 	//join bottom-bottom gives you bottom. Anything else gives you top.
-	if (this->basic==BOTTOM && other.basic==BOTTOM)
-		return Flow(BOTTOM);
+	if (this->basic==BOTTOM && other->basic==BOTTOM)
+		return new Flow(BOTTOM);
 	else
-		return Flow(TOP);
+		return new Flow(TOP);
 }
 
 Flow::~Flow(){
