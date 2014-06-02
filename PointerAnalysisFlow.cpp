@@ -51,7 +51,7 @@ string PointerAnalysisFlow::jsonString() {
 	for (; it != this->value.end() ; it++) {
 		if (it->second.size()==0)
 			continue;
-		ss << "\"" << it->first << "\" : [ ";
+		ss << ", \"" << it->first << "\" : [ ";
 		its=it->second.begin();
 		if (its != it->second.end()) {
 			ss << *its << " ";
