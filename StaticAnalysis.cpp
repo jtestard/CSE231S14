@@ -54,18 +54,17 @@ void StaticAnalysis::runWorklist() {
 			in = f;
 		}
 
-		errs() << "Instruction : " << *(current->inst) << ", Flow In : " << in->jsonString();
+//		errs() << "Instruction : " << *(current->inst) << ", Flow In : " << in->jsonString();
 
 		//EXECUTE THE FLOW FUNCTION
 		Flow* out = executeFlowFunction(in,current->inst);
 
-		errs() << ", Flow out : " << out->jsonString() << "\n";
+//		errs() << ", Flow out : " << out->jsonString() << "\n";
 
 		//This will executed the flow function
 		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
 			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
 			Flow* new_out = out->join(current->outgoing[i]->flow);
-			errs() << "new_out : " << new_out->jsonString() << "\n";
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
 			if (!(new_out->equals(current->outgoing[i]->flow))){
 				current->outgoing[i]->flow->copy(new_out);
@@ -74,7 +73,6 @@ void StaticAnalysis::runWorklist() {
 		}
 		worklist.pop();
 	}
-	errs() << "RunWorklist complete\n";
 }
 
 void StaticAnalysis::buildCFG(Function &F){
