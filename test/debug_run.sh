@@ -8,26 +8,32 @@ make all
 
 #Compile benchmarks
 #echo "COMPILING BENCHMARKS"
-#clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
-#llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
-
-#Dummy optimization
-#echo "DUMMY OPTIMIZATION"
-#opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-
-#echo "POINTER ANALYSIS OPTIMIZATION"
-#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-
-
-echo "CONSTANT PROPAGATION ANALYSIS OPTIMIZATION"
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
+llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENCHMARKS/constantProp/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
-opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
-mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
-llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
-opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze
 
+#Dummy optimization
+if [ "$1" == "dummy" ]
+then
+	#echo "DUMMY OPTIMIZATION"
+	opt -load $LLVMLIB/CSE231.so -dummyOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+fi
 
+if [ "$1" == "pointerAnalysis" ]
+then
+	echo "POINTER ANALYSIS OPTIMIZATION"
+	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+fi
+
+if [ "$1" == "constantPropagation" ]
+then
+	echo "CONSTANT PROPAGATION ANALYSIS OPTIMIZATION"
+	opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
+	mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
+	llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
+	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze
+fi
 
 #echo "DUMMY CONST PROP"
 #opt -load $LLVMLIB/CSE231.so -ConstantPropOptimization < $PROJ2BENCHMARKS/constantProp/simplecp.bc -analyze
