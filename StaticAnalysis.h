@@ -78,7 +78,12 @@ public :
 	 */
 	virtual Flow* executeFlowFunction(Flow *in, Instruction *inst);
 
-//private:
+	/**
+	 * This method initializes the flow of the edges. It must be overriden by the subclass and return a default instance of the
+	 * subclass for the worklist algorithm to play with.
+	 */
+	virtual Flow* initialize();
+
 	void buildCFG(Function &F);
 	static void JSONEdge(raw_ostream &OS, ListEdge* edge);
 	static void JSONNode(raw_ostream &OS, ListNode* node);

@@ -41,6 +41,10 @@ PointerAnalysisFlow* PointerAnalysis::executeStoreInst(Flow* in, Instruction* in
 	return f;
 }
 
+Flow* PointerAnalysis::initialize(){
+	return new PointerAnalysisFlow(PointerAnalysisFlow::BOTTOM);
+}
+
 PointerAnalysis::PointerAnalysis(Function &F) : StaticAnalysis() {
 	this->top = new PointerAnalysisFlow(PointerAnalysisFlow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
 	this->bottom = new PointerAnalysisFlow(PointerAnalysisFlow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass

@@ -1,5 +1,4 @@
-/*
- *
+/**
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
@@ -7,14 +6,15 @@
  * 	Notice that we assume all static analyses use a function scope, in accordance with the Professor's instructions.
  */
 
-#ifndef POINTER_ANALYSIS
-#define POINTER_ANALYSIS
+#ifndef RANGE_ANALYSIS
+#define RANGE_ANALYSIS
+#include "StaticAnalysis.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/raw_ostream.h"
-#include "PointerAnalysisFlow.h"
-#include "StaticAnalysis.h"
+#include "Flow.h"
+#include "RangeAnalysisDomainElement.h"	//Defines what the "flow" elements will look like
 #include <map>
 #include <vector>
 #include <cstdlib>
@@ -26,11 +26,11 @@ using namespace llvm;
 using namespace std;
 
 //Static Analysis class
-class PointerAnalysis : public StaticAnalysis {
+class RangeAnalysis: public StaticAnalysis {
 
 public :
 
-	PointerAnalysis(Function &F);
+	RangeAnalysis(Function &F);
 	/*
 	 * This method is called by the run worklist algorithm.
 	 * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
@@ -41,9 +41,8 @@ public :
 	 */
 	Flow* executeFlowFunction(Flow* in, Instruction* inst);
 
-	Flow* initialize();
+	virtual ~RangeAnalysis();
 
-protected:
-	PointerAnalysisFlow *executeStoreInst(Flow* in, Instruction* inst);
+
 };
 #endif

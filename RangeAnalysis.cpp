@@ -10,8 +10,9 @@
  * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
  * took hours to install :).
  */
-#include "StaticAnalysis.h"
-
+#include "RangeFlowSet.h"
+#include "RangeAnalysis.h"
+/*
 StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
 	return this->contextFlowGraph;
 }
@@ -20,6 +21,7 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
  * The run worklist is not much more than a classic BFS.
  * Notice that it processes one instruction at a time. Processing multiple instructions at a time will be much harder.
  */
+/*
 void StaticAnalysis::runWorklist() {
 	//We are using a queue for the worklist, but it could be any type of structure, really.
 	queue<ListNode*> worklist;
@@ -28,7 +30,7 @@ void StaticAnalysis::runWorklist() {
 	//Top and bottom must be defined in order for the worklist to work.
 	//This step uses the operator= from the Flow class.
 	for (unsigned int i = 0; i < CFGEdges.size(); i++) {
-		CFGEdges[i]->flow = initialize();
+		CFGEdges[i]->flow = bottom;
 	}
 
 	//Add each node to the worklist
@@ -41,37 +43,32 @@ void StaticAnalysis::runWorklist() {
 		ListNode* current = worklist.front();
 
 		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
-		vector<Flow*> inputFlows;
+		vector<Flow> inputFlows;
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
 			inputFlows.push_back(current->incoming[i]->flow);
 		}
 
 		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
-		Flow* in = inputFlows[0];
+		Flow in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
-			Flow* f = in->join(inputFlows[i]);
-			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
-			in = f;
+			in = in.join(inputFlows[i]);
 		}
-
-//		errs() << "Instruction : " << *(current->inst) << ", Flow In : " << in->jsonString();
 
 		//EXECUTE THE FLOW FUNCTION
-		Flow* out = executeFlowFunction(in,current->inst);
-
-//		errs() << ", Flow out : " << out->jsonString() << "\n";
+		Flow out = executeFlowFunction(in,*(current->inst));
 
 		//This will executed the flow function
-		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
-			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
-			Flow* new_out = out->join(current->outgoing[i]->flow);
-			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-			if (!(new_out->equals(current->outgoing[i]->flow))){
-				current->outgoing[i]->flow->copy(new_out);
-				worklist.push(current->outgoing[i]->destination);
-			}
-		}
-		worklist.pop();
+				for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
+					//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
+					Flow new_out = out.join(current->outgoing[i]->flow);
+
+					//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
+					if (!(new_out==current->outgoing[i]->flow)){
+						current->outgoing[i]->flow = new_out;
+						worklist.push(current->outgoing[i]->destination);
+					}
+				}
+				worklist.pop();
 	}
 }
 
@@ -148,13 +145,9 @@ void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 	OS << "\n]";
 }
 
-Flow* StaticAnalysis::initialize(){
-	return new Flow(Flow::BOTTOM);
-}
-
 void StaticAnalysis::JSONEdge(raw_ostream &OS, ListEdge* edge) {
 	OS << "{\"Edge\" : " << "[" << edge->source->index << "," << edge->destination->index << "],";
-	OS << "\"Flow\" : " << edge->flow->jsonString() << "}";
+	OS << "\"Flow\" : " << edge->flow.jsonString() << "}";
 }
 
 void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
@@ -182,29 +175,33 @@ void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
 StringRef StaticAnalysis::getFunctionName(){
 	return this->functionName;
 }
-
+*/
 /**
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst){
+//TO DO!!!!!!! NEEED CHANGED STRUCTURE
+/*Flow RangeAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
 //	switch(instruction) {
 //	case:
 //
 //	}
 	return top;
 }
-
-StaticAnalysis::StaticAnalysis(Function &F){
-	top = new Flow(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
-	bottom = new Flow(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+*/
+RangeAnalysis::RangeAnalysis(Function &F){
+	//TO DO: Figure this out.
+//	top = RangeFlowSet(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
+//	bottom = RangeFlowSet(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+	this->top = (Flow*) new RangeFlowSet;
+	this->bottom = (Flow*) new RangeFlowSet;
 	this->functionName = F.getName();
 	buildCFG(F);
 }
 
-StaticAnalysis::StaticAnalysis() {}
+//END TO DO!!!!!
 
-StaticAnalysis::~StaticAnalysis(){
+RangeAnalysis::~RangeAnalysis(){
 	delete this->contextFlowGraph;
 	//Might need to put something else here
 	for (unsigned int i = 0 ; i < CFGNodes.size() ; i++) {
@@ -213,6 +210,4 @@ StaticAnalysis::~StaticAnalysis(){
 	for (unsigned int i = 0 ; i < CFGEdges.size() ; i++) {
 		delete CFGEdges[i];
 	}
-	delete top;
-	delete bottom;
 }
