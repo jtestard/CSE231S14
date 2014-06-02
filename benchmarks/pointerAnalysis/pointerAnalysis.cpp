@@ -10,8 +10,14 @@ int main() {
 	float* e = &d;
 	float* f;
 	float* g;
+	float** h;
+	float i = 5.3f;
 	f = e;
 	g = f; //testing X = Y
+	h = &f;
+	e = &i;
+	//*h = e; //testing *X = Y
+
 	// simple branch
 //	if (a==3) {
 //		e = &d;

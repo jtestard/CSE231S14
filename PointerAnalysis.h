@@ -46,5 +46,6 @@ public :
 protected:
 	PointerAnalysisFlow* execute_X_equals_refY(PointerAnalysisFlow* in, Instruction* inst);
 	PointerAnalysisFlow* execute_X_equals_Y(PointerAnalysisFlow* in, Instruction* inst);
+	PointerAnalysisFlow* execute_ptrX_equals_Y(PointerAnalysisFlow* in, Instruction*);
 };
 #endif

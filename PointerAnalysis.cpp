@@ -24,8 +24,18 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 		output = execute_X_equals_refY(inFlow,inst);
 		break;
 	case 27 : //Load instruction
-		output = execute_X_equals_Y(inFlow,inst);
-		break;
+		//If one load followed by one store, then is X = Y
+		//If two loads followed by one store, then is *X = Y
+		{
+			Instruction* nInst = inst->getNextNode();
+			Instruction* nnInst = nInst->getNextNode();
+			if(isa<StoreInst>(nInst)) {
+				output = execute_X_equals_Y(inFlow,inst);
+			} else if (isa<LoadInst>(nInst) && isa<StoreInst>(nnInst)) {
+			}
+			//output = execute_X_equals_Y(inFlow,inst);
+			break;
+		}
 	default:
 		output = new PointerAnalysisFlow(inFlow);
 		break;
@@ -82,6 +92,11 @@ PointerAnalysisFlow* PointerAnalysis::execute_X_equals_Y(PointerAnalysisFlow* in
 			f = tmp;
 		}
 	}
+	return f;
+}
+
+PointerAnalysisFlow* PointerAnalysis::execute_ptrX_equals_Y(PointerAnalysisFlow* in, Instruction*){
+	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
 	return f;
 }
 
