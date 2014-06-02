@@ -21,7 +21,10 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	PointerAnalysisFlow * output;
 	switch(inst->getOpcode()) {
 	case 28 : //store instruction
-		output = executeStoreInst(inFlow,inst);
+		output = execute_X_equals_refY(inFlow,inst);
+		break;
+	case 27 : //Load instruction
+		output = execute_X_equals_Y(inFlow,inst);
 		break;
 	default:
 		output = new PointerAnalysisFlow(inFlow);
@@ -30,26 +33,58 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	return output;
 }
 
-
-PointerAnalysisFlow* PointerAnalysis::executeStoreInst(PointerAnalysisFlow* in, Instruction* instruction) {
+//StoreInst manages X = &Y
+PointerAnalysisFlow* PointerAnalysis::execute_X_equals_refY(PointerAnalysisFlow* in, Instruction* instruction) {
 	StoreInst* store = static_cast<StoreInst*>(instruction);
+	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
+
+	// X = &Y
 	//Check if right operand is a pointer
 	if (store->getOperand(1)->getType()->isPointerTy()) {
 		//Check if left & right operand names are non empty.
 		if (store->getOperand(0)->getName()!="" && store->getOperand(1)->getName()!="") {
-			PointerAnalysisFlow* f = new PointerAnalysisFlow();
+			PointerAnalysisFlow* ff = new PointerAnalysisFlow();
 			set<string> s;
 			map<string, set<string> >value;
 			s.insert(store->getOperand(0)->getName());
 			value[store->getOperand(1)->getName()] = s;
-			f->value = value;
-			PointerAnalysisFlow* ff = static_cast<PointerAnalysisFlow*>(f->join(in));
+			ff->value = value;
+			PointerAnalysisFlow* tmp = static_cast<PointerAnalysisFlow*>(ff->join(f));
+			delete ff;
 			delete f;
-			return ff;
+			f = tmp;
 		}
 	}
-	return in;
+	return f;
 }
+
+//Manages X = Y. Requires looking at two instructions to get all the necessary infomation.
+//Managing this flow function requires spanning over two consecutive instructions.
+PointerAnalysisFlow* PointerAnalysis::execute_X_equals_Y(PointerAnalysisFlow* in, Instruction* instruction) {
+	LoadInst* load = static_cast<LoadInst*>(instruction);
+	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
+	Value* LO = load->getOperand(0);
+	Value* RO = load->getNextNode()->getOperand(1);
+
+	// X = Y
+	// Check if both operands (LO & RO) are pointers.
+	if (LO->getType()->isPointerTy() && RO->getType()->isPointerTy()) {
+		if (LO->getName()!="" && RO->getName()!="") {
+			//Everything LO points to, RO points to now as well.
+			PointerAnalysisFlow* ff = new PointerAnalysisFlow();
+			map<string, set<string> > value;
+			//Get the set of everything LO points from the in and make RO point to it.
+			value[RO->getName()] = in->value[LO->getName()];;
+			ff->value = value;
+			PointerAnalysisFlow* tmp = static_cast<PointerAnalysisFlow*>(ff->join(f));
+			delete ff;
+			delete f;
+			f = tmp;
+		}
+	}
+	return f;
+}
+
 
 Flow* PointerAnalysis::initialize(){
 	return new PointerAnalysisFlow(PointerAnalysisFlow::BOTTOM);

@@ -44,6 +44,7 @@ public :
 	Flow* initialize();
 
 protected:
-	PointerAnalysisFlow *executeStoreInst(PointerAnalysisFlow* in, Instruction* inst);
+	PointerAnalysisFlow* execute_X_equals_refY(PointerAnalysisFlow* in, Instruction* inst);
+	PointerAnalysisFlow* execute_X_equals_Y(PointerAnalysisFlow* in, Instruction* inst);
 };
 #endif
