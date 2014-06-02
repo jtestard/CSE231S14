@@ -41,6 +41,9 @@ public :
 	 */
 	Flow* executeFlowFunction(Flow* in, Instruction* inst);
 
+	//Call a construtor of your own type. For me that would be ....
+	Flow* initialize();
+
 	virtual ~RangeAnalysis();
 
 

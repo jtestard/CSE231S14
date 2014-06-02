@@ -189,6 +189,11 @@ StringRef StaticAnalysis::getFunctionName(){
 	return top;
 }
 */
+
+Flow* RangeAnalysis::initialize(){
+	return new RangeFlowSet;
+}
+
 RangeAnalysis::RangeAnalysis(Function &F){
 	//TO DO: Figure this out.
 //	top = RangeFlowSet(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
