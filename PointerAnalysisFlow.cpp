@@ -49,10 +49,10 @@ string PointerAnalysisFlow::jsonString() {
 	//errs() << "number of keys in set : " << it->second.size() << "\n";
  	ss << " ] ";it++;
 	for (; it != this->value.end() ; it++) {
+		if (it->second.size()==0)
+			continue;
 		ss << "\"" << it->first << "\" : [ ";
-		errs() << "key value : " << it->first << ",size=" << it->second.size() << "\n";
 		its=it->second.begin();
-		errs() << ss.str() << "\n";
 		if (its != it->second.end()) {
 			ss << *its << " ";
 			its++;
@@ -125,7 +125,8 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 			values.insert(*j);
 		for (set<string>::iterator j = other->value[key].begin(); j != other->value[key].end() ; j++)
 			values.insert(*j);
-		f->value[key] = values;
+		if (values.size()>0)
+			f->value[key] = values;
 	}
 	return f;
 
