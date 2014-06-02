@@ -17,7 +17,6 @@
  * This method is expected to do much more when overloaded.
  */
 Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
-	//errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : " << inst->getOpcodeName() << "\n";
 	PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
 	PointerAnalysisFlow * output;
 	switch(inst->getOpcode()) {
@@ -28,23 +27,28 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 		output = new PointerAnalysisFlow(inFlow);
 		break;
 	}
-	//errs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
 	return output;
 }
 
 
 PointerAnalysisFlow* PointerAnalysis::executeStoreInst(PointerAnalysisFlow* in, Instruction* instruction) {
-//	PointerAnalysisFlow* f = new PointerAnalysisFlow(PointerAnalysisFlow::TOP);
-	PointerAnalysisFlow* f = new PointerAnalysisFlow();
-	map<string, set<string> >value;
-	set<string> s;
-	s.insert("Y");
-	value["X"] = s;
-	f->value = value;
-//	StoreInst* store = dyn_cast<StoreInst>(instruction);
-//	f->copy(in);
-//	errs() << "Operand : " << store->getPointerOperand() << "\n";
-	return f;
+	StoreInst* store = static_cast<StoreInst*>(instruction);
+	//Check if right operand is a pointer
+	if (store->getOperand(1)->getType()->isPointerTy()) {
+		//Check if left & right operand names are non empty.
+		if (store->getOperand(0)->getName()!="" && store->getOperand(1)->getName()!="") {
+			PointerAnalysisFlow* f = new PointerAnalysisFlow();
+			set<string> s;
+			map<string, set<string> >value;
+			s.insert(store->getOperand(0)->getName());
+			value[store->getOperand(1)->getName()] = s;
+			f->value = value;
+			PointerAnalysisFlow* ff = static_cast<PointerAnalysisFlow*>(f->join(in));
+			delete f;
+			return ff;
+		}
+	}
+	return in;
 }
 
 Flow* PointerAnalysis::initialize(){
