@@ -19,11 +19,11 @@ llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 echo "POINTER ANALYSIS OPTIMIZATION"
 opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
 
-echo "RANGE ANALYSIS OPTIMIZATION"
-clang -O0 -emit-llvm -c $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.cpp -o $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc
-llvm-dis $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc #will give human readable version
-opt -mem2reg $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc > $PROJ2RANGEANALYSISBENCHMARKS/memrangeanalysis.bc #get rid of stack vars
-llvm-dis $PROJ2RANGEANALYSISBENCHMARKS/memrangeanalysis.bc #get human readable version
+#echo "RANGE ANALYSIS OPTIMIZATION"
+#clang -O0 -emit-llvm -c $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.cpp -o $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc
+#llvm-dis $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc #will give human readable version
+#opt -mem2reg $PROJ2RANGEANALYSISBENCHMARKS/rangeanalysis.bc > $PROJ2RANGEANALYSISBENCHMARKS/memrangeanalysis.bc #get rid of stack vars
+#llvm-dis $PROJ2RANGEANALYSISBENCHMARKS/memrangeanalysis.bc #get human readable version
 
 
 #echo "DUMMY CONST PROP"
