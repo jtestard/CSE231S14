@@ -33,6 +33,7 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 
 
 PointerAnalysisFlow* PointerAnalysis::executeStoreInst(Flow* in, Instruction* instruction) {
+//	PointerAnalysisFlow* f = new PointerAnalysisFlow(PointerAnalysisFlow::TOP);
 	PointerAnalysisFlow* f = new PointerAnalysisFlow();
 //	StoreInst* store = dyn_cast<StoreInst>(instruction);
 //	f->copy(in);

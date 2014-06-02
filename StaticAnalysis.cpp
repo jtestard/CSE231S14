@@ -54,12 +54,12 @@ void StaticAnalysis::runWorklist() {
 			in = f;
 		}
 
-		errs() << "Instruction : " << *(current->inst) << ", Flow In : " << in->jsonString();
+//		errs() << "Instruction : " << *(current->inst) << ", Flow In : " << in->jsonString();
 
 		//EXECUTE THE FLOW FUNCTION
 		Flow* out = executeFlowFunction(in,current->inst);
 
-		errs() << ", Flow out : " << out->jsonString() << "\n";
+//		errs() << ", Flow out : " << out->jsonString() << "\n";
 
 		//This will executed the flow function
 		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
@@ -73,7 +73,6 @@ void StaticAnalysis::runWorklist() {
 		}
 		worklist.pop();
 	}
-	errs() << "RunWorklist complete\n";
 }
 
 void StaticAnalysis::buildCFG(Function &F){

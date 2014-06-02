@@ -99,25 +99,43 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 	if (this->basic == TOP || other->basic == TOP)
 		return new PointerAnalysisFlow(TOP);
 
-
 	//Merge the input from both.
 	PointerAnalysisFlow* f = new PointerAnalysisFlow();
-	//Merges this value with f
-	for (map<string, set<string> >::const_iterator itThis = this->value.begin();
-			itThis != this->value.end(); itThis++) {
-		string varThis = itThis->first;
-		set < string > setThis = itThis->second;
-		//This lines uses the copy constructor of the STL set class.
-		f->value[varThis].insert(setThis.begin(),setThis.end());
-	}
-	//merges other value with f
-	for (map<string, set<string> >::const_iterator itOther =
-			other->value.begin(); itOther != other->value.end(); itOther++) {
-		string varOther = itOther->first;
-		set < string > setOther = itOther->second;
-		f->value[varOther].insert(setOther.begin(),setOther.end());
 
+	//Get all keys
+	set<string> keys;
+	for (map<string, set<string> >::iterator it = this->value.begin() ; it != this->value.end() ; it++)
+		keys.insert(it->first);
+	for (map<string, set<string> >::iterator it = other->value.begin() ; it != other->value.end() ; it++)
+		keys.insert(it->first);
+	for (set<string>::iterator it = keys.begin() ; it != keys.end() ; it++) {
+		string key = *it;
+		set<string> values;
+		for (set<string>::iterator j = this->value[key].begin(); j != this->value[key].end() ; j++)
+			values.insert(*j);
+		for (set<string>::iterator j = other->value[key].begin(); j != other->value[key].end() ; j++)
+			values.insert(*j);
+		f->value[key] = values;
 	}
+
+	//Merges this value with f
+//	for (map<string, set<string> >::const_iterator itThis = this->value.begin();
+//			itThis != this->value.end(); itThis++) {
+//		string varThis = itThis->first;
+//		set < string > setThis = itThis->second;
+//		//This lines uses the copy constructor of the STL set class.
+//		f->value[varThis].insert(setThis.begin(),setThis.end());
+//	}
+//	//merges other value with f
+//	for (map<string, set<string> >::const_iterator itOther =
+//			other->value.begin(); itOther != other->value.end(); itOther++) {
+//		string varOther = itOther->first;
+//		errs() << "[" << varOther << ",";
+//		set < string > setOther = itOther->second;
+//		errs() << setOther.size() << "]\n";
+//		f->value[varOther].insert(setOther.begin(),setOther.end());
+//
+//	}
 	return f;
 
 }
