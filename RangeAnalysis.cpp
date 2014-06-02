@@ -204,6 +204,20 @@ RangeAnalysis::RangeAnalysis(Function &F){
 	buildCFG(F);
 }
 
+
+/*
+ * This method is called by the run worklist algorithm.
+ * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
+ * that instruction.
+ * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
+ *
+ * The output is a Flow that is the result of the processing of in with respect to instruction inst.
+ */
+Flow* RangeAnalysis::executeFlowFunction(Flow* in, Instruction* inst)
+{
+	return new RangeFlowSet;
+}
+
 //END TO DO!!!!!
 
 RangeAnalysis::~RangeAnalysis(){

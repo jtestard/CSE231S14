@@ -43,7 +43,7 @@ namespace {
 
     	//The pure static analysis. Functional testing
     	OS << "Range analysis test : \n";
-    	for (unsigned int i = 0 ; i < rangeAnalyses.size() ; i++){
+ /*   	for (unsigned int i = 0 ; i < rangeAnalyses.size() ; i++){
     	        	OS << "Print CFG (without flow) : " << "\n";
     	        	//Check graph once. Everything flow should be empty.
     	        	rangeAnalyses[i]->JSONCFG(OS);
@@ -52,20 +52,11 @@ namespace {
     	        	//Check graph again. Everything flow should say top.
     	        	OS << "\nPrint CFG (with flow) : " << "\n";
     	        	rangeAnalyses[i]->JSONCFG(OS);
-/*    	for (unsigned int i = 0 ; i < staticAnalyses.size() ; i++){
-        	OS << "Print CFG (without flow) : " << "\n";
-        	//Check graph once. Everything flow should be empty.
-        	staticAnalyses[i]->JSONCFG(OS);
-        	//Run worklist algorithm
-        	staticAnalyses[i]->runWorklist();
-        	//Check graph again. Everything flow should say top.
-        	OS << "\nPrint CFG (with flow) : " << "\n";
-        	staticAnalyses[i]->JSONCFG(OS);*/
-    	}
+    	}*/
 
   	}
   };
 }
 
 char RangeAnalysisPass::ID = 0;
-static RegisterPass<RangeAnalysisPass> X("rangeAnalysis", "Range analysis Pass", false, false);
+static RegisterPass<RangeAnalysisPass> X("rangeAnalysis", "Range analysis Pass whee", false, false);
