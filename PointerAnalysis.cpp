@@ -18,13 +18,14 @@
  */
 Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	//errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : " << inst->getOpcodeName() << "\n";
+	PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
 	PointerAnalysisFlow * output;
 	switch(inst->getOpcode()) {
 	case 28 : //store instruction
-		output = executeStoreInst(in,inst);
+		output = executeStoreInst(inFlow,inst);
 		break;
 	default:
-		output = new PointerAnalysisFlow(PointerAnalysisFlow::TOP);
+		output = new PointerAnalysisFlow(inFlow);
 		break;
 	}
 	//errs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
@@ -32,9 +33,14 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 }
 
 
-PointerAnalysisFlow* PointerAnalysis::executeStoreInst(Flow* in, Instruction* instruction) {
+PointerAnalysisFlow* PointerAnalysis::executeStoreInst(PointerAnalysisFlow* in, Instruction* instruction) {
 //	PointerAnalysisFlow* f = new PointerAnalysisFlow(PointerAnalysisFlow::TOP);
 	PointerAnalysisFlow* f = new PointerAnalysisFlow();
+	map<string, set<string> >value;
+	set<string> s;
+	s.insert("Y");
+	value["X"] = s;
+	f->value = value;
 //	StoreInst* store = dyn_cast<StoreInst>(instruction);
 //	f->copy(in);
 //	errs() << "Operand : " << store->getPointerOperand() << "\n";

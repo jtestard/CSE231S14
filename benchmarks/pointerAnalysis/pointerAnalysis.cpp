@@ -6,6 +6,8 @@ int main() {
 	int  b = 3;
 	int *c = &a;
 	c = &b;
+	float d = 0.5f;
+	float* e = &d;
 //	int b = 5;
 //	int c = a+b;
 //	int* b = &a;

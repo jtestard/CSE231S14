@@ -44,6 +44,6 @@ public :
 	Flow* initialize();
 
 protected:
-	PointerAnalysisFlow *executeStoreInst(Flow* in, Instruction* inst);
+	PointerAnalysisFlow *executeStoreInst(PointerAnalysisFlow* in, Instruction* inst);
 };
 #endif

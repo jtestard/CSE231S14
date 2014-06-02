@@ -38,9 +38,9 @@ string PointerAnalysisFlow::jsonString() {
 	//Value has something inside
 	stringstream ss;
 	map<string, set<string> >::const_iterator it = this->value.begin();
-	ss << "\"" << it->first << "\" : [ ";
+	ss << "{\"" << it->first << "\" : [ ";
 	set<string>::iterator its=it->second.begin();
-	ss << *its << " ";
+	ss << *its << " "; its++;
 	for (; its != it->second.end() ; its++) {
 		ss << ", " << *its;
 	}
@@ -48,12 +48,13 @@ string PointerAnalysisFlow::jsonString() {
 	for (; it != this->value.end() ; it++) {
 		ss << "\"" << it->first << "\" : [ ";
 		its=it->second.begin();
-		ss << *its << " ";
+		ss << *its << " "; its++;
 		for (; its != it->second.end() ; its++) {
 			ss << ", " << *its;
 		}
-		ss << " ] ";
+		ss << "] ";
 	}
+	ss << "}";
 	return ss.str();
 }
 
@@ -73,6 +74,7 @@ PointerAnalysisFlow::PointerAnalysisFlow(string input) :
 
 PointerAnalysisFlow::PointerAnalysisFlow(PointerAnalysisFlow *flow) :
 		Flow(flow->basic) {
+	this->value = flow->value;
 }
 
 //Merges flow together.
@@ -117,25 +119,6 @@ Flow* PointerAnalysisFlow::join(Flow* otherSuper) {
 			values.insert(*j);
 		f->value[key] = values;
 	}
-
-	//Merges this value with f
-//	for (map<string, set<string> >::const_iterator itThis = this->value.begin();
-//			itThis != this->value.end(); itThis++) {
-//		string varThis = itThis->first;
-//		set < string > setThis = itThis->second;
-//		//This lines uses the copy constructor of the STL set class.
-//		f->value[varThis].insert(setThis.begin(),setThis.end());
-//	}
-//	//merges other value with f
-//	for (map<string, set<string> >::const_iterator itOther =
-//			other->value.begin(); itOther != other->value.end(); itOther++) {
-//		string varOther = itOther->first;
-//		errs() << "[" << varOther << ",";
-//		set < string > setOther = itOther->second;
-//		errs() << setOther.size() << "]\n";
-//		f->value[varOther].insert(setOther.begin(),setOther.end());
-//
-//	}
 	return f;
 
 }
