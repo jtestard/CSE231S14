@@ -40,15 +40,23 @@ string PointerAnalysisFlow::jsonString() {
 	map<string, set<string> >::const_iterator it = this->value.begin();
 	ss << "{\"" << it->first << "\" : [ ";
 	set<string>::iterator its=it->second.begin();
+	if (its != it->second.end()) {
 	ss << *its << " "; its++;
+	}
 	for (; its != it->second.end() ; its++) {
 		ss << ", " << *its;
 	}
-	ss << " ] ";it++;
+	//errs() << "number of keys in set : " << it->second.size() << "\n";
+ 	ss << " ] ";it++;
 	for (; it != this->value.end() ; it++) {
 		ss << "\"" << it->first << "\" : [ ";
+		errs() << "key value : " << it->first << ",size=" << it->second.size() << "\n";
 		its=it->second.begin();
-		ss << *its << " "; its++;
+		errs() << ss.str() << "\n";
+		if (its != it->second.end()) {
+			ss << *its << " ";
+			its++;
+		}
 		for (; its != it->second.end() ; its++) {
 			ss << ", " << *its;
 		}
