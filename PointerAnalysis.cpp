@@ -10,11 +10,17 @@
 /*
  * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
  * took hours to install :).
+ *
+ *
+ *
+ *
+ *
  */
 #include "PointerAnalysis.h"
 /*
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
+ * We use the presence of names in the instructions in LLVM.
  */
 Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
@@ -32,7 +38,12 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 			if(isa<StoreInst>(nInst)) {
 				output = execute_X_equals_Y(inFlow,inst);
 			} else if (isa<LoadInst>(nInst) && isa<StoreInst>(nnInst)) {
-				output = execute_ptrX_equals_Y(inFlow,inst);
+				if (inst->getOperand(0)->getName()!="" && nInst->getOperand(0)->getName()!="")
+					output = execute_ptrX_equals_Y(inFlow,inst);
+				else if (inst->getOperand(0)->getName()!="" && nnInst->getOperand(1)->getName()!="")
+					output = execute_X_equals_ptrY(inFlow,inst);
+				else
+					output = new PointerAnalysisFlow(inFlow);
 			} else {
 				output = new PointerAnalysisFlow(inFlow);
 			}
@@ -45,7 +56,11 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	return output;
 }
 
-//StoreInst manages X = &Y
+/**
+ * C CODE : X = &Y
+ * LLVM CODE :
+ * store float* %Y, float** %X, align 4
+ */
 PointerAnalysisFlow* PointerAnalysis::execute_X_equals_refY(PointerAnalysisFlow* in, Instruction* instruction) {
 	StoreInst* store = static_cast<StoreInst*>(instruction);
 	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
@@ -71,8 +86,12 @@ PointerAnalysisFlow* PointerAnalysis::execute_X_equals_refY(PointerAnalysisFlow*
 	return f;
 }
 
-//Manages X = Y. Requires looking at two instructions to get all the necessary infomation.
-//Managing this flow function requires spanning over two consecutive instructions.
+/**
+ * C CODE : X = Y
+ * LLVM CODE :
+ * %0 = load float** %Y, align 4
+ * store float* %0, float** %X, align 4
+ */
 PointerAnalysisFlow* PointerAnalysis::execute_X_equals_Y(PointerAnalysisFlow* in, Instruction* instruction) {
 	LoadInst* load = static_cast<LoadInst*>(instruction);
 	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
@@ -98,7 +117,13 @@ PointerAnalysisFlow* PointerAnalysis::execute_X_equals_Y(PointerAnalysisFlow* in
 	return f;
 }
 
-//Manages *X = Y
+/**
+ * C CODE : *X = Y
+ * LLVM CODE :
+ * %0 = load float** %Y, align 4
+ * %1 = load float*** %X, align 4
+ * store float* %0, float** %1, align 4
+ */
 PointerAnalysisFlow* PointerAnalysis::execute_ptrX_equals_Y(PointerAnalysisFlow* in, Instruction* instruction){
 	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
 	Value* Y = instruction->getOperand(0); //RO
@@ -126,9 +151,33 @@ PointerAnalysisFlow* PointerAnalysis::execute_ptrX_equals_Y(PointerAnalysisFlow*
 	return f;
 }
 
-//Manages X = *Y
+/**
+ * C CODE : X = *Y
+ * LLVM CODE :
+ * %0 = load float*** %Y, align 4
+ * %1 = load float** %0, align 4
+ * store float* %1, float** %X, align 4
+ */
 PointerAnalysisFlow* PointerAnalysis::execute_X_equals_ptrY(PointerAnalysisFlow* in, Instruction* instruction) {
 	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
+	Value* Y = instruction->getOperand(0);
+	Value* X = instruction->getNextNode()->getNextNode()->getOperand(1);
+	if (Y->getType()->isPointerTy() && X->getType()->isPointerTy()) {
+		if (Y->getName()!="" && X->getName()!="") {
+			PointerAnalysisFlow* ff = new PointerAnalysisFlow();
+			//For all W pointed by Y, X points to Z, where Z is pointed by W.
+			set<string> pointedByY = in->value[Y->getName()]; //Set of Ws.
+			for (set<string>::iterator W = pointedByY.begin(); W != pointedByY.end() ; W++) {
+				for (set<string>::iterator Z = in->value[*W].begin() ; Z != in->value[*W].end() ; Z++) {
+					ff->value[X->getName()].insert(*Z);
+				}
+			}
+			PointerAnalysisFlow* tmp = static_cast<PointerAnalysisFlow*>(ff->join(f));
+			delete ff;
+			delete f;
+			f = tmp;
+		}
+	}
 	return f;
 }
 

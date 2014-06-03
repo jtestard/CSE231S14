@@ -36,7 +36,6 @@ Flow::Flow(string input){
 
 //Most basic join operation possible.
 Flow* Flow::join(Flow* other){
-	//errs() << "Flow::join called...\n";
 	//join bottom-bottom gives you bottom. Anything else gives you top.
 	if (this->basic==BOTTOM && other->basic==BOTTOM)
 		return new Flow(BOTTOM);
