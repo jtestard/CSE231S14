@@ -20,7 +20,7 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 	PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
 	PointerAnalysisFlow * output;
 	switch(inst->getOpcode()) {
-	case 28 : //store instruction
+	case 28 : // Store instructions are X = &Y
 		output = execute_X_equals_refY(inFlow,inst);
 		break;
 	case 27 : //Load instruction
