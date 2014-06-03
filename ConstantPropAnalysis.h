@@ -45,11 +45,14 @@ public :
 	Flow* initialize();
 
 protected:
-	ConstantPropAnalysisFlow *executeAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
-	ConstantPropAnalysisFlow *executeSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
-	ConstantPropAnalysisFlow *executeMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
-	ConstantPropAnalysisFlow *executeSDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 	ConstantPropAnalysisFlow *executeFAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 	ConstantPropAnalysisFlow *executeFptosiInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 
 
