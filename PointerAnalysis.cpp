@@ -124,6 +124,12 @@ PointerAnalysisFlow* PointerAnalysis::execute_ptrX_equals_Y(PointerAnalysisFlow*
 	return f;
 }
 
+//Manages X = *Y
+PointerAnalysisFlow* PointerAnalysis::execute_X_equals_ptrY(PointerAnalysisFlow* in, Instruction* instruction) {
+	PointerAnalysisFlow* f = new PointerAnalysisFlow(in);
+	return f;
+}
+
 
 Flow* PointerAnalysis::initialize(){
 	return new PointerAnalysisFlow(PointerAnalysisFlow::BOTTOM);
