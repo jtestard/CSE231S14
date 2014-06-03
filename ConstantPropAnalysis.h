@@ -56,6 +56,14 @@ protected:
 	ConstantPropAnalysisFlow *executeFptosiInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 
 
+	ConstantPropAnalysisFlow *executeFOpInst(ConstantPropAnalysisFlow* in, Instruction* inst, unsigned opcode);
+	ConstantPropAnalysisFlow *executeOpInst(ConstantPropAnalysisFlow* in, Instruction* inst, unsigned opcode);
+
+public:
+	float computeOp(float leftVal, float rightVal, unsigned opcode);
+
+
+
 
 
 };

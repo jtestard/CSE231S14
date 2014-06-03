@@ -2,9 +2,9 @@
  
 int main()
 {
-  float a;
-  float b;
-  float c;
+  int a;
+  int b;
+  int c;
   int d;
   int e;
 
@@ -13,10 +13,10 @@ int main()
 
   int h;
 
-  a = 5.5;
-  b = 15.6;
+  a = 5;
+  b = 15;
 
-  c = a*b;
+  c = a+b;
   d = c+9;
 
   h = 15*c;
