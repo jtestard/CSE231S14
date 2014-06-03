@@ -18,19 +18,19 @@ int main() {
 	e = &i;
 	*h = e; //testing *X = Y f->i
 
-//	// simple branch
-//	if (a==3) {
-//		e = &d;
-//	} else {
-//		f = &d;
-//	}
-//	float **j;
-//	//simple loop
-//	for (int k = 0 ; k < 10 ; k++) {
-//		if (k==5)
-//			j = &e;
-//		if (k==9)
-//			j = &f;
-//	}
+	// simple branch
+	if (a==3) {
+		e = &d;
+	} else {
+		f = &d;
+	}
+	float **j;
+	//simple loop
+	for (int k = 0 ; k < 10 ; k++) {
+		if (k==5)
+			j = &e;
+		if (k==9)
+			j = &f;
+	}
 	return 0;
 }

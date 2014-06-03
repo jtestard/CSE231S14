@@ -47,7 +47,9 @@ string PointerAnalysisFlow::jsonString() {
 		ss << ", " << *its;
 	}
 	//errs() << "number of keys in set : " << it->second.size() << "\n";
- 	ss << " ] ";it++;
+ 	ss << " ] ";
+ 	if (it != this->value.end())
+ 		it++;
 	for (; it != this->value.end() ; it++) {
 		if (it->second.size()==0)
 			continue;

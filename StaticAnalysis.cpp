@@ -39,7 +39,6 @@ void StaticAnalysis::runWorklist() {
 	while(!worklist.empty()){
 		//It is assumed that any node popped from the worklist has a complete "in" flow.
 		ListNode* current = worklist.front();
-
 		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
 		vector<Flow*> inputFlows;
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
@@ -49,6 +48,7 @@ void StaticAnalysis::runWorklist() {
 		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
 		Flow* in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
+			errs() << inputFlows[i]->jsonString() << ",";
 			Flow* f = in->join(inputFlows[i]);
 			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
 			in = f;
@@ -61,7 +61,6 @@ void StaticAnalysis::runWorklist() {
 		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
 			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
 			Flow* new_out = out->join(current->outgoing[i]->flow);
-//			errs() << "new_out :" << new_out->jsonString() << "\n";
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
 			if (!(new_out->equals(current->outgoing[i]->flow))){
 				current->outgoing[i]->flow->copy(new_out);
@@ -142,7 +141,7 @@ void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 		if(i+1 < CFGNodes.size())
 			OS << ",\n";
 	}
-	OS << "\n]";
+	OS << "\n]\n";
 }
 
 Flow* StaticAnalysis::initialize(){

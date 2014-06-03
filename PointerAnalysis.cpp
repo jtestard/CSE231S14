@@ -33,6 +33,8 @@ Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
 				output = execute_X_equals_Y(inFlow,inst);
 			} else if (isa<LoadInst>(nInst) && isa<StoreInst>(nnInst)) {
 				output = execute_ptrX_equals_Y(inFlow,inst);
+			} else {
+				output = new PointerAnalysisFlow(inFlow);
 			}
 			break;
 		}
