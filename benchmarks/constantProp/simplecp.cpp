@@ -2,18 +2,25 @@
  
 int main()
 {
-  int a;
-  int b;
+  float a;
+  float b;
   int c;
   int d;
   int e;
 
-  a = 5;
-  b = 10;
+  int g;
+  int f;
+
+
+  a = 5.5;
+  b = 15.6;
 
   c = a+b;
-  c = a+b;
   d = c+9;
+
+  f = 10+c;
+
+  g = f+d;
 
   //std::cout<<"d:"<<d+5<<std::endl;
   return 0;

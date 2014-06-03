@@ -46,5 +46,14 @@ public :
 
 protected:
 	ConstantPropAnalysisFlow *executeAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFptosiInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+
+
+
+
 };
 #endif
