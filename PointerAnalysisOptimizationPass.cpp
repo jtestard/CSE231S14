@@ -40,14 +40,10 @@ namespace {
     void print(raw_ostream &OS, const Module*) const {
 
     	//The pure static analysis. Functional testing
-    	OS << "POINTER ANALYSES test : \n";
     	for (unsigned int i = 0 ; i < pointerAnalyses.size() ; i++){
-//        	OS << "Print CFG (without flow) : " << "\n";
-//        	pointerAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
         	pointerAnalyses[i]->runWorklist();
         	//Check analysis results.
-        	OS << "\nPrint CFG (with flow) : " << "\n";
         	pointerAnalyses[i]->JSONCFG(OS);
     	}
 

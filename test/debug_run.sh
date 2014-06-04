@@ -23,8 +23,8 @@ fi
 if [ "$1" == "pointerAnalysis" ]
 then
 	echo "POINTER ANALYSIS OPTIMIZATION"
-	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze
+	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze >> gcd.json
 fi
 
 if [ "$1" == "constantPropagation" ]
