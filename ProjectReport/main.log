@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  4 JUN 2014 01:57
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  4 JUN 2014 11:38
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -695,13 +695,43 @@ File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <9> not available
 (Font)              Font shape `OML/cmm/m/it' tried instead on input line 11.
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 38.
  [1{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 
 ]
-Overfull \hbox (3.22327pt too wide) in paragraph at lines 59--61
+Underfull \hbox (badness 1430) in paragraph at lines 37--38
+[]\OT1/cmr/m/n/10.95 The [][][] class in-cludes a lot of the func-
+ []
+
+
+Underfull \hbox (badness 1412) in paragraph at lines 37--38
+\OT1/cmr/m/n/10.95 tion-al-ity from the lat-tice op-er-a-tors seen in
+ []
+
+
+Underfull \hbox (badness 1590) in paragraph at lines 37--38
+\OT1/cmr/m/n/10.95 class. The first method over-ri-den by the
+ []
+
+
+Underfull \hbox (badness 2103) in paragraph at lines 37--38
+\OT1/cmr/m/n/10.95 joins the [][][] flow and the [][][] flow to-
+ []
+
+
+Underfull \hbox (badness 1092) in paragraph at lines 37--38
+\OT1/cmr/m/n/10.95 a copy of their merged in-for-ma-tion is out-
+ []
+
+
+Underfull \hbox (badness 1077) in paragraph at lines 37--38
+\OT1/cmr/m/n/10.95 putted. The client must also over-ride the
+ []
+
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 44.
+
+Overfull \hbox (3.22327pt too wide) in paragraph at lines 65--67
 [][][][][][][][][][][][][][] 
  []
 
@@ -711,30 +741,33 @@ Overfull \hbox (3.22327pt too wide) in paragraph at lines 59--61
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [2]
-(./main.aux) ) 
+[3
+
+] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 8658 strings out of 493315
- 122947 string characters out of 6137903
- 233993 words of memory out of 5000000
- 11945 multiletter control sequences out of 15000+600000
- 13205 words of font info for 50 fonts, out of 8000000 for 9000
+ 8674 strings out of 493315
+ 123145 string characters out of 6137903
+ 239993 words of memory out of 5000000
+ 11961 multiletter control sequences out of 15000+600000
+ 14196 words of font info for 54 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,8n,58p,558b,1497s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmbx9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.
-pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pf
-b></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><
-/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
-usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></us
-r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main.pdf (2 pages, 130797 bytes).
+ 38i,8n,58p,758b,1497s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmbx9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
+10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12
+.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.p
+fb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb>
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><
+/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></u
+sr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on main.pdf (3 pages, 143469 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
- 39 compressed objects within 1 object stream
+ 62 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

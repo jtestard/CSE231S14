@@ -32,7 +32,15 @@ Each node can have multiple incoming and outgoing edges and represents an instru
 
 \subsection{The Flow Class}
 
-The Flow class is the way we represent the information computed by analyses which use our interface. Any client must create his own class which will extend the flow class. The class 
+The \code{Flow} class is the way we represent the information computed by analyses which use our interface. Any client must create his own class which will extend the \code{Flow} class. The class does not contain any container for the computed, leaving this job entirely to the subclass. This decision allows the class to be very flexible and allow just about any kind of data model for the computed information, although this information is most often represented a map from variables to analysis-specific domain elements. The subclass is however required to override a number of virtual C++ functions.
+
+The \code{Flow} class includes a lot of the functionality from the lattice operators seen in class. The first method overriden by the client is the \code{Flow* join(Flow* other);} method, which joins the \code{this} flow and the \code{other} flow together. The \code{this} flow and the \code{other} flow objects are not altered by this method, rather a copy of their merged information is outputted. The client must also override the \code{bool equals(Flow* other)} and \code{void copy(Flow* other)} which allow comparison and duplication, respectively. The \code{void copy(Flow* other)} method should be read as "copy flow \code{other} into \code{this}", and therefore does not have a return type.
+
+In all of the overridden versions of these methods, the client will have to cast the input \code{Flow*} type to an instance of his client class in order to have access to all the fields required to implement these methods accurately. The type casting can happen safely, because it will always be the case when those methods are called, that the incoming flow's actual type will be that of the client subclass. For increased readibility, we initially wanted the $copy$ and $equals$ methods to be implemented through operator overloading. However, we realized that this is not possible, given operator overloading restricts the input to be a constant pointer and disables casting.
+
+The \code{initialize()} method has also to be overwritten by the client class.
+
+The last method the client must override is the \code{string jsonString()} method which allows the output of the flow in \code{JSON format}. The class defines two constants strings, called \code{"top"} and \code{"bottom"} and a member called \code{basic}, which is only allowed to be empty or have these two values. The \code{jsonString()} method will output \code{"top"} or \code{"bottom"} if and only if the basic string is non-empty, regardless of the analysis, which help clarify the flow representation when outputed in \code{JSON} format.
 
 \begin{itemize}
 \item TOP
