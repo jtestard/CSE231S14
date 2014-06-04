@@ -6,3 +6,5 @@ instrumentation/dynamic/*.bc
 *.synctex.gz
 *.bc
 *.ll
+*.aux
+*.log
