@@ -45,7 +45,10 @@ namespace {
         	//OS << "Print CFG (without flow) : " << "\n";
         	//constantPropAnalyses[i]->JSONCFG(OS);
         	//Run worklist algorithm
+    		errs() << "Function Name : " << constantPropAnalyses[i]->getFunctionName() << "\n";
+    		errs() << "before runWorklist()...\n";
         	constantPropAnalyses[i]->runWorklist();
+        	errs() << "after runWorklist()...\n";
         	//Check analysis results.
         	OS << "\nPrint CFG (with flow) : " << "\n";
         	constantPropAnalyses[i]->JSONCFG(OS);

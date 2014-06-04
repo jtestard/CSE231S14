@@ -45,6 +45,26 @@ public :
 	Flow* initialize();
 
 protected:
+	ConstantPropAnalysisFlow *executeFAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 	ConstantPropAnalysisFlow *executeAddInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSubInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeFDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeSDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeCastInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+
+
+	ConstantPropAnalysisFlow *executeFOpInst(ConstantPropAnalysisFlow* in, Instruction* inst, unsigned opcode);
+	ConstantPropAnalysisFlow *executeOpInst(ConstantPropAnalysisFlow* in, Instruction* inst, unsigned opcode);
+
+public:
+	float computeOp(float leftVal, float rightVal, unsigned opcode);
+
+
+
+
+
 };
 #endif

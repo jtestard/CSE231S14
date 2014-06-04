@@ -27,24 +27,6 @@ bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
 
 	}
 
-
-	/*
-
-	for (map<string, set<string> >::const_iterator it = this->value.begin(); it != this->value.end() ; it++) {
-		string key = it->first;
-		set<string> thisSet = it->second;
-		//Check if key is found in other
-		if(other->value.find(key)==other->value.end())
-			return false;
-		set<string> otherSet = other->value.find(key)->second;
-		 for (set<string>::iterator it=thisSet.begin(); it!=thisSet.end(); ++it) {
-			 if(otherSet.find(*it)==otherSet.end()){
-				 return false;
-			 }
-		 }
-	}
-
-	*/
 	return true;
 }
 
@@ -63,6 +45,7 @@ string ConstantPropAnalysisFlow::jsonString() {
 	}
 	ss << " ] ";
 	*/
+
 	int counter = 0;
 	for (; it != this->value.end() ; it++) {
 		if (counter==0){
@@ -80,6 +63,7 @@ string ConstantPropAnalysisFlow::jsonString() {
 
 	}
 	ss << "}";
+	errs() << "After jSonString()...\n";
 	return ss.str();
 
 	/*
