@@ -47,7 +47,7 @@ void StaticAnalysis::runWorklist() {
 		}
 //		errs() << "Inflow collected...\n";
 		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
-		Flow* in = new Flow(inputFlows[0]);
+		Flow* in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
 			Flow* f = in->join(inputFlows[i]);
 			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
