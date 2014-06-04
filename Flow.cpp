@@ -34,6 +34,10 @@ Flow::Flow(string input){
 	basic = input;
 }
 
+Flow::Flow(Flow* flow){
+	basic = flow->basic;
+}
+
 //Most basic join operation possible.
 Flow* Flow::join(Flow* other){
 	//join bottom-bottom gives you bottom. Anything else gives you top.
