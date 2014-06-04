@@ -1,5 +1,6 @@
 .project
 instrumentation/dynamic/*.bc
+*.json
 *~
 *.pdf
 *.synctex.gz
