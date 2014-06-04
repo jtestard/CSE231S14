@@ -1,0 +1,78 @@
+\documentclass[11pt,twocolumn]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{parskip}
+\usepackage{mathtools}
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[noend,linesnumbered]{algorithm2e}
+\usepackage{setspace} 
+\usepackage{enumerate} 
+\usepackage{amsthm}
+\newcommand{\lra}{\Leftrightarrow}
+\newcommand{\join}{\bowtie}
+\newcommand{\select}{\sigma}
+\newcommand{\project}{\pi}
+\newcommand{\distinct}{\delta}
+\newcommand{\Schema}{\Sigma}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\q}{\quad}
+\newcommand{\tbf}{\textbf}
+
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+
+\usepackage{amssymb}
+
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+\newcommand\NV[1]{**NV #1 ** }
+
+
+
+\begin{document}
+
+\title{Project Report}
+\author{Konstantinos Zarifis \quad Jules Testard \quad Michael Barrow}
+\maketitle
+
+\section{Introduction}
+
+\input{introduction}
+
+\section{The interface}
+
+\input{interface}
+
+\section{Constant Propagation}
+
+\input{constant_propagation}
+
+\section{Available Expressions}
+
+\input{available_expressions}
+
+\section{Range Analysis}
+
+\input{range_analysis}
+
+\section{Pointer Analysis}
+
+\input{pointer_analysis}
+
+\section{Benchmarks}
+
+\input{benchmarks}
+
+\section{Conclusion}
+
+\input{conclusion}
+
+\end{document}
