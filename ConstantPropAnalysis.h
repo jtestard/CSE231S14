@@ -53,7 +53,7 @@ protected:
 	ConstantPropAnalysisFlow *executeMulInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 	ConstantPropAnalysisFlow *executeFDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 	ConstantPropAnalysisFlow *executeSDivInst(ConstantPropAnalysisFlow* in, Instruction* inst);
-	ConstantPropAnalysisFlow *executeFptosiInst(ConstantPropAnalysisFlow* in, Instruction* inst);
+	ConstantPropAnalysisFlow *executeCastInst(ConstantPropAnalysisFlow* in, Instruction* inst);
 
 
 	ConstantPropAnalysisFlow *executeFOpInst(ConstantPropAnalysisFlow* in, Instruction* inst, unsigned opcode);

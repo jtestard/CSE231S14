@@ -104,7 +104,7 @@ void StaticAnalysis::buildCFG(Function &F){
    			BranchInst * br = dyn_cast<BranchInst>(inst);
    			for (unsigned int i = 0 ; i < br->getNumSuccessors() ; i++) {
    				BasicBlock * bb = br->getSuccessor(i); //Get successor basic block
-   				Instruction * nextInst = bb->getFirstNonPHIOrDbgOrLifetime(); // Gets the first legitimate instruction.
+   				Instruction * nextInst = &(*bb->begin());//bb->getFirstNonPHIOrDbgOrLifetime(); // Gets the first legitimate instruction.
    				if (nextInst!=0)
    					if (helper.find(nextInst)!=helper.end()) {
    	   					StaticAnalysis::ListNode* nextNode = helper[nextInst];

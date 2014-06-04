@@ -5,7 +5,7 @@ int main()
   int a;
   int b;
   int c;
-  int d;
+  float d;
   int e;
 
   int g;
@@ -16,9 +16,23 @@ int main()
   a = 5;
   b = 15;
 
-  c = a+b;
-  d = c+9;
+//  if(a==6){
+//	  c = a+b;
+//	  d = c+9;
+//  }
+//  else{
+//	  c = a+b;
+//	  d = c+9;
+//  }
 
+
+
+  unsigned short short1 = 2;
+  unsigned short short2 = short1 >> 2;
+
+
+  c = a+b;
+  d = c%9;
   h = 15*c;
   f = 10+c;
 
