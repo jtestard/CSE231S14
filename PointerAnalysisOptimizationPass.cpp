@@ -41,10 +41,13 @@ namespace {
 
     	//The pure static analysis. Functional testing
     	for (unsigned int i = 0 ; i < pointerAnalyses.size() ; i++){
+    		//Function name
+    		OS << "{\"Function Name\" : \"" << pointerAnalyses[i]->getFunctionName() << "\",\n";
         	//Run worklist algorithm
         	pointerAnalyses[i]->runWorklist();
         	//Check analysis results.
         	pointerAnalyses[i]->JSONCFG(OS);
+        	OS << "}\n";
     	}
 
   	}

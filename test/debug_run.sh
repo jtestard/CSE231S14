@@ -9,7 +9,9 @@ make all
 #Compile benchmarks
 #echo "COMPILING BENCHMARKS"
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc
 llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
+llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENCHMARKS/constantProp/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
 
@@ -24,7 +26,8 @@ if [ "$1" == "pointerAnalysis" ]
 then
 	echo "POINTER ANALYSIS OPTIMIZATION"
 	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze >> gcd.json
+	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc -analyze
+	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze >> gcd.json
 fi
 
 if [ "$1" == "constantPropagation" ]

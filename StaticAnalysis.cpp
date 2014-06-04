@@ -134,7 +134,7 @@ void StaticAnalysis::buildCFG(Function &F){
 //Doesn't quite print out JSON yet, but some nice string representation.
 void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 	//The graph data representation is now edge-based.
-	OS << "[\n";
+	OS << "\"Analysis\" : [\n";
 	for (unsigned int i = 0; i < CFGNodes.size() ; i++) {
 		StaticAnalysis::JSONNode(OS,CFGNodes[i]);
 		if(i+1 < CFGNodes.size())
