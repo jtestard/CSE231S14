@@ -31,16 +31,15 @@
 #define LSHR 21 //This is the opcode for the Shift right (logical) instruction
 #define ASHR 22 //This is the opcode for the Shift right (arithmetic) instruction
 
-
 // Logical operators (integer operands)
 /*122	HANDLE_BINARY_INST(20, Shl  , BinaryOperator) // Shift left  (logical)
-123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
-124	HANDLE_BINARY_INST(22, AShr , BinaryOperator) // Shift right (arithmetic)
-125	HANDLE_BINARY_INST(23, And  , BinaryOperator)
-126	HANDLE_BINARY_INST(24, Or   , BinaryOperator)
-127	HANDLE_BINARY_INST(25, Xor  , BinaryOperator)
-128	  LAST_BINARY_INST(25)
-*/
+ 123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
+ 124	HANDLE_BINARY_INST(22, AShr , BinaryOperator) // Shift right (arithmetic)
+ 125	HANDLE_BINARY_INST(23, And  , BinaryOperator)
+ 126	HANDLE_BINARY_INST(24, Or   , BinaryOperator)
+ 127	HANDLE_BINARY_INST(25, Xor  , BinaryOperator)
+ 128	  LAST_BINARY_INST(25)
+ */
 
 #define TRUNC 33 // Truncate integers
 #define ZEXT 34 // Zero extend integers
@@ -98,8 +97,8 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
 		output = executeCastInst(inFlow, inst);
 		break;
 	case PHI:
-		errs() << "HOLLY FUCK WE'RE SCREWED!";
-		break;
+		//output = executePhiInst(inFlow, inst);
+		//break;
 
 	default:
 		output = new ConstantPropAnalysisFlow(inFlow);
@@ -209,16 +208,186 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 		resVal = (int) leftVal % (int) rightVal;
 		break;
 	case SHL:
-		resVal = (int)leftVal <<  (int)rightVal;
+		resVal = (int) leftVal << (int) rightVal;
 		break;
 	case LSHR:
 	case ASHR:
-		resVal = (int)leftVal >>  (int)rightVal;
+		resVal = (int) leftVal >> (int) rightVal;
 		break;
 	}
 
 	return resVal;
 
+}
+
+ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
+		ConstantPropAnalysisFlow* in, Instruction* instruction) {
+
+	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+	Value *leftOperand = instruction->getOperand(0);
+	Value *rightOperand = instruction->getOperand(1);
+	map<string, float> value;
+	Value *K = instruction;
+	string regName = K->getName();
+	errs() << "Instruction : " << regName << " left " << leftOperand->getName()
+			<< " right " << rightOperand->getName() << "\n";
+
+	// Ok, cool! Both the right and the left operand is a variable...
+//	if ((f->value.find(leftOperand->getName()) == f->value.end())
+//			| (f->value.find(rightOperand->getName()) == f->value.end())) {
+//		// Oh no! Read the error message!
+//		errs() << "Oh no! Something went terribly wrong!\n";
+//		errs() << "Undefined variable!\n";
+//		errs() << "Apparently the left operand of the op is";
+//		errs() << " a variable but this is the first time we ";
+//		errs() << "come across this variable!!\n";
+//
+//	} else {
+//		// Hmm, I guess we're good...
+//		float leftVal = f->value.find(leftOperand->getName())->second;
+//
+//		float rightVal = f->value.find(rightOperand->getName())->second;
+//
+//		if (leftVal == rightVal){
+//
+//			float resVal = leftVal;
+//			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//			errs() << leftVal << " " << rightVal << "\n";
+//			errs() << "outcome: " << resVal << "\n";
+//			value[K->getName()] = resVal;
+//			ff->value = value;
+//			ConstantPropAnalysisFlow* tmp =
+//					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//			delete ff;
+//			delete f;
+//			f = tmp;
+//		}
+//
+//	}
+
+// Checking if left operand is a constant
+//	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
+//
+//		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
+//			// Cool they are both constants.
+//
+//			float leftVal = CILeft->getValueAPF().convertToFloat();
+//			float rightVal = CIRight->getValueAPF().convertToFloat();
+//
+//			float resVal = computeOp(leftVal, rightVal, opcode);
+//
+//			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//			//errs() << leftVal << " " << rightVal << "\n";
+//			//errs() << "outcome: " << resVal << "\n";
+//			value[K->getName()] = resVal;
+//			ff->value = value;
+//			ConstantPropAnalysisFlow* tmp =
+//					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//			delete ff;
+//			delete f;
+//			f = tmp;
+//		} else {
+//			// ok so the right operand is a variable
+//			if (f->value.find(rightOperand->getName()) == f->value.end()) {
+//				// Oh no! Read the error message!
+//				errs() << "Oh no! Something went wrong!\n";
+//				errs() << "Undefined variable!\n";
+//				errs() << "Apparently the right operand of the op is";
+//				errs() << " a variable but this is the first time we ";
+//				errs() << "come across this variable!!\n";
+//			}
+//
+//			else {
+//
+//				// Hmm, I guess we're good...
+//				float leftVal = CILeft->getValueAPF().convertToFloat();
+//				float rightVal = f->value.find(rightOperand->getName())->second;
+//
+//				float resVal = computeOp(leftVal, rightVal, opcode);
+//
+//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				//errs() << leftVal << " " << rightVal << "\n";
+//				//errs() << "outcome: " << resVal << "\n";
+//				value[K->getName()] = resVal;
+//				ff->value = value;
+//				ConstantPropAnalysisFlow* tmp =
+//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				delete ff;
+//				delete f;
+//				f = tmp;
+//			}
+//		}
+//	} else {
+//		// So, the left part of the addition is a variable. We'll have to check the input set to get the value
+//		// this variable has at the moment.
+//		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
+//			// Ok, cool! the right part is a constant...
+//			//leftOperand->getName()
+//
+//			//int leftVal = CILeft->getZExtValue();
+//
+//			if (f->value.find(leftOperand->getName()) == f->value.end()) {
+//				// Oh no! Read the error message!
+//				errs() << "Oh no! Something went terribly wrong!\n";
+//				errs() << "Undefined variable!\n";
+//				errs() << "Apparently the left operand of the op is";
+//				errs() << " a variable but this is the first time we ";
+//				errs() << "come across this variable!!\n";
+//
+//			} else {
+//				// Hmm, I guess we're good...
+//
+//				float leftVal = f->value.find(leftOperand->getName())->second;
+//				float rightVal = CIRight->getValueAPF().convertToFloat();
+//				//float resVal = leftVal + rightVal;
+//
+//				float resVal = computeOp(leftVal, rightVal, opcode);
+//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				//errs() << leftVal << " " << rightVal << "\n";
+//				//errs() << "outcome: " << resVal << "\n";
+//				value[K->getName()] = resVal;
+//				ff->value = value;
+//				ConstantPropAnalysisFlow* tmp =
+//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				delete ff;
+//				delete f;
+//				f = tmp;
+//			}
+//		} else {
+//
+//			// Ok, cool! Both the right and the left operand is a variable...
+//			if ((f->value.find(leftOperand->getName()) == f->value.end())
+//					| (f->value.find(rightOperand->getName()) == f->value.end())) {
+//				// Oh no! Read the error message!
+//				errs() << "Oh no! Something went terribly wrong!\n";
+//				errs() << "Undefined variable!\n";
+//				errs() << "Apparently the left operand of the op is";
+//				errs() << " a variable but this is the first time we ";
+//				errs() << "come across this variable!!\n";
+//
+//			} else {
+//				// Hmm, I guess we're good...
+//				float leftVal = f->value.find(leftOperand->getName())->second;
+//
+//				float rightVal = f->value.find(rightOperand->getName())->second;
+//				float resVal = computeOp(leftVal, rightVal, opcode);
+//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				//errs() << leftVal << " " << rightVal << "\n";
+//				//errs() << "outcome: " << resVal << "\n";
+//				value[K->getName()] = resVal;
+//				ff->value = value;
+//				ConstantPropAnalysisFlow* tmp =
+//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				delete ff;
+//				delete f;
+//				f = tmp;
+//
+//			}
+//
+//		}
+//
+//	}
+	return f;
 }
 
 ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
