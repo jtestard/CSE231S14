@@ -119,6 +119,7 @@ ConstantPropAnalysisFlow::ConstantPropAnalysisFlow(ConstantPropAnalysisFlow *flo
 Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 	//join bottom-bottom gives you bottom. Anything else gives you top.
 	ConstantPropAnalysisFlow* other = static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+	errs()<< "I just entered into the sublcassed join... \n";
 
 	if (this->basic == BOTTOM && other->basic == BOTTOM)
 		return new ConstantPropAnalysisFlow(BOTTOM);

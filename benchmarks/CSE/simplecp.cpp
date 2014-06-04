@@ -16,14 +16,14 @@ int main()
   a = 5;
   b = 15;
 
-  if(a==6){
-	  c = a+b;
-	  d = c+9;
-  }
-  else{
-	  c = a+b;
-	  d = c+9;
-  }
+//  if(a==6){
+//	  c = a+b;
+//	  d = c+9;
+//  }
+//  else{
+//	  c = a+b;
+//	  d = c+9;
+//  }
 
 
 
@@ -31,11 +31,10 @@ int main()
   unsigned short short2 = short1 >> 2;
 
 
-//  c = a+b;
-//  d = c+9;
-  h = c+9;
-  h = d+c;
-  f = 10+c;
+  c = a+b;
+  d = c+9;
+  h = c+d;
+  f = c+d;
 
   g = f+d;
 

@@ -98,8 +98,8 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
 		output = executeCastInst(inFlow, inst);
 		break;
 	case PHI:
-		errs() << "HOLLY FUCK WE'RE SCREWED!";
-		break;
+		//errs() << "HOLLY FUCK WE'RE SCREWED!";
+		//break;
 
 	default:
 		output = new ConstantPropAnalysisFlow(inFlow);

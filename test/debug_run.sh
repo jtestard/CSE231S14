@@ -12,6 +12,8 @@ clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o 
 llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENCHMARKS/constantProp/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
+llvm-dis $PROJ2BENCHMARKS/CSE/simplecp.bc
 
 #Dummy optimization
 if [ "$1" == "dummy" ]
@@ -34,6 +36,14 @@ then
 	mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
 	llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
 	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze
+fi
+if [ "$1" == "CSE" ]
+then
+	echo "AVAILABLE EXPRESSIONS ANALYSIS OPTIMIZATION"
+	opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
+	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
+	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
+	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
 fi
 
 #echo "DUMMY CONST PROP"
