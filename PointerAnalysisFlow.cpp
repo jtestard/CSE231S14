@@ -1,6 +1,6 @@
 /*
 
- * Flow.cpp
+ * PointerAnalysisFlow.cpp
  *
  *  Created on: 2014-05-29
  *      Author: jtestard
@@ -83,7 +83,7 @@ PointerAnalysisFlow::PointerAnalysisFlow(string input) :
 }
 
 PointerAnalysisFlow::PointerAnalysisFlow(PointerAnalysisFlow *flow) :
-		Flow(flow->basic) {
+		Flow(flow) {
 	this->value = flow->value;
 }
 
