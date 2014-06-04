@@ -12,6 +12,7 @@
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Instruction.h"
+#include "llvm/IR/Constants.h"
 #include "llvm/Support/raw_ostream.h"
 #include "PointerAnalysisFlow.h"
 #include "StaticAnalysis.h"
@@ -48,5 +49,7 @@ protected:
 	PointerAnalysisFlow* execute_X_equals_Y(PointerAnalysisFlow* in, Instruction* inst);
 	PointerAnalysisFlow* execute_ptrX_equals_Y(PointerAnalysisFlow* in, Instruction* inst);
 	PointerAnalysisFlow* execute_X_equals_ptrY(PointerAnalysisFlow* in, Instruction* inst);
+	PointerAnalysisFlow* execute_X_equals_NULL(PointerAnalysisFlow* in, Instruction* inst);
+	bool madeByLLVM(string name);
 };
 #endif

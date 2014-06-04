@@ -6,14 +6,14 @@
  *      Author: jtestard
  */
 
-#include "ConstantPropAnalysisFlow.h"
+#include "AvailableExpressionAnalysisFlow.h"
 
 /*
  * Flows are equal if their values are equal
  */
-bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
-	ConstantPropAnalysisFlow* other =
-			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+bool AvailableExpressionAnalysisFlow::equals(Flow* otherSuper) {
+	AvailableExpressionAnalysisFlow* other =
+			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
 	if (other->value.size() != this->value.size())
 		return false;
 	for (map<string, float>::const_iterator it = this->value.begin();
@@ -33,7 +33,7 @@ bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
 }
 
 //Represents a constant propagation analysis value as a JSON string.
-string ConstantPropAnalysisFlow::jsonString() {
+string AvailableExpressionAnalysisFlow::jsonString() {
 	if (value.size() == 0)
 		return "\"" + basic + "\"";
 	//Value has something inside
@@ -95,55 +95,55 @@ string ConstantPropAnalysisFlow::jsonString() {
 	 */
 }
 
-void ConstantPropAnalysisFlow::copy(Flow* rhs) {
-	ConstantPropAnalysisFlow* f = static_cast<ConstantPropAnalysisFlow*>(rhs);
+void AvailableExpressionAnalysisFlow::copy(Flow* rhs) {
+	AvailableExpressionAnalysisFlow* f = static_cast<AvailableExpressionAnalysisFlow*>(rhs);
 	this->basic = f->basic;
 	this->value = f->value;
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow() :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow() :
 		Flow() {
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow(string input) :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow(string input) :
 		Flow(input) {
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow(
-		ConstantPropAnalysisFlow *flow) :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow(
+		AvailableExpressionAnalysisFlow *flow) :
 		Flow(flow->basic) {
 	this->value = flow->value;
 }
 
 // TODO : Fix the join... See the commented out stuff
 //Merges flow together.
-Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
+Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 	//join bottom-bottom gives you bottom. Anything else gives you top.
-	ConstantPropAnalysisFlow* other =
-			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+	AvailableExpressionAnalysisFlow* other =
+			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
 //	errs()<< "I just entered into the sublcassed join... \n";
 
 	if (this->basic == BOTTOM && other->basic == BOTTOM)
-		return new ConstantPropAnalysisFlow(BOTTOM);
+		return new AvailableExpressionAnalysisFlow(BOTTOM);
 
 	//Anything joined with a bottom will just be itself.
 	if (this->basic == BOTTOM) {
-		ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+		AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 		f->copy(other);
 		return f;
 	}
 	if (other->basic == BOTTOM) {
-		ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+		AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 		f->copy(this);
 		return f;
 	}
 
 	//Join anything with top will give you top.
 	if (this->basic == TOP || other->basic == TOP)
-		return new ConstantPropAnalysisFlow(TOP);
+		return new AvailableExpressionAnalysisFlow(TOP);
 
 	//Merge the input from both.
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 
 	//f = other;
 	for (map<string, float>::iterator it = this->value.begin();
@@ -223,6 +223,6 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 
 }
 
-ConstantPropAnalysisFlow::~ConstantPropAnalysisFlow() {
+AvailableExpressionAnalysisFlow::~AvailableExpressionAnalysisFlow() {
 	//Nothing for basic static analysis
 }

@@ -1,5 +1,5 @@
 //
-//  ConstantPropAnalysisPass.cpp
+//  AvailableExpressionAnalysisPass.cpp
 //  
 //
 //  Created by Costas Zarifis on 22/05/2014.
@@ -10,7 +10,7 @@
  * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
  * took hours to install :).
  */
-#include "ConstantPropAnalysis.h"
+#include "AvailableExpressionAnalysis.h"
 
 // You can actually check out the opcodes in this address:
 // 	http://code.woboq.org/userspace/llvm/include/llvm/IR/Instruction.def.html
@@ -57,12 +57,12 @@
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
+Flow* AvailableExpressionAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
 //	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
 //			<< inst->getOpcodeName() << "\n";
-	ConstantPropAnalysisFlow* inFlow =
-			static_cast<ConstantPropAnalysisFlow*>(in);
-	ConstantPropAnalysisFlow * output;
+	AvailableExpressionAnalysisFlow* inFlow =
+			static_cast<AvailableExpressionAnalysisFlow*>(in);
+	AvailableExpressionAnalysisFlow * output;
 
 
 
@@ -112,17 +112,17 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
 		break;
 
 	default:
-		output = new ConstantPropAnalysisFlow(inFlow);
+		output = new AvailableExpressionAnalysisFlow(inFlow);
 		break;
 	}
 	//errs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
 	return output;
 }
 
-ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
-		ConstantPropAnalysisFlow* in, Instruction* instruction) {
+AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeCastInst(
+		AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
 	//Value *leftOperand = instruction->getOperand(0);
 	//Value *rightOperand = instruction->getOperand(1);
 	map<string, float> value;
@@ -146,11 +146,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 				// Hmm, I guess we're good...
 
 				float forwardVal = f->value.find(casting->getName())->second;
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				value[retVal->getName()] = forwardVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -164,21 +164,21 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 				float forwardVal = cfp->getValueAPF().convertToFloat();
 
 				//float forwardVal = f->value.find(casting->getName())->second;
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				value[retVal->getName()] = forwardVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
 			} else if (ConstantInt *cfp = dyn_cast<ConstantInt>(casting)) {
 				float forwardVal = cfp->getZExtValue();
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				value[retVal->getName()] = forwardVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -192,7 +192,7 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 
 }
 
-float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
+float AvailableExpressionAnalysis::computeOp(float leftVal, float rightVal,
 		unsigned opcode) {
 
 	float resVal = 0;
@@ -231,10 +231,10 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 
 }
 
-ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
-		ConstantPropAnalysisFlow* in, Instruction* instruction) {
+AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executePhiInst(
+		AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
 	Value *rightOperand = instruction->getOperand(1);
 	map<string, float> value;
@@ -265,13 +265,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 		if (leftVal == rightVal){
 
 			float resVal = leftVal;
-			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+			AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 			errs() << leftVal << " " << rightVal << "\n";
 			errs() << "outcome: " << resVal << "\n";
 			value[K->getName()] = resVal;
 			ff->value = value;
-			ConstantPropAnalysisFlow* tmp =
-					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+			AvailableExpressionAnalysisFlow* tmp =
+					static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 			delete ff;
 			delete f;
 			f = tmp;
@@ -290,13 +290,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 //
 //			float resVal = computeOp(leftVal, rightVal, opcode);
 //
-//			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//			AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 //			//errs() << leftVal << " " << rightVal << "\n";
 //			//errs() << "outcome: " << resVal << "\n";
 //			value[K->getName()] = resVal;
 //			ff->value = value;
-//			ConstantPropAnalysisFlow* tmp =
-//					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//			AvailableExpressionAnalysisFlow* tmp =
+//					static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 //			delete ff;
 //			delete f;
 //			f = tmp;
@@ -319,13 +319,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 //
 //				float resVal = computeOp(leftVal, rightVal, opcode);
 //
-//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 //				//errs() << leftVal << " " << rightVal << "\n";
 //				//errs() << "outcome: " << resVal << "\n";
 //				value[K->getName()] = resVal;
 //				ff->value = value;
-//				ConstantPropAnalysisFlow* tmp =
-//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				AvailableExpressionAnalysisFlow* tmp =
+//						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 //				delete ff;
 //				delete f;
 //				f = tmp;
@@ -356,13 +356,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 //				//float resVal = leftVal + rightVal;
 //
 //				float resVal = computeOp(leftVal, rightVal, opcode);
-//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 //				//errs() << leftVal << " " << rightVal << "\n";
 //				//errs() << "outcome: " << resVal << "\n";
 //				value[K->getName()] = resVal;
 //				ff->value = value;
-//				ConstantPropAnalysisFlow* tmp =
-//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				AvailableExpressionAnalysisFlow* tmp =
+//						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 //				delete ff;
 //				delete f;
 //				f = tmp;
@@ -385,13 +385,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 //
 //				float rightVal = f->value.find(rightOperand->getName())->second;
 //				float resVal = computeOp(leftVal, rightVal, opcode);
-//				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+//				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 //				//errs() << leftVal << " " << rightVal << "\n";
 //				//errs() << "outcome: " << resVal << "\n";
 //				value[K->getName()] = resVal;
 //				ff->value = value;
-//				ConstantPropAnalysisFlow* tmp =
-//						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+//				AvailableExpressionAnalysisFlow* tmp =
+//						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 //				delete ff;
 //				delete f;
 //				f = tmp;
@@ -404,11 +404,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 	return f;
 }
 
-ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
-		ConstantPropAnalysisFlow* in, Instruction* instruction,
+AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeFOpInst(
+		AvailableExpressionAnalysisFlow* in, Instruction* instruction,
 		unsigned opcode) {
 
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
 	Value *rightOperand = instruction->getOperand(1);
 	map<string, float> value;
@@ -428,13 +428,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 
 			float resVal = computeOp(leftVal, rightVal, opcode);
 
-			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+			AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 			//errs() << leftVal << " " << rightVal << "\n";
 			//errs() << "outcome: " << resVal << "\n";
 			value[K->getName()] = resVal;
 			ff->value = value;
-			ConstantPropAnalysisFlow* tmp =
-					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+			AvailableExpressionAnalysisFlow* tmp =
+					static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 			delete ff;
 			delete f;
 			f = tmp;
@@ -457,13 +457,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 
 				float resVal = computeOp(leftVal, rightVal, opcode);
 
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -494,13 +494,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 				//float resVal = leftVal + rightVal;
 
 				float resVal = computeOp(leftVal, rightVal, opcode);
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -523,13 +523,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 
 				float rightVal = f->value.find(rightOperand->getName())->second;
 				float resVal = computeOp(leftVal, rightVal, opcode);
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -542,11 +542,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 	return f;
 }
 
-ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
-		ConstantPropAnalysisFlow* in, Instruction* instruction,
+AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeOpInst(
+		AvailableExpressionAnalysisFlow* in, Instruction* instruction,
 		unsigned opcode) {
 
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
 	Value *rightOperand = instruction->getOperand(1);
 	map<string, float> value;
@@ -567,13 +567,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 			float resVal = computeOp(leftVal, rightVal, opcode);
 
 			//float resVal = leftVal + rightVal;
-			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+			AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 			//errs() << leftVal << " " << rightVal << "\n";
 			//errs() << "outcome: " << resVal << "\n";
 			value[K->getName()] = resVal;
 			ff->value = value;
-			ConstantPropAnalysisFlow* tmp =
-					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+			AvailableExpressionAnalysisFlow* tmp =
+					static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 			delete ff;
 			delete f;
 			f = tmp;
@@ -597,13 +597,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 				float resVal = computeOp(leftVal, rightVal, opcode);
 				//float resVal = leftVal + rightVal;
 
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -634,13 +634,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 				float resVal = computeOp(leftVal, rightVal, opcode);
 
 				//float resVal = leftVal + rightVal;
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -665,13 +665,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 				float resVal = computeOp(leftVal, rightVal, opcode);
 
 				//float resVal = leftVal + rightVal;
-				ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+				AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 				//errs() << leftVal << " " << rightVal << "\n";
 				//errs() << "outcome: " << resVal << "\n";
 				value[K->getName()] = resVal;
 				ff->value = value;
-				ConstantPropAnalysisFlow* tmp =
-						static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+				AvailableExpressionAnalysisFlow* tmp =
+						static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 				delete ff;
 				delete f;
 				f = tmp;
@@ -687,10 +687,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 }
 
 /*
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFAddInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeFAddInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -708,13 +708,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getValueAPF().convertToFloat();
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -736,13 +736,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal + rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -771,13 +771,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -800,13 +800,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -819,10 +819,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeAddInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeAddInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -840,13 +840,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getZExtValue();
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -869,13 +869,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal + rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -904,13 +904,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -933,13 +933,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal + rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -954,10 +954,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFDivInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeFDivInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -972,12 +972,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getValueAPF().convertToFloat();
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -999,12 +999,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal / rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1030,11 +1030,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1057,13 +1057,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1076,10 +1076,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeSDivInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeSDivInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -1097,13 +1097,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getZExtValue();
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1116,9 +1116,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the right operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 
  delete ff;
  delete f;
@@ -1132,13 +1132,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal / rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1161,9 +1161,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1173,13 +1173,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1195,9 +1195,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the left operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1208,13 +1208,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal / rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1229,10 +1229,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFMulInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeFMulInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -1247,12 +1247,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getValueAPF().convertToFloat();
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1274,12 +1274,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal * rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1305,11 +1305,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1332,13 +1332,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1351,10 +1351,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeMulInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeMulInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -1372,13 +1372,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getZExtValue();
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1391,9 +1391,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the right operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 
  delete ff;
  delete f;
@@ -1407,13 +1407,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal * rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1436,9 +1436,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1448,13 +1448,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1470,9 +1470,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the left operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1483,13 +1483,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal * rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1504,10 +1504,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFSubInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeFSubInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -1522,12 +1522,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getValueAPF().convertToFloat();
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1549,12 +1549,12 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal - rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
 
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1580,11 +1580,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getValueAPF().convertToFloat();
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1607,13 +1607,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1626,10 +1626,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  return f;
  }
 
- ConstantPropAnalysisFlow* ConstantPropAnalysis::executeSubInst(
- ConstantPropAnalysisFlow* in, Instruction* instruction) {
+ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeSubInst(
+ AvailableExpressionAnalysisFlow* in, Instruction* instruction) {
 
- ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow(in);
+ AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow(in);
  Value *leftOperand = instruction->getOperand(0);
  Value *rightOperand = instruction->getOperand(1);
  map<string, float> value;
@@ -1647,13 +1647,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = CILeft->getZExtValue();
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1666,9 +1666,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the right operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
 
  delete ff;
  delete f;
@@ -1682,13 +1682,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal - rightVal;
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1711,9 +1711,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
 
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1723,13 +1723,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  float leftVal = f->value.find(leftOperand->getName())->second;
  float rightVal = CIRight->getZExtValue();
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1745,9 +1745,9 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  errs() << "Apparently the left operand of the op is";
  errs() << " a variable but this is the first time we ";
  errs() << "come across this variable!!\n";
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1758,13 +1758,13 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 
  float rightVal = f->value.find(rightOperand->getName())->second;
  float resVal = leftVal - rightVal;
- ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+ AvailableExpressionAnalysisFlow* ff = new AvailableExpressionAnalysisFlow();
  //errs() << leftVal << " " << rightVal << "\n";
  //errs() << "outcome: " << resVal << "\n";
  value[K->getName()] = resVal;
  ff->value = value;
- ConstantPropAnalysisFlow* tmp =
- static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+ AvailableExpressionAnalysisFlow* tmp =
+ static_cast<AvailableExpressionAnalysisFlow*>(ff->join(f));
  delete ff;
  delete f;
  f = tmp;
@@ -1781,15 +1781,15 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
  }
  */
 
-Flow * ConstantPropAnalysis::initialize() {
-	return new ConstantPropAnalysisFlow(ConstantPropAnalysisFlow::BOTTOM);
+Flow * AvailableExpressionAnalysis::initialize() {
+	return new AvailableExpressionAnalysisFlow(AvailableExpressionAnalysisFlow::BOTTOM);
 }
 
-ConstantPropAnalysis::ConstantPropAnalysis(Function & F) :
+AvailableExpressionAnalysis::AvailableExpressionAnalysis(Function & F) :
 		StaticAnalysis() {
-	this->top = new ConstantPropAnalysisFlow(ConstantPropAnalysisFlow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
-	this->bottom = new ConstantPropAnalysisFlow(
-			ConstantPropAnalysisFlow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+	this->top = new AvailableExpressionAnalysisFlow(AvailableExpressionAnalysisFlow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
+	this->bottom = new AvailableExpressionAnalysisFlow(
+			AvailableExpressionAnalysisFlow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
 	this->functionName = F.getName();
 	buildCFG(F);
 }

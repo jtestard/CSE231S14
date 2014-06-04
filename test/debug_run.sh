@@ -9,7 +9,9 @@ make all
 #Compile benchmarks
 #echo "COMPILING BENCHMARKS"
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc
 llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
+llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENCHMARKS/constantProp/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
@@ -25,8 +27,9 @@ fi
 if [ "$1" == "pointerAnalysis" ]
 then
 	echo "POINTER ANALYSIS OPTIMIZATION"
-	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze
+	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
+	opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc -analyze
+	#opt -load $LLVMLIB/CSE231.so -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze >> gcd.json
 fi
 
 if [ "$1" == "constantPropagation" ]
@@ -43,7 +46,7 @@ then
 	opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
 	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
-	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
+	opt -load $LLVMLIB/CSE231.so -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
 fi
 
 #echo "DUMMY CONST PROP"

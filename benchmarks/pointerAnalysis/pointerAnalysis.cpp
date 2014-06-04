@@ -1,4 +1,5 @@
 //#include <stdio.h>
+#define NULL 0
 
 int main() {
 	// simple statementsi
@@ -25,7 +26,7 @@ int main() {
 	//Testing X = *Y
 	f = *j; //c-> a,b ; e -> a,d; l -> b; f ->a,b,d ; g->d ; h->f ; j -> l
 	e = *j; //c-> a,b ; e -> a,b,d; l -> b; f ->a,b,d ; g->d ; h->f ; j -> l
-
+	c = NULL; //e -> a,b,d; l -> b; f ->a,b,d ; g->d ; h->f ; j -> l
 	// simple branch
 	if (a==3) {
 		e = &d;

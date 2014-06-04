@@ -47,7 +47,9 @@ void StaticAnalysis::runWorklist() {
 		}
 //		errs() << "Inflow collected...\n";
 		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
-		Flow* in = inputFlows[0];
+
+		Flow* in = initialize();
+		in->copy(inputFlows[0]);
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
 			Flow* f = in->join(inputFlows[i]);
 			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
@@ -67,7 +69,7 @@ void StaticAnalysis::runWorklist() {
 //			errs() << "Joined with existing output...\n";
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
 			if (!(new_out->equals(current->outgoing[i]->flow))){
-				errs() << "new output pushed to the worklist...\n";
+				//errs() << "new output pushed to the worklist...\n";
 				current->outgoing[i]->flow->copy(new_out);
 				worklist.push(current->outgoing[i]->destination);
 			}
@@ -140,7 +142,7 @@ void StaticAnalysis::buildCFG(Function &F){
 //Doesn't quite print out JSON yet, but some nice string representation.
 void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 	//The graph data representation is now edge-based.
-	OS << "[\n";
+	OS << "\"Analysis\" : [\n";
 	for (unsigned int i = 0; i < CFGNodes.size() ; i++) {
 		StaticAnalysis::JSONNode(OS,CFGNodes[i]);
 		if(i+1 < CFGNodes.size())
