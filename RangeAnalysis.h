@@ -1,4 +1,5 @@
-/**
+/*
+ *
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
@@ -6,27 +7,27 @@
  * 	Notice that we assume all static analyses use a function scope, in accordance with the Professor's instructions.
  */
 
-#ifndef RANGE_ANALYSIS
-#define RANGE_ANALYSIS
-#include "StaticAnalysis.h"
+#ifndef CONSTANT_PROP_ANALYSIS
+#define CONSTANT_PROP_ANALYSIS
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Instruction.h"
 #include "llvm/Support/raw_ostream.h"
-#include "Flow.h"
-#include "RangeAnalysisDomainElement.h"	//Defines what the "flow" elements will look like
+#include "RangeAnalysisFlow.h"
+#include "StaticAnalysis.h"
 #include <map>
 #include <vector>
 #include <cstdlib>
 #include <queue>
 #include <sstream>
 #include <set>
+#include <llvm/IR/Constants.h>
 
 using namespace llvm;
 using namespace std;
 
 //Static Analysis class
-class RangeAnalysis: public StaticAnalysis {
+class RangeAnalysis : public StaticAnalysis {
 
 public :
 
@@ -41,10 +42,30 @@ public :
 	 */
 	Flow* executeFlowFunction(Flow* in, Instruction* inst);
 
-	//Call a construtor of your own type. For me that would be ....
 	Flow* initialize();
 
-	virtual ~RangeAnalysis();
+protected:
+	RangeAnalysisFlow *executeFAddInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeAddInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeFSubInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeSubInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeFMulInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeMulInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeFDivInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeSDivInst(RangeAnalysisFlow* in, Instruction* inst);
+	RangeAnalysisFlow *executeCastInst(RangeAnalysisFlow* in, Instruction* inst);
+
+
+	RangeAnalysisFlow *executeFOpInst(RangeAnalysisFlow* in, Instruction* inst, unsigned opcode);
+	RangeAnalysisFlow *executeOpInst(RangeAnalysisFlow* in, Instruction* inst, unsigned opcode);
+	RangeAnalysisFlow *executePhiInst(RangeAnalysisFlow* in, Instruction* inst);
+
+
+public:
+	float computeOp(float leftVal, float rightVal, unsigned opcode);
+	RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainElement rightRange, unsigned opcode);
+
+
 
 
 };
