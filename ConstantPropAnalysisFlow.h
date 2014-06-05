@@ -33,7 +33,7 @@ public:
 	/* This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
 	 * It must output a proper representation of the flow in JSON format :
 	 *
-	 * 		{ "X" : "Z", "Z" : ["W","Y"] }
+	 * 		{ "X" : 4, "Z" : 2.5 }
 	 *
 	 * 	Where the left hand side are variable names and right hand side are also variable names.
 	 */

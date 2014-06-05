@@ -16,14 +16,14 @@ bool AvailableExpressionAnalysisFlow::equals(Flow* otherSuper) {
 			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
 	if (other->value.size() != this->value.size())
 		return false;
-	for (map<string, float>::const_iterator it = this->value.begin();
+	for (map<string, string>::const_iterator it = this->value.begin();
 			it != this->value.end(); it++) {
 		string key = it->first;
-		float thisVal = it->second;
+		string thisVal = it->second;
 		//Check if key is found in other
 		if (other->value.find(key) == other->value.end())
 			return false;
-		float otherVal = other->value.find(key)->second;
+		string otherVal = other->value.find(key)->second;
 		if (otherVal != thisVal)
 			return false;
 
@@ -38,7 +38,7 @@ string AvailableExpressionAnalysisFlow::jsonString() {
 		return "\"" + basic + "\"";
 	//Value has something inside
 	stringstream ss;
-	map<string, float>::const_iterator it = this->value.begin();
+	map<string, string>::const_iterator it = this->value.begin();
 	/*ss << "{\"" << it->first << "\" : [ ";
 	 set<string>::iterator its=it->second.begin();
 	 ss << *its << " "; its++;
@@ -52,11 +52,11 @@ string AvailableExpressionAnalysisFlow::jsonString() {
 	for (; it != this->value.end(); it++) {
 		if (counter == 0) {
 			ss << "\"" << it->first << "\" : ";
-			float v = it->second;
+			string v = it->second;
 			ss << v << " ";
 		} else {
 			ss << ",\"" << it->first << "\" : ";
-			float v = it->second;
+			string v = it->second;
 			ss << v << " ";
 		}
 
@@ -146,7 +146,7 @@ Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 
 	//f = other;
-	for (map<string, float>::iterator it = this->value.begin();
+	for (map<string, string>::iterator it = this->value.begin();
 			it != this->value.end(); it++) {
 
 		if (other->value.find(it->first) == other->value.end()) {
@@ -155,8 +155,8 @@ Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 		} else {
 			// Oh no! They do have the same key! We need to check if they have
 			// the same values! if they do then we're good
-			float otherVal = other->value.find(it->first)->second;
-			float thisVal = this->value.find(it->first)->second;
+			string otherVal = other->value.find(it->first)->second;
+			string thisVal = this->value.find(it->first)->second;
 
 			if (otherVal == thisVal)
 				// OK, we can replicate the value since both branches
@@ -171,7 +171,7 @@ Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 		}
 	}
 
-	for (map<string, float>::iterator it = other->value.begin();
+	for (map<string, string>::iterator it = other->value.begin();
 			it != other->value.end(); it++) {
 
 		if (this->value.find(it->first) == this->value.end()) {
@@ -180,8 +180,8 @@ Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 		} else {
 			// Oh no! They do have the same key! We need to check if they have
 			// the same values! if they do then we're good
-			float thisVal = this->value.find(it->first)->second;
-			float otherVal = other->value.find(it->first)->second;
+			string thisVal = this->value.find(it->first)->second;
+			string otherVal = other->value.find(it->first)->second;
 
 			if (otherVal == thisVal)
 				// OK, we can replicate the value since both branches
