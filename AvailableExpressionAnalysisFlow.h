@@ -61,7 +61,7 @@ public:
 	~AvailableExpressionAnalysisFlow();
 
 	//Variables are represented as strings.
-	map<string, float > value;
+	map<string, string > value;
 
 };
 
