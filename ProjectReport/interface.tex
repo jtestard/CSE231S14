@@ -38,23 +38,23 @@ The \code{Flow} class includes a lot of the functionality from the lattice opera
 
 In all of the overridden versions of these methods, the client will have to cast the input \code{Flow*} type to an instance of his client class in order to have access to all the fields required to implement these methods accurately. The type casting can happen safely, because it will always be the case when those methods are called, that the incoming flow's actual type will be that of the client subclass. For increased readibility, we initially wanted the $copy$ and $equals$ methods to be implemented through operator overloading. However, we realized that this is not possible, given operator overloading restricts the input to be a constant pointer and disables casting.
 
-The \code{initialize()} method has also to be overwritten by the client class.
-
 The last method the client must override is the \code{string jsonString()} method which allows the output of the flow in \code{JSON format}. The class defines two constants strings, called \code{"top"} and \code{"bottom"} and a member called \code{basic}, which is only allowed to be empty or have these two values. The \code{jsonString()} method will output \code{"top"} or \code{"bottom"} if and only if the basic string is non-empty, regardless of the analysis, which help clarify the flow representation when outputed in \code{JSON} format.
-
-\begin{itemize}
-\item TOP
-\item BOTTOM
-\item join(Flow* other)
-\item equals(Flow* other)
-\item copy(Flow* other)
-\item jsonString()
-\end{itemize}
-
 
 \subsection{The Static Analysis Class}
 
-The dataflow analysis implementation is centered around the \tbf{worklist algorithm}, whose C++ implementation can be seen on listing \ref{worklist}.
+While the \code{Flow} class represents the information computed by the dataflow analysis, the \code{Static Analysis} implements the analysis itself. It must also be extended by clients. The \code{Static Analysis} class implements most of the effort required for an analysis, leaving the client class focusing on the flow function implementation.
+
+The \code{StaticAnalysis} class has the responsibility of building the Context Flow Graph, which it does in the \code{void builCFG(llvm::Function &F)} method. Recall that our analysis are made on a function scope. This method will build the graph corresponding to the LLVM function given as argument. When analysis multiple procedures, multiple instances of the Analysis class are created. More details about this are discussed in the next section.
+
+The most important feature of the \code{StaticAnalysis} class is the \code{void runWorklist()} method, whose C++ implementation can be seen on listing \ref{worklist}. This class has been made on purpose extremely similar to the worklist algorithm seen in class. Next, we go over the important methods used by this class.
+
+The \code{void initializeEdgeFlowToBottom()} function has a dual functionality. First, it makes sure the edge flow is initialized to bottom at the start of the analysis. Second, it ensures that the C++ type of the flow used by algorithm is that of the client analysis subclass. When the client extends this class, in his constructor he must initialize the two \code{Flow*} objects \code{top} and \code{bottom} to instance of the client analysis's \code{Flow*} subclass. Next, the \code{Flow* initialize()} method must to be overridden. This method returns a copy of the \code{bottom} flow. When the  \code{void initializeEdgeFlowToBottom()}, it will call \code{Flow* initialize()} on all edge flows in the graph. The method \code{void addAllNodesToWorklist()} is pretty self explanatory.
+
+The \code{Flow* mergeFlowFromIncoming()} method gets all of the flows from the incoming edges of the current node and joins them together using the \code{Flow* join()} method. Note that given all \code{Flow*} objects are instance of the client subclass, through polymorphism the \code{Flow* join()} method that will be called will be that of the client subclass.
+
+Next, the \code{Flow* executeFlowFunction()} method outputs the \code{Flow*} corresponding to the input \code{Flow*} and \code{Instruction*}. This method must be overridden by the client. Inside this function, this client is expected to implement the functionality for every flow function. This leaves the client very free in the way he intends to implement flow functions.
+
+The last part of the worklist algorithm updates the flows of the output edges. Notice that given two consecutive nodes, the outgoing edge for the first node and incoming edge of the second node are the same object (by updating one, you update the other). This section relies on the client interfaces implementing the \code{Flow* join()}, \code{bool equals()}, \code{void copy()} methods correctly.
 
 \begin{lstlisting}[caption=Worklist Algorithm, label=worklist]
 void StaticAnalysis::runWorklist() {
@@ -92,3 +92,7 @@ void StaticAnalysis::runWorklist() {
   }
 }
 \end{lstlisting}
+
+\subsection{The AnalysisPass}
+
+Until now, it has been assumed that the LLVM code we want to analyze was given. We actually require the client to write an \code{LLVM::Pass} to perform the analysis. The user is then required to use the LLVM \code{opt} program with the \code{-analyze} flag on the pass he creates to output the computed information. Given our analyses all use function scope, the \code{Pass} should create one analysis object per function in the LLVM module. Notice that the client is not required to extend any class, but an example \code{Pass} is provided as a guideline. Finally, noticed that in our design, it is possible for a single pass to handle multiple analyses, if required. We believe extending our analysis to module scope would be easy, given the flexibility of our framework. In order to extend our scope, we only need to extend our Context Flow Graph to add edges from caller to callee functions (in addition to branching and jumps).

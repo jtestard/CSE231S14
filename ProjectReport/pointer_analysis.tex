@@ -1,1 +1,31 @@
+LLVM has a huge set of instruction set, we decide to cover it incrementally.
 
+Pointer analysis instructions covered 
+Pointer ins
+Flow functions
+
+\begin{table*}
+\centering
+\caption{Pointer Analysis Instruction coverage}
+\begin{tabular}{| c | c | c | }
+\hline
+Instruction & C++ code & LLVM bit code  \\
+%\hline
+%\shortstack{$X,Y : $ pointers \\ $C : $ constant} &
+%\shortstack{\code{Type* x , y ;} \\ \code{Type x,y;} } &
+%\shortstack{\code{\%X,\%Y \%add.ptr} : registers \\ a} \\
+\hline
+$X \la NULL$ &
+\text{\code{x = 0;}} &
+\text{\code{store float* null, float** \%X, align 4}} \\
+\hline
+$X \la Y + C$ & \shortstack{\code{x = y+i;} \\ \code{x = (&z)+i;}} & 
+\shortstack{ \code{\%add.ptr = getelementptr inbounds float** \%Y, i32 i} \\
+\code{store float** \%add.ptr, float** \%X, align 4}}  \\
+\hline
+%X \la &Y
+\hline
+\end{tabular}
+\end{table*}
+
+$$OUT = IN - \{X \ra Z | Z \}$$
