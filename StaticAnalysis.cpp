@@ -58,8 +58,12 @@ void StaticAnalysis::runWorklist() {
 //		errs() << "Inflow joined...\n";
 
 		//EXECUTE THE FLOW FUNCTION
-		Flow* out = executeFlowFunction(in,current->inst);
-//		errs() << "Flow function executed...\n";
+		Flow* out = executeFlowFunction(	in,					//Contains all known variable mappings for the flow function
+											current->inst, 		//Instruction to perform flow function on
+											current->index	);	//Basic block index
+//TO IDENTIFY BLOCK
+		//Flow* out = executeFlowFunction(in,current->inst, current->index);
+		//		errs() << "Flow function executed...\n";
 
 		//This will executed the flow function
 		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
@@ -190,7 +194,8 @@ StringRef StaticAnalysis::getFunctionName(){
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst){
+Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst, int NodeId)
+{
 //	switch(instruction) {
 //	case:
 //

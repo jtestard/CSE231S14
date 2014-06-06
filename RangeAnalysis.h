@@ -26,6 +26,13 @@
 using namespace llvm;
 using namespace std;
 
+typedef struct _nodeState
+{
+	int nodeVisitCounter;
+	RangeAnalysisFlow* nodeSet;
+	_nodeState(){nodeVisitCounter = 0;};
+}nodeState;
+
 //Static Analysis class
 class RangeAnalysis : public StaticAnalysis {
 
@@ -40,7 +47,7 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	Flow* executeFlowFunction(Flow* in, Instruction* inst);
+	Flow* executeFlowFunction(Flow *in, Instruction *inst, int NodeId);
 
 	Flow* initialize();
 
@@ -60,6 +67,8 @@ protected:
 	RangeAnalysisFlow *executeOpInst(RangeAnalysisFlow* in, Instruction* inst, unsigned opcode);
 	RangeAnalysisFlow *executePhiInst(RangeAnalysisFlow* in, Instruction* inst);
 
+	map<int,nodeState> nodeCount;	//Use this as a ceiling on how many times you loop. If you see any node more than 2 times assume a loop
+							//Give a chance for some complex control to not be considered as a loop.
 
 public:
 	float computeOp(float leftVal, float rightVal, unsigned opcode);
@@ -69,4 +78,9 @@ public:
 
 
 };
+
+//Helper function to set variables with a different range but the same name to top
+//This is used during merge control flow as a way of dealing with infinite range analysis loops
+void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B);
+
 #endif

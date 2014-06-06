@@ -47,8 +47,7 @@
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* AvailableExpressionAnalysis::executeFlowFunction(Flow *in,
-		Instruction* inst) {
+Flow* AvailableExpressionAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId) {
 //	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
 //			<< inst->getOpcodeName() << "\n";
 	AvailableExpressionAnalysisFlow* inFlow =

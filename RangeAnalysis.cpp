@@ -53,17 +53,60 @@
 
 #define PHI 48 // Extend floating point
 
+
+//Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction* inst, int index) {
+//	return executeFlowFunction(Flow *in, Instruction* inst);
+//}
+
 /*
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
+Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId) {
 //	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
 //			<< inst->getOpcodeName() << "\n";
 	RangeAnalysisFlow* inFlow =
 			static_cast<RangeAnalysisFlow*>(in);
 	RangeAnalysisFlow * output;
+//Just need to check if we have seen this basic block a few times.
+//If we have seen this a few times, change ALL VARIABLES that are changing to TOP
+	if(nodeCount.find(NodeId) != nodeCount.end())
+	{
 
+
+		if(nodeCount[NodeId].nodeVisitCounter >= 3)
+		{
+//ANY VARIABLES THAT DID NOT CHANGE MUST BE SET TO TOP!!!
+//THIS SHOULD SET SOME VARIABLES TO TOP!!!!
+			RangeAnalysisFlow* f = new RangeAnalysisFlow(inFlow);
+			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
+			RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));//Contains the value of the variable from the old set
+			delete ff;
+			delete f;
+			f = tmp;									//Keep tmp which has the variable from.. f?
+
+			DeleteDifferentRanges(f, nodeCount[NodeId].nodeSet);
+
+			return(f);	//In = Out
+			//Just return the in Set (no Change)
+		}
+		nodeCount[NodeId].nodeVisitCounter = (nodeCount[NodeId].nodeVisitCounter + 1);
+	}
+	else
+	{
+		nodeState thisNodeState;
+		RangeAnalysisFlow* f = new RangeAnalysisFlow(inFlow);
+		RangeAnalysisFlow* ff = new RangeAnalysisFlow();
+		RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));//Contains the value of the variable from the old set
+		delete ff;
+		delete f;
+		f = tmp;
+
+		thisNodeState.nodeVisitCounter = 1;
+		thisNodeState.nodeSet = f;
+		nodeCount[NodeId] = thisNodeState;	//Track this node
+
+	}
 
 
 
@@ -217,6 +260,7 @@ float RangeAnalysis::computeOp(float leftVal, float rightVal,
 		unsigned opcode) {
 
 	float resVal = 0;
+	int ASHRVAL, ASHRMASK;
 	switch (opcode) {
 
 	case ADD:
@@ -243,8 +287,15 @@ float RangeAnalysis::computeOp(float leftVal, float rightVal,
 		resVal = (int) leftVal << (int) rightVal;
 		break;
 	case LSHR:
-	case ASHR:
 		resVal = (int) leftVal >> (int) rightVal;
+		break;
+	case ASHR:
+		ASHRMASK = (int)leftVal;
+		ASHRMASK &= 0x80000000;
+		ASHRVAL = (int)leftVal;
+		ASHRVAL &= 0x7fffffff;
+		ASHRMASK |=( ASHRVAL >> (int) rightVal);
+		resVal = (int)ASHRMASK;
 		break;
 	}
 
@@ -257,11 +308,15 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 {
 	RangeDomainElement resRange;
 	float mulDivCombos[4];
+	int shiftCombos[4];
+	int AshiftLower, AshiftHigher, BshiftLower, BshiftHigher;
+	int lowerShiftSign, upperShiftSign;
 	int comboCheckCtr = 0;
 //CHECK THAT BOTH ELEMENTS ARE IN RANGE!!!
-	if(rightRange.undefined || leftRange.undefined)
+	if(rightRange.undefined || leftRange.undefined || rightRange.top || leftRange.top)
 	{
 		resRange.top = true;	//Oh dearrrrrrrr :( This guy is not gonna be helpful anymore :(
+		resRange.bottom = false;
 		resRange.upper = 0;
 		resRange.lower = 0;
 		return resRange;
@@ -368,23 +423,66 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		}
 		break;
 	case LSHR:
+		AshiftLower = (int)leftRange.lower;
+		AshiftHigher = (int)leftRange.upper;
+		BshiftLower = (int)rightRange.lower;
+		BshiftHigher = (int)rightRange.upper;
+
+		shiftCombos[0] = AshiftLower >>  BshiftLower;
+		shiftCombos[1] = AshiftLower >> BshiftHigher;
+		shiftCombos[2] = AshiftHigher >> BshiftLower;
+		shiftCombos[3] = AshiftHigher >> BshiftHigher;
+		//get the lowest of all combos for the return lower bound
+		//get the highest of all combos for the return upper bound
+		resRange.lower = shiftCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.upper = shiftCombos[0];
+		while(comboCheckCtr < 4)
+		{
+			if(shiftCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = (float)shiftCombos[comboCheckCtr];
+			if(shiftCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = (float)shiftCombos[comboCheckCtr];
+			comboCheckCtr++;
+		}
+		break;
 	case ASHR:	//Haaaanh? TO DO: Debug.
 //		resVal = (int) leftVal >> (int) rightVal;
 		//another combo fiender.
-		mulDivCombos[0] = (int) leftRange.lower >> (int) rightRange.lower;
-		mulDivCombos[1] = (int) leftRange.lower >> (int) rightRange.upper;
-		mulDivCombos[2] = (int) leftRange.upper >> (int) rightRange.lower;
-		mulDivCombos[3] = (int) leftRange.upper >> (int) rightRange.upper;
+		//BUBAGAWG!!!!
+		AshiftLower = (int)leftRange.lower;
+		AshiftHigher = (int)leftRange.upper;
+		BshiftLower = (int)rightRange.lower;
+		BshiftHigher = (int)rightRange.upper;
+		lowerShiftSign = AshiftLower & 0x80000000;	//Save the sign bit of the left operand (low range)
+		upperShiftSign = AshiftHigher & 0x80000000; //Save the sign bit of the left operand (high range)
+		AshiftLower &= 0x7fffffff;					//In a copy to be shifted: Destroy the sign bit of the left operand (low range)
+		AshiftLower &= 0x7fffffff;
+
+		AshiftLower >>=  BshiftLower;
+		AshiftLower |= lowerShiftSign;
+		shiftCombos[0] = AshiftLower;
+
+		AshiftLower >>= BshiftHigher;
+		AshiftLower |= lowerShiftSign;
+		shiftCombos[1] = AshiftLower;
+
+		AshiftHigher >>= BshiftLower;
+		AshiftHigher |= upperShiftSign;
+		shiftCombos[2] = AshiftHigher;
+
+		AshiftHigher >>= BshiftHigher;
+		AshiftHigher |= BshiftHigher;
+		shiftCombos[3] = AshiftHigher;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];	//Initialize, you must. Since we start with max in resRange.
-		resRange.upper = mulDivCombos[0];
+		resRange.lower = shiftCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.upper = shiftCombos[0];
 		while(comboCheckCtr < 4)
 		{
-			if(mulDivCombos[comboCheckCtr] < resRange.lower)
-				resRange.lower = mulDivCombos[comboCheckCtr];
-			if(mulDivCombos[comboCheckCtr] > resRange.upper)
-				resRange.upper = mulDivCombos[comboCheckCtr];
+			if(shiftCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = (float)shiftCombos[comboCheckCtr];
+			if(shiftCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = (float)shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
 		break;
@@ -780,3 +878,48 @@ RangeAnalysis::RangeAnalysis(Function & F) :
 	this->functionName = F.getName();
 	buildCFG(F);
 }
+
+//Utility function
+//Delete (set to top) all variables with different ranges. This is a utility function for merging, specifically for looping
+//control structures in the range analysis
+void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B)
+{
+	for (map<string, RangeDomainElement>::iterator it = B->value.begin();
+				it != B->value.end(); it++) {
+
+/*			if (this->value.find(it->first) == this->value.end()) {
+				// They don't have the same key! We're good!
+				f->value[it->first] = B->value.find(it->first)->second;
+			} else {*/
+		if (!(A->value.find(it->first) == A->value.end()))
+		{
+				// Oh no! They do have the same key! We need to check if they have
+				// the same values! if they do then we're good
+				RangeDomainElement thisVal = A->value.find(it->first)->second;
+				RangeDomainElement BVal = B->value.find(it->first)->second;
+
+				//if (BVal == thisVal)
+				if(!RangeDomainElementisEqual(	(const RangeDomainElement*) &BVal,
+												(const RangeDomainElement*) &thisVal)	)
+				{
+					// Both branches had different value for this variable
+					//f->value[it->first] = BVal;
+					thisVal.top = true;
+					thisVal.bottom = false;
+					thisVal.lower = 0;
+					thisVal.undefined = true;
+					thisVal.upper = 0;
+					B->value[it->first] = thisVal;
+					A->value[it->first] = thisVal;
+
+				}
+				//else
+				// Nope! They have different values
+				// we need to omit this variable for
+				// the (implicit) "set"
+
+			}
+	}
+}
+
+//End Utility function

@@ -57,7 +57,7 @@
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
+Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
 //	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
 //			<< inst->getOpcodeName() << "\n";
 	ConstantPropAnalysisFlow* inFlow =
@@ -196,6 +196,7 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 		unsigned opcode) {
 
 	float resVal = 0;
+	int ASHRVAL, ASHRMASK;
 	switch (opcode) {
 
 	case ADD:
@@ -222,8 +223,15 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 		resVal = (int) leftVal << (int) rightVal;
 		break;
 	case LSHR:
-	case ASHR:
 		resVal = (int) leftVal >> (int) rightVal;
+		break;
+	case ASHR:
+		ASHRMASK = (int)leftVal;
+		ASHRMASK &= 0x80000000;
+		ASHRVAL = (int)leftVal;
+		ASHRVAL &= 0x7fffffff;
+		ASHRMASK |=( ASHRVAL >> (int) rightVal);
+		resVal = (int)ASHRMASK;
 		break;
 	}
 

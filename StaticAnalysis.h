@@ -76,7 +76,7 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	virtual Flow* executeFlowFunction(Flow *in, Instruction *inst);
+	virtual Flow* executeFlowFunction(Flow *in, Instruction *inst, int NodeId);
 
 	/**
 	 * This method initializes the flow of the edges. It must be overriden by the subclass and return a default instance of the

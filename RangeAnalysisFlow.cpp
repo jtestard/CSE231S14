@@ -162,13 +162,23 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 			RangeDomainElement thisVal = this->value.find(it->first)->second;
 
 			//if (otherVal == thisVal)
+			//take the largest range of the two values to be the new range
+			f->value[it->first] = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
+																			(const RangeDomainElement*) &thisVal);
+			/*
 			if(RangeDomainElementisEqual(	(const RangeDomainElement*) &otherVal,
 											(const RangeDomainElement*) &thisVal)	)
 				// OK, we can replicate the value since both branches
 				// had the same value for this variable
 				f->value[it->first] = otherVal;
 
-			//else
+			else
+			{
+				f->value[it->first] = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
+																(const RangeDomainElement*) &thisVal);
+			}
+
+			*/
 			// Nope! They have different values
 			// we need to omit this variable for
 			// the (implicit) "set"
@@ -248,6 +258,8 @@ RangeDomainElement JoinRangeDomainElements(const RangeDomainElement* A, const Ra
 	maxAB.lower = (A->lower <= B->lower) ? A->lower : B->lower;
 	//If A has the highest of the high range, make maxAB take that value.
 	maxAB.upper = (A->upper >= B->upper) ? A->upper : B->upper;
+	//Preserve the TOP if it has been set in one of these variables
+	maxAB.top = (A->top | B->top);
 
 	return maxAB;
 }

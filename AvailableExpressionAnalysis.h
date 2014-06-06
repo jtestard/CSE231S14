@@ -42,7 +42,7 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	Flow* executeFlowFunction(Flow* in, Instruction* inst);
+	Flow* executeFlowFunction(Flow *in, Instruction *inst, int NodeId);
 
 	Flow* initialize();
 
