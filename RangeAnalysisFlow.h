@@ -13,6 +13,7 @@
 #include <set>
 #include <algorithm>
 #include <sstream>
+#include <limits>		//Has max int and min int.
 #include "llvm/Support/raw_ostream.h"
 #include "Flow.h"
 
@@ -23,7 +24,29 @@ using namespace llvm;
  * This is a May-Point-To Analysis.
  */
 
-class ConstantPropAnalysisFlow: public Flow {
+//this type represents the range for each variable.
+typedef struct _RangeDomainElement{
+	float upper;
+	float lower;
+	bool top;
+	bool bottom;
+	bool undefined;
+	_RangeDomainElement()
+	{
+			upper = std::numeric_limits<float>::infinity();
+			lower = -std::numeric_limits<float>::infinity();
+			top = false;
+			bottom = true;
+			undefined = false;
+	}
+}RangeDomainElement;
+
+//Utility functions
+RangeDomainElement JoinRangeDomainElements(const RangeDomainElement* A, const RangeDomainElement* B);
+bool RangeDomainElementisEqual(const RangeDomainElement* A, const RangeDomainElement* B);
+//End utility functions
+
+class RangeAnalysisFlow: public Flow {
 
 public:
 
@@ -33,7 +56,7 @@ public:
 	/* This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
 	 * It must output a proper representation of the flow in JSON format :
 	 *
-	 * 		{ "X" : 4, "Z" : 2.5 }
+	 * 		{ "X" : "Z", "Z" : ["W","Y"] }
 	 *
 	 * 	Where the left hand side are variable names and right hand side are also variable names.
 	 */
@@ -50,18 +73,18 @@ public:
 	Flow* join(Flow* other);
 
 	//This constructor initializes an empty map.
-	ConstantPropAnalysisFlow();
+	RangeAnalysisFlow();
 
 	//This constructor should be used for top or bottom.
-	ConstantPropAnalysisFlow(string input);
+	RangeAnalysisFlow(string input);
 
 	//Required for type casting within overloaded functions.
-	ConstantPropAnalysisFlow(ConstantPropAnalysisFlow* flow);
+	RangeAnalysisFlow(RangeAnalysisFlow* flow);
 
-	~ConstantPropAnalysisFlow();
+	~RangeAnalysisFlow();
 
 	//Variables are represented as strings.
-	map<string, float > value;
+	map<string, RangeDomainElement > value;
 
 };
 

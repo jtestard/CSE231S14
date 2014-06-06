@@ -22,7 +22,7 @@
  * This method is expected to do much more when overloaded.
  * We use the presence of names in the instructions in LLVM.
  */
-Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction* inst){
+Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
 	PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
 	PointerAnalysisFlow * output;
 	switch(inst->getOpcode()) {

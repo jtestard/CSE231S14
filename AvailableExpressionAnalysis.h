@@ -22,6 +22,8 @@
 #include <sstream>
 #include <set>
 #include <llvm/IR/Constants.h>
+#include <time.h>
+#include <stdlib.h>
 
 using namespace llvm;
 using namespace std;
@@ -40,7 +42,7 @@ public :
 	 *
 	 * The output is a Flow that is the result of the processing of in with respect to instruction inst.
 	 */
-	Flow* executeFlowFunction(Flow* in, Instruction* inst);
+	Flow* executeFlowFunction(Flow *in, Instruction *inst, int NodeId);
 
 	Flow* initialize();
 
@@ -61,12 +63,12 @@ protected:
 	AvailableExpressionAnalysisFlow *executePhiInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
 
 
-public:
-	float computeOp(float leftVal, float rightVal, unsigned opcode);
+private:
+	string computeOp(string leftVal, string rightVal, unsigned opcode);
 
 
-
-
+	//Variables are represented as strings.
+	map<int, int > analysisMap;
 
 };
 #endif
