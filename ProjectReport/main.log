@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  5 JUN 2014 22:40
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.11.29)  6 JUN 2014 18:06
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -751,34 +751,122 @@ Overfull \hbox (3.22327pt too wide) in paragraph at lines 67--69
 [][][][][][][][][][][][][][] 
  []
 
-) (./constant_propagation.tex) (./available_expressions.tex)
-(./range_analysis.tex) (./pointer_analysis.tex) (./conclusion.tex) [3] [4
+) (./pointer_analysis.tex [3]
+Overfull \hbox (21.04pt too wide) in paragraph at lines 58--58
+[] 
+ []
 
-]
-(./main.aux) ) 
+
+Overfull \hbox (236.32404pt too wide) in paragraph at lines 66--67
+[][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (158.62378pt too wide) in paragraph at lines 67--68
+[][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (47.62341pt too wide) in paragraph at lines 71--72
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (47.62341pt too wide) in paragraph at lines 74--75
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (30.97336pt too wide) in paragraph at lines 77--78
+[][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (42.0734pt too wide) in paragraph at lines 78--79
+[][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (42.0734pt too wide) in paragraph at lines 80--81
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (136.4237pt too wide) in paragraph at lines 81--82
+[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (247.42407pt too wide) in paragraph at lines 82--83
+[][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (58.72345pt too wide) in paragraph at lines 83--84
+[][][][][][][][][][][][][] 
+ []
+
+[4]
+Overfull \hbox (269.62415pt too wide) in paragraph at lines 84--85
+[][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (58.72345pt too wide) in paragraph at lines 85--86
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (42.0734pt too wide) in paragraph at lines 87--88
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (42.0734pt too wide) in paragraph at lines 89--90
+[][][][][][][][][][][][][] 
+ []
+
+
+Overfull \hbox (36.52338pt too wide) in paragraph at lines 94--95
+[][][][][][][][][][][][][] 
+ []
+
+) (./constant_propagation.tex) (./available_expressions.tex)
+(./range_analysis.tex) (./conclusion.tex) [5
+
+] (./main.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 8726 strings out of 493315
- 123627 string characters out of 6137903
- 241996 words of memory out of 5000000
- 12017 multiletter control sequences out of 15000+600000
- 13888 words of font info for 53 fonts, out of 8000000 for 9000
+ 8775 strings out of 493315
+ 124396 string characters out of 6137903
+ 251996 words of memory out of 5000000
+ 12065 multiletter control sequences out of 15000+600000
+ 14196 words of font info for 54 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,20n,58p,992b,1497s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/c
-mmi10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-0.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.
-pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pf
-b></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><
-/usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></
-usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></us
-r/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on main.pdf (4 pages, 143568 bytes).
+ 38i,20n,58p,992b,1606s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
+usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></u
+sr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr
+/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/l
+ocal/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/loc
+al/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local
+/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/t
+exlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/tex
+live/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texliv
+e/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
+/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2
+013/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/201
+3/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013
+/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (5 pages, 197910 bytes).
 PDF statistics:
- 61 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
+ 84 PDF objects out of 1000 (max. 8388607)
+ 60 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

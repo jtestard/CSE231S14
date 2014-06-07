@@ -1,31 +1,102 @@
-LLVM has a huge set of instruction set, we decide to cover it incrementally.
-
-Pointer analysis instructions covered 
-Pointer ins
-Flow functions
-
-\begin{table*}
+\begin{table*}[t]
 \centering
 \caption{Pointer Analysis Instruction coverage}
 \begin{tabular}{| c | c | c | }
 \hline
 Instruction & C++ code & LLVM bit code  \\
-%\hline
-%\shortstack{$X,Y : $ pointers \\ $C : $ constant} &
-%\shortstack{\code{Type* x , y ;} \\ \code{Type x,y;} } &
-%\shortstack{\code{\%X,\%Y \%add.ptr} : registers \\ a} \\
 \hline
 $X \la NULL$ &
-\text{\code{x = 0;}} &
-\text{\code{store float* null, float** \%X, align 4}} \\
+\text{\code{Type* x = 0;}} &
+\text{\code{store Type* null, Type** \%X, align 4}} \\
 \hline
-$X \la Y + C$ & \shortstack{\code{x = y+i;} \\ \code{x = (&z)+i;}} & 
-\shortstack{ \code{\%add.ptr = getelementptr inbounds float** \%Y, i32 i} \\
-\code{store float** \%add.ptr, float** \%X, align 4}}  \\
+$X \la Y + c$ & \shortstack{\code{Type* x,y;} \\ \code{int i;} \\ \code{x = y+i;}} & 
+\shortstack{ \code{\%add.ptr = getelementptr inbounds Type** \%Y, i32 i} \\
+\code{store Type** \%add.ptr, Type** \%X, align 4}}  \\
 \hline
-%X \la &Y
+$X \la \&Y$ & 
+\shortstack{\code{Type y;} \\ \code{Type* x = \&y;}} &
+\text{\code{store Type* \%Y, Type** \%X, align 4}} \\
+\hline
+$*X \la Y$ &
+\shortstack{\code{Type** x;} \\ \code{Type* y;} \\ \code{*x = y;}} &
+\shortstack{\code{\%0 = load Type** \%Y, align 4} \\ 
+\code{\%1 = load Type*** \%X, align 4} \\
+\code{store Type* \%0, Type** \%1, align 4} } \\
+\hline
+$X \la *Y$ &
+\shortstack{\code{Type* x;} \\ \code{Type** y;} \\ \code{x = *y;}} &
+\shortstack{\code{\%0 = load Type*** \%Y, align 4} \\ 
+\code{\%1 = load Type** \%0, align 4} \\
+\code{store Type* \%1, Type** \%X, align 4} } \\
 \hline
 \end{tabular}
+\label{pointerAnalysisTable}
 \end{table*}
 
-$$OUT = IN - \{X \ra Z | Z \}$$
+The pointer analysis which we implemented is only intra-procedural, although it could be easily extended across procedures through our framework. The pointer analysis theoretical framework has already been discussed in class and on the midterm, but the implemented work is more involved given that a single instruction may span across multiple instructions in LLVM bitcode. Our pointer analysis is C++ oriented. That is, we analyze C++ programs, and the LLVM bitcode is only the medium upon the analysis is performed.
+\subsection{Lattice \& Flow Functions}
+In order to define the pointer analysis flow in C++, we introduce the concept of \emph{pointer} and \emph{non-pointer} variables. The information computed at each edge (a.k.a flow) is represented by a map from pointer variables to variables (pointer or non-pointer). When defining the lattice, we disregard the typing restrictions of C++. These will become relevant in the implementation. 
+\subsubsection{Lattice}
+Let $Vars$ be the set of C++ variables present in the program. Given two flows $F,F'$, we have :
+\begin{align*}
+F \sqsubseteq & F'  & \lra & & F \subseteq F' \\
+\top & & \lra & & \{ X \ra Y | \forall X,Y \in Vars \}\\ 
+\bot & & \lra & & \emptyset \\ 
+F \sqcup F' & & \lra &  & F \cup F' \quad \text{(set union)} \\
+F \sqcap F' & & \lra & & F \cap F' \quad \text{(set intersection)}
+\end{align*}
+\subsubsection{Flow Functions}
+We present here the scope of instructions covered by our pointer analysis. For each instruction, we define $F_{IN}$ and $F_{OUT}$ as the input and output of the flow functions for each instruction, respectively. All upper case literals are variables and all lower case literals are constants.
+{\footnotesize
+\begin{align*} 
+& X \la NULL & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
+& X \la Y + c & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
+& X \la \&Y & : & & F_{OUT} = F_{IN} \cup \{X \ra Y \} \\
+& X \la Y & : & & F_{OUT} = F_{IN} \cup \{X \ra Z | Y \ra Z \} \\
+& *X \la Y & : & & F_{OUT} = F_{IN} \cup \{W \ra Z | X \ra W \wedge Y \ra Z \} \\
+& X \la *Y & : & & F_{OUT} = F_{IN} \cup \{X \ra Z | Y \ra W \wedge W \ra Z \} 
+\end{align*}
+}%
+
+Notice that scope of instructions covered could be larger and these out-of-scope instructions fall into two categories. Instructions such as $X \la c$ (where $X$ is a pointer variable) are explicitly forbidden in C++ language. Instructions such as $*X \ra *Y$ are legitimate candidates but where not implemented because of time constraints. 
+\subsection{Implementation}
+Each mathematical instruction is identified by its corresponding C++ and LLVM code snippets, which are available on table \ref{pointerAnalysisTable}. When the \code{Flow* executeFlowFunction()} is executed, the instruction's opcode is parsed and the computation performed is selected using switch statements as follows :
+
+\begin{lstlisting}[caption=PointerAnalysis Flow Functions, label=PAFF]
+Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
+  PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
+  PointerAnalysisFlow * output;
+  switch(inst->getOpcode()) {
+    case 29 :
+      output = execute_X_equals_NULL(inFlow,inst);
+      break;
+    case 28 :
+      output = execute_X_equals_refY(inFlow,inst);
+      break;
+    case 27 : {
+      Instruction* nInst = inst->getNextNode();
+      Instruction* nnInst = nInst->getNextNode();
+      if(isa<StoreInst>(nInst)) {
+        output = execute_X_equals_Y(inFlow,inst);
+      } else if (isa<LoadInst>(nInst) && isa<StoreInst>(nnInst)) {
+        if (inst->getOperand(0)->getName()!="" && nInst->getOperand(0)->getName()!="")
+        output = execute_ptrX_equals_Y(inFlow,inst);
+      else if (inst->getOperand(0)->getName()!="" && nnInst->getOperand(1)->getName()!="")
+        output = execute_X_equals_ptrY(inFlow,inst);
+      else
+        output = new PointerAnalysisFlow(inFlow);
+      } else {
+        output = new PointerAnalysisFlow(inFlow);
+      }
+        break;
+     }
+     default:
+       output = new PointerAnalysisFlow(inFlow);
+       break;
+  }
+  return output;
+}
+\end{lstlisting}
+
+
+
