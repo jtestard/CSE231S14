@@ -1,83 +1,54 @@
-; ModuleID = '/home/xhrdx/Desktop/cse231-proj1/llvm/src/lib/CSE231/test/../../../../../llvm/src/lib/CSE231/benchmarks/constantProp/out.bc'
+; ModuleID = './../../../../../llvm/src/lib/CSE231/benchmarks/constantProp/out.bc'
 target datalayout = "e-p:64:64:64-i1:8:8-i8:8:8-i16:16:16-i32:32:32-i64:64:64-f32:32:32-f64:64:64-v64:64:64-v128:128:128-a0:0:64-s0:64:64-f80:128:128-n8:16:32:64-S128"
-target triple = "x86_64-unknown-linux-gnu"
+target triple = "x86_64-apple-macosx10.9.0"
 
-%"class.std::ios_base::Init" = type { i8 }
+; Function Attrs: nounwind ssp uwtable
+define i32 @main() #0 {
+  %1 = icmp eq i32 5, 6
+  br i1 %1, label %2, label %5
 
-@_ZStL8__ioinit = internal global %"class.std::ios_base::Init" zeroinitializer, align 1
-@__dso_handle = external global i8
-@llvm.global_ctors = appending global [1 x { i32, void ()* }] [{ i32, void ()* } { i32 65535, void ()* @_GLOBAL__I_a }]
+; <label>:2                                       ; preds = %0
+  %3 = add nsw i32 5, 15
+  %4 = add nsw i32 %3, 10
+  br label %8
 
-define internal void @__cxx_global_var_init() section ".text.startup" {
-entry:
-  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)
-  %0 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #1
-  ret void
-}
+; <label>:5                                       ; preds = %0
+  %6 = add nsw i32 5, 15
+  %7 = add nsw i32 %6, 9
+  br label %8
 
-declare void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) #0
+; <label>:8                                       ; preds = %5, %2
+  %c.0 = phi i32 [ %3, %2 ], [ %6, %5 ]
+  %d.0 = phi i32 [ %4, %2 ], [ %7, %5 ]
+  br label %9
 
-declare void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) #0
+; <label>:9                                       ; preds = %13, %8
+  %temp.0 = phi i32 [ 0, %8 ], [ %12, %13 ]
+  %i.0 = phi i32 [ 0, %8 ], [ %14, %13 ]
+  %10 = icmp slt i32 %i.0, 10
+  br i1 %10, label %11, label %15
 
-; Function Attrs: nounwind
-declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #1
+; <label>:11                                      ; preds = %9
+  %12 = add nsw i32 %temp.0, 1
+  br label %13
 
-; Function Attrs: nounwind uwtable
-define i32 @main() #2 {
-entry:
-  %cmp = icmp eq i32 5, 6
-  br i1 %cmp, label %if.then, label %if.else
+; <label>:13                                      ; preds = %11
+  %14 = add nsw i32 %i.0, 1
+  br label %9
 
-if.then:                                          ; preds = %entry
-  %add = add nsw i32 5, 15
-  %add1 = add nsw i32 %add, 10
-  br label %if.end
-
-if.else:                                          ; preds = %entry
-  %add2 = add nsw i32 5, 15
-  %add3 = add nsw i32 %add2, 9
-  br label %if.end
-
-if.end:                                           ; preds = %if.else, %if.then
-  %c.0 = phi i32 [ %add, %if.then ], [ %add2, %if.else ]
-  %d.0 = phi i32 [ %add1, %if.then ], [ %add3, %if.else ]
-  br label %for.cond
-
-for.cond:                                         ; preds = %for.inc, %if.end
-  %temp.0 = phi i32 [ 0, %if.end ], [ %inc, %for.inc ]
-  %i.0 = phi i32 [ 0, %if.end ], [ %inc5, %for.inc ]
-  %cmp4 = icmp slt i32 %i.0, 10
-  br i1 %cmp4, label %for.body, label %for.end
-
-for.body:                                         ; preds = %for.cond
-  %inc = add nsw i32 %temp.0, 1
-  br label %for.inc
-
-for.inc:                                          ; preds = %for.body
-  %inc5 = add nsw i32 %i.0, 1
-  br label %for.cond
-
-for.end:                                          ; preds = %for.cond
-  %conv = zext i16 2 to i32
-  %shr = ashr i32 %conv, 2
-  %conv6 = trunc i32 %shr to i16
-  %add7 = add nsw i32 %c.0, 9
-  %add8 = add nsw i32 %d.0, %c.0
-  %add9 = add nsw i32 10, %c.0
-  %add10 = add nsw i32 %add9, %d.0
+; <label>:15                                      ; preds = %9
+  %16 = zext i16 2 to i32
+  %17 = ashr i32 %16, 2
+  %18 = trunc i32 %17 to i16
+  %19 = add nsw i32 %c.0, 9
+  %20 = add nsw i32 %d.0, %c.0
+  %21 = add nsw i32 10, %c.0
+  %22 = add nsw i32 %21, %d.0
   ret i32 0
 }
 
-define internal void @_GLOBAL__I_a() section ".text.startup" {
-entry:
-  call void @__cxx_global_var_init()
-  ret void
-}
-
-attributes #0 = { "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
-attributes #1 = { nounwind }
-attributes #2 = { nounwind uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #0 = { nounwind ssp uwtable "less-precise-fpmad"="false" "no-frame-pointer-elim"="true" "no-frame-pointer-elim-non-leaf" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "stack-protector-buffer-size"="8" "unsafe-fp-math"="false" "use-soft-float"="false" }
 
 !llvm.ident = !{!0}
 
-!0 = metadata !{metadata !"clang version 3.4 (tags/RELEASE_34/final)"}
+!0 = metadata !{metadata !"Apple LLVM version 5.1 (clang-503.0.40) (based on LLVM 3.4svn)"}
