@@ -46,7 +46,7 @@ then
 	opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
 	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
-	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
+	opt -load $LLVMLIB/CSE231.so -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
 fi
 
 #echo "DUMMY CONST PROP"

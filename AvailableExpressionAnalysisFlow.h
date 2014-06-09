@@ -6,8 +6,8 @@
  *      Author: jtestard
  */
 
-#ifndef CONSTANT_PROP_ANALYSIS_FLOW_H_
-#define CONSTANT_PROP_ANALYSIS_FLOW_H_
+#ifndef AVAILABLE_EXPRESSION_ANALYSIS_FLOW_H_
+#define AVAILABLE_EXPRESSION_ANALYSIS_FLOW_H_
 #include <string>
 #include <map>
 #include <set>
@@ -23,7 +23,7 @@ using namespace llvm;
  * This is a May-Point-To Analysis.
  */
 
-class ConstantPropAnalysisFlow: public Flow {
+class AvailableExpressionAnalysisFlow: public Flow {
 
 public:
 
@@ -33,7 +33,7 @@ public:
 	/* This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
 	 * It must output a proper representation of the flow in JSON format :
 	 *
-	 * 		{ "X" : 4, "Z" : 2.5 }
+	 * 		{ "X" : "Z", "Z" : ["W","Y"] }
 	 *
 	 * 	Where the left hand side are variable names and right hand side are also variable names.
 	 */
@@ -50,18 +50,18 @@ public:
 	Flow* join(Flow* other);
 
 	//This constructor initializes an empty map.
-	ConstantPropAnalysisFlow();
+	AvailableExpressionAnalysisFlow();
 
 	//This constructor should be used for top or bottom.
-	ConstantPropAnalysisFlow(string input);
+	AvailableExpressionAnalysisFlow(string input);
 
 	//Required for type casting within overloaded functions.
-	ConstantPropAnalysisFlow(ConstantPropAnalysisFlow* flow);
+	AvailableExpressionAnalysisFlow(AvailableExpressionAnalysisFlow* flow);
 
-	~ConstantPropAnalysisFlow();
+	~AvailableExpressionAnalysisFlow();
 
 	//Variables are represented as strings.
-	map<string, float > value;
+	map<string, string > value;
 
 };
 

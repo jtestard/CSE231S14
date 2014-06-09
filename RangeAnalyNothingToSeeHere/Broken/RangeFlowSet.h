@@ -40,15 +40,20 @@ typedef struct _RangeDomainElement{
 	}
 }RangeDomainElement;
 
+//RangeDomainElement helper functions. NO! I don't want to use a class THANK YOU!
+bool RangeDomainElementisEqual(const RangeDomainElement* A, const RangeDomainElement* B);
+RangeDomainElement JoinRangeDomainElements(const RangeDomainElement* A, const RangeDomainElement* B);
+
 class RangeFlowSet: public Flow {
 
 public :
 //	static const string TOP;
 //	static const string BOTTOM;
-
+	static const string OTHER;//I don't see how you would get in an intermediate state otherwise... = "other";
 
 	//The equality operator is used by the worklist algorithm and must be overloaded by the analysis.
 	bool equals(Flow* other);
+	bool contains(string &varName);
 
 	/*
 	 * This method is used by the JSONCFG function of the analysis to output the graph in JSON format.
@@ -75,8 +80,8 @@ public :
 
 	RangeFlowSet(string input);
 
-	RangeFlowSet(RangeFlowSet *flow);
-	//ConstantPropFlow(map<variable,int>());
+//NOT NEEDED I THINK	RangeFlowSet(RangeFlowSet *flow);
+
 
 	//Destructor must be virtual.
 	virtual ~RangeFlowSet();

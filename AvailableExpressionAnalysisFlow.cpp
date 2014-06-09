@@ -6,24 +6,24 @@
  *      Author: jtestard
  */
 
-#include "ConstantPropAnalysisFlow.h"
+#include "AvailableExpressionAnalysisFlow.h"
 
 /*
  * Flows are equal if their values are equal
  */
-bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
-	ConstantPropAnalysisFlow* other =
-			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+bool AvailableExpressionAnalysisFlow::equals(Flow* otherSuper) {
+	AvailableExpressionAnalysisFlow* other =
+			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
 	if (other->value.size() != this->value.size())
 		return false;
-	for (map<string, float>::const_iterator it = this->value.begin();
+	for (map<string, string>::const_iterator it = this->value.begin();
 			it != this->value.end(); it++) {
 		string key = it->first;
-		float thisVal = it->second;
+		string thisVal = it->second;
 		//Check if key is found in other
 		if (other->value.find(key) == other->value.end())
 			return false;
-		float otherVal = other->value.find(key)->second;
+		string otherVal = other->value.find(key)->second;
 		if (otherVal != thisVal)
 			return false;
 
@@ -33,12 +33,12 @@ bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
 }
 
 //Represents a constant propagation analysis value as a JSON string.
-string ConstantPropAnalysisFlow::jsonString() {
+string AvailableExpressionAnalysisFlow::jsonString() {
 	if (value.size() == 0)
 		return "\"" + basic + "\"";
 	//Value has something inside
 	stringstream ss;
-	map<string, float>::const_iterator it = this->value.begin();
+	map<string, string>::const_iterator it = this->value.begin();
 	/*ss << "{\"" << it->first << "\" : [ ";
 	 set<string>::iterator its=it->second.begin();
 	 ss << *its << " "; its++;
@@ -52,11 +52,11 @@ string ConstantPropAnalysisFlow::jsonString() {
 	for (; it != this->value.end(); it++) {
 		if (counter == 0) {
 			ss << "\"" << it->first << "\" : ";
-			float v = it->second;
+			string v = it->second;
 			ss << v << " ";
 		} else {
 			ss << ",\"" << it->first << "\" : ";
-			float v = it->second;
+			string v = it->second;
 			ss << v << " ";
 		}
 
@@ -95,58 +95,58 @@ string ConstantPropAnalysisFlow::jsonString() {
 	 */
 }
 
-void ConstantPropAnalysisFlow::copy(Flow* rhs) {
-	ConstantPropAnalysisFlow* f = static_cast<ConstantPropAnalysisFlow*>(rhs);
+void AvailableExpressionAnalysisFlow::copy(Flow* rhs) {
+	AvailableExpressionAnalysisFlow* f = static_cast<AvailableExpressionAnalysisFlow*>(rhs);
 	this->basic = f->basic;
 	this->value = f->value;
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow() :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow() :
 		Flow() {
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow(string input) :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow(string input) :
 		Flow(input) {
 }
 
-ConstantPropAnalysisFlow::ConstantPropAnalysisFlow(
-		ConstantPropAnalysisFlow *flow) :
+AvailableExpressionAnalysisFlow::AvailableExpressionAnalysisFlow(
+		AvailableExpressionAnalysisFlow *flow) :
 		Flow(flow->basic) {
 	this->value = flow->value;
 }
 
 // TODO : Fix the join... See the commented out stuff
 //Merges flow together.
-Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
+Flow* AvailableExpressionAnalysisFlow::join(Flow* otherSuper) {
 	//join bottom-bottom gives you bottom. Anything else gives you top.
-	ConstantPropAnalysisFlow* other =
-			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+	AvailableExpressionAnalysisFlow* other =
+			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
 //	errs()<< "I just entered into the sublcassed join... \n";
 
 	if (this->basic == BOTTOM && other->basic == BOTTOM)
-		return new ConstantPropAnalysisFlow(BOTTOM);
+		return new AvailableExpressionAnalysisFlow(BOTTOM);
 
 	//Anything joined with a bottom will just be itself.
 	if (this->basic == BOTTOM) {
-		ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+		AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 		f->copy(other);
 		return f;
 	}
 	if (other->basic == BOTTOM) {
-		ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+		AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 		f->copy(this);
 		return f;
 	}
 
 	//Join anything with top will give you top.
 	if (this->basic == TOP || other->basic == TOP)
-		return new ConstantPropAnalysisFlow(TOP);
+		return new AvailableExpressionAnalysisFlow(TOP);
 
 	//Merge the input from both.
-	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();
+	AvailableExpressionAnalysisFlow* f = new AvailableExpressionAnalysisFlow();
 
 	//f = other;
-	for (map<string, float>::iterator it = this->value.begin();
+	for (map<string, string>::iterator it = this->value.begin();
 			it != this->value.end(); it++) {
 
 		if (other->value.find(it->first) == other->value.end()) {
@@ -155,8 +155,8 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 		} else {
 			// Oh no! They do have the same key! We need to check if they have
 			// the same values! if they do then we're good
-			float otherVal = other->value.find(it->first)->second;
-			float thisVal = this->value.find(it->first)->second;
+			string otherVal = other->value.find(it->first)->second;
+			string thisVal = this->value.find(it->first)->second;
 
 			if (otherVal == thisVal)
 				// OK, we can replicate the value since both branches
@@ -171,7 +171,7 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 		}
 	}
 
-	for (map<string, float>::iterator it = other->value.begin();
+	for (map<string, string>::iterator it = other->value.begin();
 			it != other->value.end(); it++) {
 
 		if (this->value.find(it->first) == this->value.end()) {
@@ -180,8 +180,8 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 		} else {
 			// Oh no! They do have the same key! We need to check if they have
 			// the same values! if they do then we're good
-			float thisVal = this->value.find(it->first)->second;
-			float otherVal = other->value.find(it->first)->second;
+			string thisVal = this->value.find(it->first)->second;
+			string otherVal = other->value.find(it->first)->second;
 
 			if (otherVal == thisVal)
 				// OK, we can replicate the value since both branches
@@ -223,6 +223,6 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 
 }
 
-ConstantPropAnalysisFlow::~ConstantPropAnalysisFlow() {
+AvailableExpressionAnalysisFlow::~AvailableExpressionAnalysisFlow() {
 	//Nothing for basic static analysis
 }

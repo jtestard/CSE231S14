@@ -10,8 +10,9 @@
  * Note : use the errs() instead of std::cout in this file to output to the console (if your name is not mike and you don't have a fancy debugger that
  * took hours to install :).
  */
-#include "StaticAnalysis.h"
-
+#include "RangeFlowSet.h"
+#include "RangeAnalysis.h"
+/*
 StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
 	return this->contextFlowGraph;
 }
@@ -20,6 +21,7 @@ StaticAnalysis::ListNode* StaticAnalysis::getCFG(){
  * The run worklist is not much more than a classic BFS.
  * Notice that it processes one instruction at a time. Processing multiple instructions at a time will be much harder.
  */
+/*
 void StaticAnalysis::runWorklist() {
 	//We are using a queue for the worklist, but it could be any type of structure, really.
 	queue<ListNode*> worklist;
@@ -28,7 +30,7 @@ void StaticAnalysis::runWorklist() {
 	//Top and bottom must be defined in order for the worklist to work.
 	//This step uses the operator= from the Flow class.
 	for (unsigned int i = 0; i < CFGEdges.size(); i++) {
-		CFGEdges[i]->flow = initialize();
+		CFGEdges[i]->flow = bottom;
 	}
 
 	//Add each node to the worklist
@@ -39,46 +41,34 @@ void StaticAnalysis::runWorklist() {
 	while(!worklist.empty()){
 		//It is assumed that any node popped from the worklist has a complete "in" flow.
 		ListNode* current = worklist.front();
-//		errs() << "New node..\n";
+
 		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
-		vector<Flow*> inputFlows;
+		vector<Flow> inputFlows;
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
 			inputFlows.push_back(current->incoming[i]->flow);
 		}
-//		errs() << "Inflow collected...\n";
-		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
 
-		Flow* in = initialize();
-		in->copy(inputFlows[0]);
+		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
+		Flow in = inputFlows[0];
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
-			Flow* f = in->join(inputFlows[i]);
-			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
-			in = f;
+			in = in.join(inputFlows[i]);
 		}
-//		errs() << "Inflow joined...\n";
 
 		//EXECUTE THE FLOW FUNCTION
-		Flow* out = executeFlowFunction(	in,					//Contains all known variable mappings for the flow function
-											current->inst, 		//Instruction to perform flow function on
-											current->index	);	//Basic block index
-//TO IDENTIFY BLOCK
-		//Flow* out = executeFlowFunction(in,current->inst, current->index);
-		//		errs() << "Flow function executed...\n";
+		Flow out = executeFlowFunction(in,*(current->inst));
 
 		//This will executed the flow function
-		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
-			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
-//			errs() << "About to join with existing output...\n";
-			Flow* new_out = out->join(current->outgoing[i]->flow);
-//			errs() << "Joined with existing output...\n";
-			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-			if (!(new_out->equals(current->outgoing[i]->flow))){
-				//errs() << "new output pushed to the worklist...\n";
-				current->outgoing[i]->flow->copy(new_out);
-				worklist.push(current->outgoing[i]->destination);
-			}
-		}
-		worklist.pop();
+				for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
+					//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
+					Flow new_out = out.join(current->outgoing[i]->flow);
+
+					//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
+					if (!(new_out==current->outgoing[i]->flow)){
+						current->outgoing[i]->flow = new_out;
+						worklist.push(current->outgoing[i]->destination);
+					}
+				}
+				worklist.pop();
 	}
 }
 
@@ -116,7 +106,7 @@ void StaticAnalysis::buildCFG(Function &F){
    			BranchInst * br = dyn_cast<BranchInst>(inst);
    			for (unsigned int i = 0 ; i < br->getNumSuccessors() ; i++) {
    				BasicBlock * bb = br->getSuccessor(i); //Get successor basic block
-   				Instruction * nextInst = &(*bb->begin());//bb->getFirstNonPHIOrDbgOrLifetime(); // Gets the first legitimate instruction.
+   				Instruction * nextInst = bb->getFirstNonPHIOrDbgOrLifetime(); // Gets the first legitimate instruction.
    				if (nextInst!=0)
    					if (helper.find(nextInst)!=helper.end()) {
    	   					StaticAnalysis::ListNode* nextNode = helper[nextInst];
@@ -146,22 +136,18 @@ void StaticAnalysis::buildCFG(Function &F){
 //Doesn't quite print out JSON yet, but some nice string representation.
 void StaticAnalysis::JSONCFG(raw_ostream &OS) {
 	//The graph data representation is now edge-based.
-	OS << "\"Analysis\" : [\n";
+	OS << "[\n";
 	for (unsigned int i = 0; i < CFGNodes.size() ; i++) {
 		StaticAnalysis::JSONNode(OS,CFGNodes[i]);
 		if(i+1 < CFGNodes.size())
 			OS << ",\n";
 	}
-	OS << "\n]\n";
-}
-
-Flow* StaticAnalysis::initialize(){
-	return new Flow(Flow::BOTTOM);
+	OS << "\n]";
 }
 
 void StaticAnalysis::JSONEdge(raw_ostream &OS, ListEdge* edge) {
 	OS << "{\"Edge\" : " << "[" << edge->source->index << "," << edge->destination->index << "],";
-	OS << "\"Flow\" : " << edge->flow->jsonString() << "}";
+	OS << "\"Flow\" : " << edge->flow.jsonString() << "}";
 }
 
 void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
@@ -189,30 +175,83 @@ void StaticAnalysis::JSONNode(raw_ostream &OS, ListNode* node) {
 StringRef StaticAnalysis::getFunctionName(){
 	return this->functionName;
 }
-
+*/
 /**
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* StaticAnalysis::executeFlowFunction(Flow* in, Instruction *inst, int NodeId)
-{
+//TO DO!!!!!!! NEEED CHANGED STRUCTURE
+/*Flow RangeAnalysis::executeFlowFunction(Flow &in, Instruction &inst){
 //	switch(instruction) {
 //	case:
 //
 //	}
-	return new Flow(Flow::TOP);
+	return top;
+}
+*/
+
+Flow* RangeAnalysis::initialize(){
+	return new RangeFlowSet;
 }
 
-StaticAnalysis::StaticAnalysis(Function &F){
-	top = new Flow(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
-	bottom = new Flow(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+RangeAnalysis::RangeAnalysis(Function &F){
+	//TO DO: Figure this out.
+//	top = RangeFlowSet(Flow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
+//	bottom = RangeFlowSet(Flow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+	this->top = new RangeFlowSet;
+	this->bottom = new RangeFlowSet;
 	this->functionName = F.getName();
 	buildCFG(F);
 }
 
-StaticAnalysis::StaticAnalysis() {}
 
-StaticAnalysis::~StaticAnalysis(){
+/*
+ * This method is called by the run worklist algorithm.
+ * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
+ * that instruction.
+ * It is expected this function will call other functions created by the subclasses to deal with each type of instruction.
+ *
+ * The output is a Flow that is the result of the processing of in with respect to instruction inst.
+ */
+Flow* RangeAnalysis::executeFlowFunction(Flow* in, Instruction* inst)
+{
+	RangeFlowSet* IN = (RangeFlowSet*)in;
+	RangeFlowSet OUT;
+	RangeFlowSet* pOUT = &OUT;
+	//RangeFlowSet* OUT;
+	//*OUT = new RangeFlowSet;
+
+	string dest = inst->getName();	//
+
+	pOUT->copy(in);	//Jules special.. requires this...
+
+	//To get the instruction destination register, use getName()
+	errs() << dest << "turn down for what?";
+/*
+	Value* a;
+
+	unsigned Opcode = inst->getOpcode();
+	switch(Opcode)
+	{
+		case Instruction::Add:
+			a = inst->getOperand(0);
+			// Checking if left operand is a constant
+				if(ConstantInt *CILeft=dyn_cast<ConstantInt>(leftOperand)){
+				        if(ConstantInt *CIRight=dyn_cast<ConstantInt>(rightOperand)){
+				          int leftVal = CILeft->getZExtValue();
+				          int rightVal = CIRight->getZExtValue();
+				          int resVal = leftVal + rightVal;
+
+				          errs() << leftVal << " "<< rightVal << "\n";
+				          errs() << "outcome: " << resVal<< "\n";
+	}*/
+
+	return pOUT;
+}
+
+//END TO DO!!!!!
+
+RangeAnalysis::~RangeAnalysis(){
 	delete this->contextFlowGraph;
 	//Might need to put something else here
 	for (unsigned int i = 0 ; i < CFGNodes.size() ; i++) {
@@ -221,6 +260,4 @@ StaticAnalysis::~StaticAnalysis(){
 	for (unsigned int i = 0 ; i < CFGEdges.size() ; i++) {
 		delete CFGEdges[i];
 	}
-	delete top;
-	delete bottom;
 }

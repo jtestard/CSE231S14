@@ -2,8 +2,8 @@
  
 int main()
 {
-  int a;
-  int b;
+  float a;
+  float b;
   int c;
   int d;
   int e;
@@ -13,8 +13,8 @@ int main()
 
   int h;
 
-  a = 5;
-  b = 15;
+  a = 5.3;
+  b = 15.3;
 
 //  if(a==6){
 //	  c = a+b;
@@ -34,6 +34,9 @@ int main()
   c = a+b;
   d = c+9;
   h = c+d;
+
+  int ff = d;
+
   f = c+d;
 
   g = f+d;

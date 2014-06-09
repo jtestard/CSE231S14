@@ -1,5 +1,5 @@
 //
-//  StaticAnalysisPass.cpp
+//  ConstantPropAnalysisPass.cpp
 //  
 //
 //  Created by Costas Zarifis on 22/05/2014.
@@ -57,12 +57,23 @@
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
-	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
-			<< inst->getOpcodeName() << "\n";
+Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
+//	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
+//			<< inst->getOpcodeName() << "\n";
 	ConstantPropAnalysisFlow* inFlow =
 			static_cast<ConstantPropAnalysisFlow*>(in);
 	ConstantPropAnalysisFlow * output;
+
+
+
+
+//	errs()<< "EXECUTING FUNCTION!\n";
+//	for (map<string, float>::iterator it = inFlow->value.begin();
+//			it != inFlow->value.end(); it++) {
+//		errs() << it->first << " -> " << it->second << "\n";
+//	}
+
+
 	switch (inst->getOpcode()) {
 
 	case ADD:
@@ -97,8 +108,8 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction* inst) {
 		output = executeCastInst(inFlow, inst);
 		break;
 	case PHI:
-		//output = executePhiInst(inFlow, inst);
-		//break;
+		output = executePhiInst(inFlow, inst);
+		break;
 
 	default:
 		output = new ConstantPropAnalysisFlow(inFlow);
@@ -185,6 +196,7 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 		unsigned opcode) {
 
 	float resVal = 0;
+	int ASHRVAL, ASHRMASK;
 	switch (opcode) {
 
 	case ADD:
@@ -211,8 +223,15 @@ float ConstantPropAnalysis::computeOp(float leftVal, float rightVal,
 		resVal = (int) leftVal << (int) rightVal;
 		break;
 	case LSHR:
-	case ASHR:
 		resVal = (int) leftVal >> (int) rightVal;
+		break;
+	case ASHR:
+		ASHRMASK = (int)leftVal;
+		ASHRMASK &= 0x80000000;
+		ASHRVAL = (int)leftVal;
+		ASHRVAL &= 0x7fffffff;
+		ASHRMASK |=( ASHRVAL >> (int) rightVal);
+		resVal = (int)ASHRMASK;
 		break;
 	}
 
@@ -233,37 +252,40 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 			<< " right " << rightOperand->getName() << "\n";
 
 	// Ok, cool! Both the right and the left operand is a variable...
-//	if ((f->value.find(leftOperand->getName()) == f->value.end())
-//			| (f->value.find(rightOperand->getName()) == f->value.end())) {
-//		// Oh no! Read the error message!
-//		errs() << "Oh no! Something went terribly wrong!\n";
-//		errs() << "Undefined variable!\n";
-//		errs() << "Apparently the left operand of the op is";
-//		errs() << " a variable but this is the first time we ";
-//		errs() << "come across this variable!!\n";
-//
-//	} else {
-//		// Hmm, I guess we're good...
-//		float leftVal = f->value.find(leftOperand->getName())->second;
-//
-//		float rightVal = f->value.find(rightOperand->getName())->second;
-//
-//		if (leftVal == rightVal){
-//
-//			float resVal = leftVal;
-//			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
-//			errs() << leftVal << " " << rightVal << "\n";
-//			errs() << "outcome: " << resVal << "\n";
-//			value[K->getName()] = resVal;
-//			ff->value = value;
-//			ConstantPropAnalysisFlow* tmp =
-//					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
-//			delete ff;
-//			delete f;
-//			f = tmp;
-//		}
-//
-//	}
+	if ((f->value.find(leftOperand->getName()) == f->value.end())
+			| (f->value.find(rightOperand->getName()) == f->value.end())) {
+		// Oh no! Read the error message!
+		errs() << "Oh no! Something went terribly wrong!\n";
+		errs() << "Undefined variable!\n";
+		errs() << "Apparently the left operand of the op is";
+		errs() << " a variable but this is the first time we ";
+		errs() << "come across this variable!!\n";
+
+	} else {
+		// Hmm, I guess we're good...
+		float leftVal = f->value.find(leftOperand->getName())->second;
+
+		float rightVal = f->value.find(rightOperand->getName())->second;
+		errs() << "leftVal: " << leftVal << "rightVal" << rightVal << "\n";
+
+		// If the variables are not the same in the two branches then
+		// we can't propagate the constant.
+		if (leftVal == rightVal){
+
+			float resVal = leftVal;
+			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
+			errs() << leftVal << " " << rightVal << "\n";
+			errs() << "outcome: " << resVal << "\n";
+			value[K->getName()] = resVal;
+			ff->value = value;
+			ConstantPropAnalysisFlow* tmp =
+					static_cast<ConstantPropAnalysisFlow*>(ff->join(f));
+			delete ff;
+			delete f;
+			f = tmp;
+		}
+
+	}
 
 // Checking if left operand is a constant
 //	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
