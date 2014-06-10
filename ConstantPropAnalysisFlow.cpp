@@ -123,6 +123,10 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
 //	errs()<< "I just entered into the sublcassed join... \n";
 
+//Join anything with top will give you top.
+	if (this->basic == TOP || other->basic == TOP)
+		return new ConstantPropAnalysisFlow(TOP);
+
 	if (this->basic == BOTTOM && other->basic == BOTTOM)
 		return new ConstantPropAnalysisFlow(BOTTOM);
 
@@ -137,10 +141,6 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 		f->copy(this);
 		return f;
 	}
-
-	//Join anything with top will give you top.
-	if (this->basic == TOP || other->basic == TOP)
-		return new ConstantPropAnalysisFlow(TOP);
 
 	//Merge the input from both.
 	ConstantPropAnalysisFlow* f = new ConstantPropAnalysisFlow();

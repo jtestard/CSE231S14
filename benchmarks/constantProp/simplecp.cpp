@@ -18,6 +18,8 @@ int main()
 
   if(a==6){
 	  c = a+b;
+	  c = a+b;
+	  c = a+b;
 	  d = c+10;
   }
   else{
