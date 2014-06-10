@@ -1,1 +1,8 @@
+This analysis is again performed in an intra-procedural manner. The theoretical background for this analysis has been covered in class so we will not analyze it further in this report. Instead, we will describe how we managed to implement the flow-functions, the lattices and the actual flow representation. 
+
+
+\subsection{Lattice, Flow \& Flow Functions}
+As previously described, we once again utilize stl maps to represent the in and out flow of each statement. However, since this is a constant propagation analysis the domain is different. Specifically D = Powerset($\{x\ra c|x\in vars \wedge c\in constants\}$), so a map that uses a string as a key was used to keep the name of the register and a float was used as a value to keep the actual constants that this register points to. We didn't have to generate a representation of the lattice since it's implicitly described by our flow functions and the implemented methods in the Flow class.
+
+Specifically, inside the Constant Propagation Flow class, we had to implement the equals class, which given the two flows we are trying to compare it returns true if the two contained maps hold the same elements, or false otherwise. Method jsonString outputs the flow at the end of the analysis in an easily readable json format
 
