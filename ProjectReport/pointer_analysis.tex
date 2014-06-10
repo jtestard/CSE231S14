@@ -47,7 +47,7 @@ F \sqcap F' & & \lra & & F \cap F' \quad \text{(set intersection)}
 \end{align*}
 \subsubsection{Flow Functions}
 We present here the scope of instructions covered by our pointer analysis. For each instruction, we define $F_{IN}$ and $F_{OUT}$ as the input and output of the flow functions for each instruction, respectively. All upper case literals are variables and all lower case literals are constants.
-{\footnotesize
+{%\footnotesize
 \begin{align*} 
 & X \la NULL & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
 & X \la Y + c & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
@@ -61,42 +61,4 @@ We present here the scope of instructions covered by our pointer analysis. For e
 Notice that scope of instructions covered could be larger and these out-of-scope instructions fall into two categories. Instructions such as $X \la c$ (where $X$ is a pointer variable) are explicitly forbidden in C++ language. Instructions such as $*X \ra *Y$ are legitimate candidates but where not implemented because of time constraints. 
 \subsection{Implementation}
 Each mathematical instruction is identified by its corresponding C++ and LLVM code snippets, which are available on table \ref{pointerAnalysisTable}. When the \code{Flow* executeFlowFunction()} is executed, the instruction's opcode is parsed and the computation performed is selected using switch statements as follows :
-
-\begin{lstlisting}[caption=PointerAnalysis Flow Functions, label=PAFF]
-Flow* PointerAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
-  PointerAnalysisFlow* inFlow = static_cast<PointerAnalysisFlow*>(in);
-  PointerAnalysisFlow * output;
-  switch(inst->getOpcode()) {
-    case 29 :
-      output = execute_X_equals_NULL(inFlow,inst);
-      break;
-    case 28 :
-      output = execute_X_equals_refY(inFlow,inst);
-      break;
-    case 27 : {
-      Instruction* nInst = inst->getNextNode();
-      Instruction* nnInst = nInst->getNextNode();
-      if(isa<StoreInst>(nInst)) {
-        output = execute_X_equals_Y(inFlow,inst);
-      } else if (isa<LoadInst>(nInst) && isa<StoreInst>(nnInst)) {
-        if (inst->getOperand(0)->getName()!="" && nInst->getOperand(0)->getName()!="")
-        output = execute_ptrX_equals_Y(inFlow,inst);
-      else if (inst->getOperand(0)->getName()!="" && nnInst->getOperand(1)->getName()!="")
-        output = execute_X_equals_ptrY(inFlow,inst);
-      else
-        output = new PointerAnalysisFlow(inFlow);
-      } else {
-        output = new PointerAnalysisFlow(inFlow);
-      }
-        break;
-     }
-     default:
-       output = new PointerAnalysisFlow(inFlow);
-       break;
-  }
-  return output;
-}
-\end{lstlisting}
-
-
 

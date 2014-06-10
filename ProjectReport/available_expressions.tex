@@ -1,1 +1,54 @@
+Common subexpression elimination (CSE), is an optimization that searches for instances of identical expressions (i.e., they all evaluate to the same value), and analyses whether it is worthwhile replacing them with a single variable holding the computed value. We analyzed CSE thoroughly in class, but in order to actually perform CSE we need to have the set of available expressions for a specific program, and this is what this pass does, it provides the set of expressions that don't have to be recomputed. This analysis is also top-down as every other analysis described here.
 
+
+\subsection*{Lattice, Flow \& Flow Functions}
+
+Once again, maps were used to represent the flow information. Specifically in this case, we used a map that had a string both as a key and as a value. Specifically, the key for a statement like this: "\%add2 = add nsw i32 \%add, \%d.0" would be this:"\%add2" and the value would be this: "add nsw i32 \%add11, \%d.0". We initially had the reversed assignment but we soon figured out that it could result in a smaller set of out flow information.
+
+The domain for this analysis is: D = Powerset($\{x\ra E|x\in vars \wedge E\in expressions\}$). Again we didn't have to explicitly represent the lattice, it is implicitly described by the implemented flow functions and the functions that reside in the Flow class. All the methods (including the join) inside the Available Expression Analysis Flow class follow the same logic as they did in the Constant Propagation Analysis Flow. As previously stated, we are using the mem2reg pass and we run this analysis on the output of that pass, for the reasons why explained thoroughly in the "Stack-Allocated Variables to Registers, SSA and Merging" section. Since we are using SSA, we don't have to worry about re-assigning more than one expressions to a variable, therefore we don't have to delete elements from the map for that same reason. Basically, every time we process a new statement we add a new record in our map, if we have loops we simple re-assign the expression to a certain key until we reach a fixed point.
+
+
+
+The merging works similarly as before. Normally we would have to delete a certain key-value record if the value we received from the two branches was different, however due to SSA we don't have to worry about that. In order, to thoroughly cover merging let's have a look at listing \ref{mAEA}
+
+
+\begin{lstlisting}[caption=Merging in Available Expression Analysis preview, label=mAEA]
+// ... Piece of C++ code ...
+float g;
+int a, b;
+// ... More Code ...
+// A value is assigned to
+// a, b and g at this point
+// ... More Code ...
+  if(statement){
+	  c = a+b;
+	  d = g+10;
+  }
+  else{
+	  c = a+b;
+	  d = g+10;
+  }
+
+// ... Coresponding LL code after ...
+// ... mem2reg has been applied   ...
+
+if.then:                                          ; preds = %entry
+  %add = add nsw i32 5, 15
+  %add1 = fadd float 1.500000e+01, 1.000000e+01
+  %conv = fptosi float %add1 to i32
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  %add2 = add nsw i32 5, 15
+  %add3 = fadd float 1.500000e+01, 1.000000e+01
+  %conv4 = fptosi float %add3 to i32
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %d.0 = phi i32 [ %conv, %if.then ], 
+    [ %conv4, %if.else ]
+  %c.0 = phi i32 [ %add, %if.then ], 
+   [ %add2, %if.else ]
+  br label %for.cond
+  
+\end{lstlisting}

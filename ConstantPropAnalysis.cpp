@@ -31,15 +31,7 @@
 #define LSHR 21 //This is the opcode for the Shift right (logical) instruction
 #define ASHR 22 //This is the opcode for the Shift right (arithmetic) instruction
 
-// Logical operators (integer operands)
-/*122	HANDLE_BINARY_INST(20, Shl  , BinaryOperator) // Shift left  (logical)
- 123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
- 124	HANDLE_BINARY_INST(22, AShr , BinaryOperator) // Shift right (arithmetic)
- 125	HANDLE_BINARY_INST(23, And  , BinaryOperator)
- 126	HANDLE_BINARY_INST(24, Or   , BinaryOperator)
- 127	HANDLE_BINARY_INST(25, Xor  , BinaryOperator)
- 128	  LAST_BINARY_INST(25)
- */
+
 
 #define TRUNC 33 // Truncate integers
 #define ZEXT 34 // Zero extend integers
@@ -130,6 +122,10 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 	string regName = retVal->getName();
 
 	Value* casting = instruction->getOperand(0); //RO
+
+//	errs() << "casting! \n";
+//	errs() << retVal->getType()->getFltSemantics()<<" \n";
+//	errs() << casting->getType()<<" \n";
 
 	if (!dyn_cast<Constant>(retVal)) {
 
