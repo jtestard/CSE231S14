@@ -9,13 +9,16 @@ The domain for this analysis is: D = Powerset($\{x\ra E|x\in vars \wedge E\in ex
 
 
 
-The merging works similarly as before. Normally we would have to delete a certain key-value record if the value we received from the two branches was different, however due to SSA we don't have to worry about that. In order, to thoroughly cover merging let's have a look at listing \ref{mAEA}
+The merging works similarly as before. Normally we would have to delete a certain key-value record if the value we received from the two branches was different, however due to SSA we don't have to worry about that. In order, to thoroughly cover merging let's have a look at listing \ref{mAEA}. In this example a, b, c and g are floating point variables and they get values 5 and 15 correspondingly. It is clear that the expression c = a+b appears in both branches, so $c\ra"a+b"$ should be maintained after the merging. In the ll code and particularly in the phi nodes we can clearly see that \%c.0 will be assigned to the expression "fadd float 1.500000e+01, 1.000000e+01" because both \%add and \%add2 will be pointing to the same expression. If there was even a slight difference to this expression then \%c.0 would not be added to the map.
+
+
+Now, let's have a look at variable d. As we mentioned previously a, b, c and g are floating point variables, but d is an integer. So that means that if we try to assign a float to d it will first be casted to an int. As we see in the ll code an intermediate statement is added by LLVM that performs the casting. Additionally, due to the SSA that takes place the addition will be assigned to \%add1 and \%add3 for the taken and the non-taken branch correspondingly. Furthermore, the casting expression will be assigned to \%conv and \%conv4 correspondingly for the two branches. However, when we reach the phi node and we are going to try to perform the merging of these instructions we will eventually end up not including \%d.0 to the output set, because the two expressions that we will try to merge are the following: "fptosi float \%add1 to i32" and "fptosi float %add3 to i32" and since they are not the same we will omit \%d.0.
 
 
 \begin{lstlisting}[caption=Merging in Available Expression Analysis preview, label=mAEA]
 // ... Piece of C++ code ...
-float g;
-int a, b;
+float g,a,b,c;
+int d;
 // ... More Code ...
 // A value is assigned to
 // a, b and g at this point
@@ -46,9 +49,9 @@ if.else:                                          ; preds = %entry
 
 if.end:                                           ; preds = %if.else, %if.then
   %d.0 = phi i32 [ %conv, %if.then ], 
-    [ %conv4, %if.else ]
+        [ %conv4, %if.else ]
   %c.0 = phi i32 [ %add, %if.then ], 
-   [ %add2, %if.else ]
+        [ %add2, %if.else ]
   br label %for.cond
   
 \end{lstlisting}
