@@ -47,7 +47,7 @@ F \sqcap F' & & \lra & & F \cap F' \quad \text{(set intersection)}
 \end{align*}
 \subsubsection{Flow Functions}
 We present here the scope of instructions covered by our pointer analysis. For each instruction, we define $F_{IN}$ and $F_{OUT}$ as the input and output of the flow functions for each instruction, respectively. All upper case literals are variables and all lower case literals are constants.
-{\footnotesize
+{%\footnotesize
 \begin{align*} 
 & X \la NULL & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
 & X \la Y + c & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
