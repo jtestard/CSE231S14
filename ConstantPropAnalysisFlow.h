@@ -3,7 +3,7 @@
  * Flow.h
  *
  *  Created on: 2014-05-29
- *      Author: jtestard
+ *      Author: Costas Zarifis
  */
 
 #ifndef CONSTANT_PROP_ANALYSIS_FLOW_H_

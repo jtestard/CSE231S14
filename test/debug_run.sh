@@ -35,7 +35,7 @@ fi
 if [ "$1" == "constantPropagation" ]
 then
 	echo "CONSTANT PROPAGATION ANALYSIS OPTIMIZATION"
-	opt -load $LLVMLIB/LLVMHello.so -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
+	opt -load $LLVMLIB/LLVMHello.so -mem2reg -instnamer < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
 	mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
 	llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
 	opt -load $LLVMLIB/CSE231.so -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze

@@ -40,34 +40,53 @@ entry:
   store i32 0, i32* %retval
   store float 0x4015333340000000, float* %a, align 4
   store float 0x402E9999A0000000, float* %b, align 4
-  store i16 2, i16* %short1, align 2
-  %0 = load i16* %short1, align 2
-  %conv = zext i16 %0 to i32
-  %shr = ashr i32 %conv, 2
-  %conv1 = trunc i32 %shr to i16
-  store i16 %conv1, i16* %short2, align 2
+  %0 = load float* %a, align 4
+  %cmp = fcmp oeq float %0, 6.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
   %1 = load float* %a, align 4
   %2 = load float* %b, align 4
   %add = fadd float %1, %2
-  %conv2 = fptosi float %add to i32
-  store i32 %conv2, i32* %c, align 4
+  %conv = fptosi float %add to i32
+  store i32 %conv, i32* %c, align 4
   %3 = load i32* %c, align 4
-  %add3 = add nsw i32 %3, 9
-  store i32 %add3, i32* %d, align 4
-  %4 = load i32* %c, align 4
-  %5 = load i32* %d, align 4
-  %add4 = add nsw i32 %4, %5
-  store i32 %add4, i32* %h, align 4
-  %6 = load i32* %d, align 4
-  store i32 %6, i32* %ff, align 4
-  %7 = load i32* %c, align 4
-  %8 = load i32* %d, align 4
-  %add5 = add nsw i32 %7, %8
-  store i32 %add5, i32* %f, align 4
-  %9 = load i32* %f, align 4
+  %add1 = add nsw i32 %3, 10
+  store i32 %add1, i32* %d, align 4
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  %4 = load float* %a, align 4
+  %5 = load float* %b, align 4
+  %add2 = fadd float %4, %5
+  %conv3 = fptosi float %add2 to i32
+  store i32 %conv3, i32* %c, align 4
+  %6 = load i32* %c, align 4
+  %add4 = add nsw i32 %6, 10
+  store i32 %add4, i32* %d, align 4
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  store i16 2, i16* %short1, align 2
+  %7 = load i16* %short1, align 2
+  %conv5 = zext i16 %7 to i32
+  %shr = ashr i32 %conv5, 2
+  %conv6 = trunc i32 %shr to i16
+  store i16 %conv6, i16* %short2, align 2
+  %8 = load i32* %c, align 4
+  %9 = load i32* %d, align 4
+  %add7 = add nsw i32 %8, %9
+  store i32 %add7, i32* %h, align 4
   %10 = load i32* %d, align 4
-  %add6 = add nsw i32 %9, %10
-  store i32 %add6, i32* %g, align 4
+  store i32 %10, i32* %ff, align 4
+  %11 = load i32* %c, align 4
+  %12 = load i32* %d, align 4
+  %add8 = add nsw i32 %11, %12
+  store i32 %add8, i32* %f, align 4
+  %13 = load i32* %f, align 4
+  %14 = load i32* %d, align 4
+  %add9 = add nsw i32 %13, %14
+  store i32 %add9, i32* %g, align 4
   ret i32 0
 }
 
