@@ -4,46 +4,47 @@ target triple = "x86_64-apple-macosx10.9.0"
 
 ; Function Attrs: nounwind ssp uwtable
 define i32 @main() #0 {
-  %1 = icmp eq i32 5, 6
-  br i1 %1, label %2, label %5
+bb:
+  %tmp = icmp eq i32 5, 6
+  br i1 %tmp, label %bb1, label %bb4
 
-; <label>:2                                       ; preds = %0
-  %3 = add nsw i32 5, 15
-  %4 = add nsw i32 %3, 10
-  br label %8
+bb1:                                              ; preds = %bb
+  %tmp2 = add nsw i32 5, 15
+  %tmp3 = add nsw i32 %tmp2, 10
+  br label %bb7
 
-; <label>:5                                       ; preds = %0
-  %6 = add nsw i32 5, 15
-  %7 = add nsw i32 %6, 9
-  br label %8
+bb4:                                              ; preds = %bb
+  %tmp5 = add nsw i32 5, 15
+  %tmp6 = add nsw i32 %tmp5, 9
+  br label %bb7
 
-; <label>:8                                       ; preds = %5, %2
-  %c.0 = phi i32 [ %3, %2 ], [ %6, %5 ]
-  %d.0 = phi i32 [ %4, %2 ], [ %7, %5 ]
-  br label %9
+bb7:                                              ; preds = %bb4, %bb1
+  %c.0 = phi i32 [ %tmp2, %bb1 ], [ %tmp5, %bb4 ]
+  %d.0 = phi i32 [ %tmp3, %bb1 ], [ %tmp6, %bb4 ]
+  br label %bb8
 
-; <label>:9                                       ; preds = %13, %8
-  %temp.0 = phi i32 [ 0, %8 ], [ %12, %13 ]
-  %i.0 = phi i32 [ 0, %8 ], [ %14, %13 ]
-  %10 = icmp slt i32 %i.0, 10
-  br i1 %10, label %11, label %15
+bb8:                                              ; preds = %bb12, %bb7
+  %temp.0 = phi i32 [ 0, %bb7 ], [ %tmp11, %bb12 ]
+  %i.0 = phi i32 [ 0, %bb7 ], [ %tmp13, %bb12 ]
+  %tmp9 = icmp slt i32 %i.0, 10
+  br i1 %tmp9, label %bb10, label %bb14
 
-; <label>:11                                      ; preds = %9
-  %12 = add nsw i32 %temp.0, 1
-  br label %13
+bb10:                                             ; preds = %bb8
+  %tmp11 = add nsw i32 %temp.0, 1
+  br label %bb12
 
-; <label>:13                                      ; preds = %11
-  %14 = add nsw i32 %i.0, 1
-  br label %9
+bb12:                                             ; preds = %bb10
+  %tmp13 = add nsw i32 %i.0, 1
+  br label %bb8
 
-; <label>:15                                      ; preds = %9
-  %16 = zext i16 2 to i32
-  %17 = ashr i32 %16, 2
-  %18 = trunc i32 %17 to i16
-  %19 = add nsw i32 %c.0, 9
-  %20 = add nsw i32 %d.0, %c.0
-  %21 = add nsw i32 10, %c.0
-  %22 = add nsw i32 %21, %d.0
+bb14:                                             ; preds = %bb8
+  %tmp15 = zext i16 2 to i32
+  %tmp16 = ashr i32 %tmp15, 2
+  %tmp17 = trunc i32 %tmp16 to i16
+  %tmp18 = add nsw i32 %c.0, 9
+  %tmp19 = add nsw i32 %d.0, %c.0
+  %tmp20 = add nsw i32 10, %c.0
+  %tmp21 = add nsw i32 %tmp20, %d.0
   ret i32 0
 }
 

@@ -45,7 +45,7 @@ fi
 if [ "$1" == "CSE" ]
 then
 	echo "AVAILABLE EXPRESSIONS ANALYSIS OPTIMIZATION"
-	opt -load $LLVMLIB/LLVMHello.dylib -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
+	opt -load -instnamer $LLVMLIB/LLVMHello.dylib -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
 	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
 	opt -load $LLVMLIB/CSE231.dylib -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
