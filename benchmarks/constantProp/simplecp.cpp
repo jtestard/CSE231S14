@@ -2,8 +2,8 @@
  
 int main()
 {
-  int a;
-  int b;
+  float a;
+  float b;
   int c;
   int d;
   int e;

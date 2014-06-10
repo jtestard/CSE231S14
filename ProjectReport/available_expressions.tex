@@ -1,1 +1,6 @@
+Common subexpression elimination (CSE), is an optimization that searches for instances of identical expressions (i.e., they all evaluate to the same value), and analyses whether it is worthwhile replacing them with a single variable holding the computed value. We analyzed CSE thoroughly in class, but in order to actually perform CSE we need to have the set of available expressions for a specific program, and this is what this pass does, it provides the set of expressions that don't have to be recomputed. This analysis is also top-down as every other analysis described here.
 
+
+\subsection*{Lattice, Flow \& Flow Functions}
+
+Once again, maps were used to represent the flow informaton. Specifically in this case, 
