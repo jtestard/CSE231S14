@@ -26,11 +26,9 @@
 #define UREM 17 //This is the opcode for the unsigned mod instruction
 #define SREM 18 //This is the opcode for the signed mod instruction
 #define FREM 19 //This is the opcode for the floating point mod instruction
-
 #define SHL 20 //This is the opcode for the Shift left (logical) instruction
 #define LSHR 21 //This is the opcode for the Shift right (logical) instruction
 #define ASHR 22 //This is the opcode for the Shift right (arithmetic) instruction
-
 // Logical operators (integer operands)
 /*122	HANDLE_BINARY_INST(20, Shl  , BinaryOperator) // Shift left  (logical)
  123	HANDLE_BINARY_INST(21, LShr , BinaryOperator) // Shift right (logical)
@@ -50,50 +48,37 @@
 #define SITOFP 39 // SInt -> floating point
 #define FPTRUNC 40 //Truncate floating point
 #define FPEXT 41 // Extend floating point
-
 #define PHI 48 // Extend floating point
-
-
-//Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction* inst, int index) {
-//	return executeFlowFunction(Flow *in, Instruction* inst);
-//}
-
 /*
  * For basic static analysis, flow is just "assigned to top", which just means the basic string from the Flow general class will be top.
  * This method is expected to do much more when overloaded.
  */
-Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId) {
-//	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
-//			<< inst->getOpcodeName() << "\n";
-	RangeAnalysisFlow* inFlow =
-			static_cast<RangeAnalysisFlow*>(in);
+Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst,
+		int NodeId) {
+	RangeAnalysisFlow* inFlow = static_cast<RangeAnalysisFlow*>(in);
 	RangeAnalysisFlow * output;
-//Just need to check if we have seen this basic block a few times.
-//If we have seen this a few times, change ALL VARIABLES that are changing to TOP
-	if(nodeCount.find(NodeId) != nodeCount.end())
-	{
-
-
-		if(nodeCount[NodeId].nodeVisitCounter >= 3)
-		{
-//ANY VARIABLES THAT DID NOT CHANGE MUST BE SET TO TOP!!!
-//THIS SHOULD SET SOME VARIABLES TO TOP!!!!
+	//Just need to check if we have seen this basic block a few times.
+	//If we have seen this a few times, change ALL VARIABLES that are changing to TOP
+	if (nodeCount.find(NodeId) != nodeCount.end()) {
+		if (nodeCount[NodeId].nodeVisitCounter >= 3) {
+			//ANY VARIABLES THAT DID NOT CHANGE MUST BE SET TO TOP!!!
+			//THIS SHOULD SET SOME VARIABLES TO TOP!!!!
 			RangeAnalysisFlow* f = new RangeAnalysisFlow(inFlow);
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
-			RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));//Contains the value of the variable from the old set
+			RangeAnalysisFlow* tmp =
+					static_cast<RangeAnalysisFlow*>(ff->join(f));//Contains the value of the variable from the old set
 			delete ff;
 			delete f;
-			f = tmp;									//Keep tmp which has the variable from.. f?
+			f = tmp;	//Keep tmp which has the variable from.. f?
 
 			DeleteDifferentRanges(f, nodeCount[NodeId].nodeSet);
 
-			return(f);	//In = Out
+			return (f);	//In = Out
 			//Just return the in Set (no Change)
 		}
-		nodeCount[NodeId].nodeVisitCounter = (nodeCount[NodeId].nodeVisitCounter + 1);
-	}
-	else
-	{
+		nodeCount[NodeId].nodeVisitCounter = (nodeCount[NodeId].nodeVisitCounter
+				+ 1);
+	} else {
 		nodeState thisNodeState;
 		RangeAnalysisFlow* f = new RangeAnalysisFlow(inFlow);
 		RangeAnalysisFlow* ff = new RangeAnalysisFlow();
@@ -107,15 +92,6 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId
 		nodeCount[NodeId] = thisNodeState;	//Track this node
 
 	}
-
-
-
-//	errs()<< "EXECUTING FUNCTION!\n";
-//	for (map<string, float>::iterator it = inFlow->value.begin();
-//			it != inFlow->value.end(); it++) {
-//		errs() << it->first << " -> " << it->second << "\n";
-//	}
-
 
 	switch (inst->getOpcode()) {
 
@@ -162,8 +138,8 @@ Flow* RangeAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId
 	return output;
 }
 
-RangeAnalysisFlow* RangeAnalysis::executeCastInst(
-		RangeAnalysisFlow* in, Instruction* instruction) {
+RangeAnalysisFlow* RangeAnalysis::executeCastInst(RangeAnalysisFlow* in,
+		Instruction* instruction) {
 
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	//Value *leftOperand = instruction->getOperand(0);
@@ -175,44 +151,40 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(
 	Value* casting = instruction->getOperand(0); //RO
 
 	if (!dyn_cast<Constant>(retVal))	//If the instruction is not a constant
-	{
+			{
 
 		if (!dyn_cast<Constant>(casting))	//If operand 0 is not a constant
-		{
+				{
 			// Instruction and operand 0 are both variables. We just need to forward the value
-			if (f->value.find(casting->getName()) == f->value.end())
-			{
+			if (f->value.find(casting->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
 
 				errs() << "Undefined variable!\n";
 				errs() << "Variable: " << casting->getName()
 						<< " was not found \n";
 
-			}
-			else
-			{
+			} else {
 				// Hmm, I guess we're good...
-//SHOULD BE AN INTEGER TYPE....
+				//SHOULD BE AN INTEGER TYPE....
 				//Get the Range that we have for this variable
-				RangeDomainElement forwardRange = f->value.find(casting->getName())->second;
+				RangeDomainElement forwardRange = f->value.find(
+						casting->getName())->second;
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
-				value[retVal->getName()] = forwardRange;		//Move the value of the stored variable into...
+				value[retVal->getName()] = forwardRange;//Move the value of the stored variable into...
 				ff->value = value;							//A new set
 				RangeAnalysisFlow* tmp =
 						static_cast<RangeAnalysisFlow*>(ff->join(f));//Contains the value of the variable from the old set
 				delete ff;
 				delete f;
-				f = tmp;									//Keep tmp which has the variable from.. f?
+				f = tmp;			//Keep tmp which has the variable from.. f?
 			}
 
-		}
-		else 							//Operand 0 is not a constant. Is it a float?
+		} else 					//Operand 0 is not a constant. Is it a float?
 		{
 
 			// Hmm, I guess we're good...
-			if (ConstantFP *cfp = dyn_cast<ConstantFP>(casting))
-			{
-				RangeDomainElement forwardRange;						//A precise range of 0 can be created using the constant.
+			if (ConstantFP *cfp = dyn_cast<ConstantFP>(casting)) {
+				RangeDomainElement forwardRange;//A precise range of 0 can be created using the constant.
 				float forwardVal = cfp->getValueAPF().convertToFloat();
 
 				//float forwardVal = f->value.find(casting->getName())->second;
@@ -229,13 +201,10 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(
 				delete ff;
 				delete f;
 				f = tmp;
-			}
-			else if (ConstantInt *cfp = dyn_cast<ConstantInt>(casting))
-			{
+			} else if (ConstantInt *cfp = dyn_cast<ConstantInt>(casting)) {
 				RangeDomainElement forwardRange;
 				float forwardVal = cfp->getZExtValue();
 				RangeAnalysisFlow* ff = new RangeAnalysisFlow();
-
 
 				forwardRange.upper = forwardVal;
 				forwardRange.lower = forwardVal;
@@ -256,8 +225,7 @@ RangeAnalysisFlow* RangeAnalysis::executeCastInst(
 
 }
 
-float RangeAnalysis::computeOp(float leftVal, float rightVal,
-		unsigned opcode) {
+float RangeAnalysis::computeOp(float leftVal, float rightVal, unsigned opcode) {
 
 	float resVal = 0;
 	int ASHRVAL, ASHRMASK;
@@ -290,12 +258,12 @@ float RangeAnalysis::computeOp(float leftVal, float rightVal,
 		resVal = (int) leftVal >> (int) rightVal;
 		break;
 	case ASHR:
-		ASHRMASK = (int)leftVal;
+		ASHRMASK = (int) leftVal;
 		ASHRMASK &= 0x80000000;
-		ASHRVAL = (int)leftVal;
+		ASHRVAL = (int) leftVal;
 		ASHRVAL &= 0x7fffffff;
-		ASHRMASK |=( ASHRVAL >> (int) rightVal);
-		resVal = (int)ASHRMASK;
+		ASHRMASK |= (ASHRVAL >> (int) rightVal);
+		resVal = (int) ASHRMASK;
 		break;
 	}
 
@@ -304,8 +272,8 @@ float RangeAnalysis::computeOp(float leftVal, float rightVal,
 }
 
 //For the tricky case of range arithmetic ops
-RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainElement rightRange, unsigned opcode)
-{
+RangeDomainElement computeOpRange(RangeDomainElement leftRange,
+		RangeDomainElement rightRange, unsigned opcode) {
 	RangeDomainElement resRange;
 	float mulDivCombos[4];
 	int shiftCombos[4];
@@ -313,15 +281,14 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 	int lowerShiftSign, upperShiftSign;
 	int comboCheckCtr = 0;
 //CHECK THAT BOTH ELEMENTS ARE IN RANGE!!!
-	if(rightRange.undefined || leftRange.undefined || rightRange.top || leftRange.top)
-	{
-		resRange.top = true;	//Oh dearrrrrrrr :( This guy is not gonna be helpful anymore :(
+	if (rightRange.undefined || leftRange.undefined || rightRange.top
+			|| leftRange.top) {
+		resRange.top = true;//Oh dearrrrrrrr :( This guy is not gonna be helpful anymore :(
 		resRange.bottom = false;
 		resRange.upper = 0;
 		resRange.lower = 0;
 		return resRange;
 	}
-
 
 	switch (opcode) {
 
@@ -346,13 +313,12 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		mulDivCombos[3] = leftRange.upper / rightRange.upper;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = mulDivCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(mulDivCombos[comboCheckCtr] < resRange.lower)
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
 				resRange.lower = mulDivCombos[comboCheckCtr];
-			if(mulDivCombos[comboCheckCtr] > resRange.upper)
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
@@ -367,13 +333,12 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		mulDivCombos[3] = leftRange.upper * rightRange.upper;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = mulDivCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(mulDivCombos[comboCheckCtr] < resRange.lower)
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
 				resRange.lower = mulDivCombos[comboCheckCtr];
-			if(mulDivCombos[comboCheckCtr] > resRange.upper)
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
@@ -391,13 +356,12 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		mulDivCombos[3] = (int) leftRange.upper % (int) rightRange.upper;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = mulDivCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(mulDivCombos[comboCheckCtr] < resRange.lower)
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
 				resRange.lower = mulDivCombos[comboCheckCtr];
-			if(mulDivCombos[comboCheckCtr] > resRange.upper)
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
@@ -411,54 +375,52 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		mulDivCombos[3] = (int) leftRange.upper << (int) rightRange.upper;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = mulDivCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = mulDivCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = mulDivCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(mulDivCombos[comboCheckCtr] < resRange.lower)
+		while (comboCheckCtr < 4) {
+			if (mulDivCombos[comboCheckCtr] < resRange.lower)
 				resRange.lower = mulDivCombos[comboCheckCtr];
-			if(mulDivCombos[comboCheckCtr] > resRange.upper)
+			if (mulDivCombos[comboCheckCtr] > resRange.upper)
 				resRange.upper = mulDivCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
 		break;
 	case LSHR:
-		AshiftLower = (int)leftRange.lower;
-		AshiftHigher = (int)leftRange.upper;
-		BshiftLower = (int)rightRange.lower;
-		BshiftHigher = (int)rightRange.upper;
+		AshiftLower = (int) leftRange.lower;
+		AshiftHigher = (int) leftRange.upper;
+		BshiftLower = (int) rightRange.lower;
+		BshiftHigher = (int) rightRange.upper;
 
-		shiftCombos[0] = AshiftLower >>  BshiftLower;
+		shiftCombos[0] = AshiftLower >> BshiftLower;
 		shiftCombos[1] = AshiftLower >> BshiftHigher;
 		shiftCombos[2] = AshiftHigher >> BshiftLower;
 		shiftCombos[3] = AshiftHigher >> BshiftHigher;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = shiftCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = shiftCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = shiftCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(shiftCombos[comboCheckCtr] < resRange.lower)
-				resRange.lower = (float)shiftCombos[comboCheckCtr];
-			if(shiftCombos[comboCheckCtr] > resRange.upper)
-				resRange.upper = (float)shiftCombos[comboCheckCtr];
+		while (comboCheckCtr < 4) {
+			if (shiftCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = (float) shiftCombos[comboCheckCtr];
+			if (shiftCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = (float) shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
 		break;
 	case ASHR:	//Haaaanh? TO DO: Debug.
 //		resVal = (int) leftVal >> (int) rightVal;
-		//another combo fiender.
-		//BUBAGAWG!!!!
-		AshiftLower = (int)leftRange.lower;
-		AshiftHigher = (int)leftRange.upper;
-		BshiftLower = (int)rightRange.lower;
-		BshiftHigher = (int)rightRange.upper;
-		lowerShiftSign = AshiftLower & 0x80000000;	//Save the sign bit of the left operand (low range)
+	//another combo fiender.
+	//BUBAGAWG!!!!
+		AshiftLower = (int) leftRange.lower;
+		AshiftHigher = (int) leftRange.upper;
+		BshiftLower = (int) rightRange.lower;
+		BshiftHigher = (int) rightRange.upper;
+		lowerShiftSign = AshiftLower & 0x80000000;//Save the sign bit of the left operand (low range)
 		upperShiftSign = AshiftHigher & 0x80000000; //Save the sign bit of the left operand (high range)
-		AshiftLower &= 0x7fffffff;					//In a copy to be shifted: Destroy the sign bit of the left operand (low range)
+		AshiftLower &= 0x7fffffff;//In a copy to be shifted: Destroy the sign bit of the left operand (low range)
 		AshiftLower &= 0x7fffffff;
 
-		AshiftLower >>=  BshiftLower;
+		AshiftLower >>= BshiftLower;
 		AshiftLower |= lowerShiftSign;
 		shiftCombos[0] = AshiftLower;
 
@@ -475,14 +437,13 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 		shiftCombos[3] = AshiftHigher;
 		//get the lowest of all combos for the return lower bound
 		//get the highest of all combos for the return upper bound
-		resRange.lower = shiftCombos[0];	//Initialize, you must. Since we start with max in resRange.
+		resRange.lower = shiftCombos[0];//Initialize, you must. Since we start with max in resRange.
 		resRange.upper = shiftCombos[0];
-		while(comboCheckCtr < 4)
-		{
-			if(shiftCombos[comboCheckCtr] < resRange.lower)
-				resRange.lower = (float)shiftCombos[comboCheckCtr];
-			if(shiftCombos[comboCheckCtr] > resRange.upper)
-				resRange.upper = (float)shiftCombos[comboCheckCtr];
+		while (comboCheckCtr < 4) {
+			if (shiftCombos[comboCheckCtr] < resRange.lower)
+				resRange.lower = (float) shiftCombos[comboCheckCtr];
+			if (shiftCombos[comboCheckCtr] > resRange.upper)
+				resRange.upper = (float) shiftCombos[comboCheckCtr];
 			comboCheckCtr++;
 		}
 		break;
@@ -491,11 +452,8 @@ RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainEleme
 	return resRange;
 }
 
-
-
-
-RangeAnalysisFlow* RangeAnalysis::executePhiInst(
-		RangeAnalysisFlow* in, Instruction* instruction) {
+RangeAnalysisFlow* RangeAnalysis::executePhiInst(RangeAnalysisFlow* in,
+		Instruction* instruction) {
 
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -518,30 +476,37 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(
 
 	} else {
 		// Hmm, I guess we're good...
-		RangeDomainElement leftVal = f->value.find(leftOperand->getName())->second;
+		RangeDomainElement leftVal =
+				f->value.find(leftOperand->getName())->second;
 
-		RangeDomainElement rightVal = f->value.find(rightOperand->getName())->second;
-		errs() << "leftVal: " << leftVal.upper << " , " << leftVal.lower << "rightVal:" << rightVal.upper << " , " << rightVal.lower << "\n";
+		RangeDomainElement rightVal =
+				f->value.find(rightOperand->getName())->second;
+		errs() << "leftVal: " << leftVal.upper << " , " << leftVal.lower
+				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
+				<< "\n";
 
-/*		REPLACE THIS WITH GETTING THE MAX RANGE!!!
-		// If the variables are not the same in the two branches then
-		// we can't propagate the constant.
-		if (leftVal == rightVal){
+		/*		REPLACE THIS WITH GETTING THE MAX RANGE!!!
+		 // If the variables are not the same in the two branches then
+		 // we can't propagate the constant.
+		 if (leftVal == rightVal){
 
-			float resVal = leftVal;*/
-		RangeDomainElement maxRange = JoinRangeDomainElements(	(const RangeDomainElement*) &leftVal,
-																(const RangeDomainElement*) &rightVal);
+		 float resVal = leftVal;*/
+		RangeDomainElement maxRange = JoinRangeDomainElements(
+				(const RangeDomainElement*) &leftVal,
+				(const RangeDomainElement*) &rightVal);
 
 		RangeAnalysisFlow* ff = new RangeAnalysisFlow();
-			errs() << "input" << leftVal.upper << " , " << leftVal.lower << "rightVal:" << rightVal.upper << " , " << rightVal.lower << "\n";
-			errs() << "outcome: " << maxRange.upper << " , " << maxRange.lower << "\n";
-			value[K->getName()] = maxRange;
-			ff->value = value;
-			RangeAnalysisFlow* tmp =
-					static_cast<RangeAnalysisFlow*>(ff->join(f));
-			delete ff;
-			delete f;
-			f = tmp;
+		errs() << "input" << leftVal.upper << " , " << leftVal.lower
+				<< "rightVal:" << rightVal.upper << " , " << rightVal.lower
+				<< "\n";
+		errs() << "outcome: " << maxRange.upper << " , " << maxRange.lower
+				<< "\n";
+		value[K->getName()] = maxRange;
+		ff->value = value;
+		RangeAnalysisFlow* tmp = static_cast<RangeAnalysisFlow*>(ff->join(f));
+		delete ff;
+		delete f;
+		f = tmp;
 		//}
 
 	}
@@ -549,9 +514,8 @@ RangeAnalysisFlow* RangeAnalysis::executePhiInst(
 	return f;
 }
 
-RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
-		RangeAnalysisFlow* in, Instruction* instruction,
-		unsigned opcode) {
+RangeAnalysisFlow* RangeAnalysis::executeFOpInst(RangeAnalysisFlow* in,
+		Instruction* instruction, unsigned opcode) {
 
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -565,11 +529,9 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 // Checking if left operand is a constant
 	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
 
-		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand))
-		{
+		if (ConstantFP *CIRight = dyn_cast<ConstantFP>(rightOperand)) {
 			RangeDomainElement resRange;
 			// Cool they are both constants. you can get a precise range.
-
 
 			float leftVal = CILeft->getValueAPF().convertToFloat();
 			float rightVal = CIRight->getValueAPF().convertToFloat();
@@ -577,7 +539,6 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 			float resVal = computeOp(leftVal, rightVal, opcode);
 			resRange.upper = resVal;
 			resRange.lower = resVal;
-
 
 			RangeAnalysisFlow* ff = new RangeAnalysisFlow();
 			//errs() << leftVal << " " << rightVal << "\n";
@@ -600,8 +561,7 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 				errs() << "come across this variable!!\n";
 			}
 
-			else
-			{
+			else {
 //TO DO: DEBUG THIS CODE! WORKS ON RANGES!!
 				//Can still get a precise range
 				RangeDomainElement leftRange, rightRange, resRange;
@@ -649,7 +609,8 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 //HERE WE ARE COMPUTING OPS USING A RANGE OF VALUES, NOT THE PLAIN ABSOLUTES
 				//float leftVal = f->value.find(leftOperand->getName())->second;
 				//Now we are working with a range in the left hand. This will introuduce some impreciseness
-				RangeDomainElement resRange, rightRange, leftRange = f->value.find(leftOperand->getName())->second;
+				RangeDomainElement resRange, rightRange, leftRange =
+						f->value.find(leftOperand->getName())->second;
 
 				float rightVal = CIRight->getValueAPF().convertToFloat();
 				rightRange.upper = rightVal;
@@ -680,13 +641,12 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 				errs() << " a variable but this is the first time we ";
 				errs() << "come across this variable!!\n";
 
-			}
-			else
-			{
+			} else {
 //DEBUG THIS!!!!
 //HERE WE ARE COMPUTING OPS USING A RANGE OF VALUES, NOT THE PLAIN ABSOLUTES
 				// Hmm, I guess we're good...
-				RangeDomainElement resRange, rightRange, leftRange = f->value.find(leftOperand->getName())->second;
+				RangeDomainElement resRange, rightRange, leftRange =
+						f->value.find(leftOperand->getName())->second;
 
 //				float rightVal = f->value.find(rightOperand->getName())->second;
 				rightRange = f->value.find(rightOperand->getName())->second;
@@ -711,10 +671,8 @@ RangeAnalysisFlow* RangeAnalysis::executeFOpInst(
 	return f;
 }
 
-RangeAnalysisFlow* RangeAnalysis::executeOpInst(	RangeAnalysisFlow* in,
-													Instruction* instruction,
-													unsigned opcode				)
-{
+RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
+		Instruction* instruction, unsigned opcode) {
 	RangeDomainElement leftRange, rightRange, resRange;
 	RangeAnalysisFlow* f = new RangeAnalysisFlow(in);
 	Value *leftOperand = instruction->getOperand(0);
@@ -728,14 +686,13 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(	RangeAnalysisFlow* in,
 // Checking if left operand is a constant
 	if (ConstantInt *CILeft = dyn_cast<ConstantInt>(leftOperand)) {
 
-		if (ConstantInt *CIRight = dyn_cast<ConstantInt>(rightOperand))
-		{
+		if (ConstantInt *CIRight = dyn_cast<ConstantInt>(rightOperand)) {
 			// Cool they are both constants.
 
 			float leftVal = CILeft->getZExtValue();
 			float rightVal = CIRight->getZExtValue();
 
-			float resVal = computeOp(leftVal, rightVal, opcode);		//Get precise information
+			float resVal = computeOp(leftVal, rightVal, opcode);//Get precise information
 			resRange.upper = resVal;
 			resRange.lower = resVal;
 
@@ -822,9 +779,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(	RangeAnalysisFlow* in,
 				delete f;
 				f = tmp;
 			}
-		}
-		else
-		{
+		} else {
 
 			// Ok, cool! Both the right and the left operand is a variable...
 			if ((f->value.find(leftOperand->getName()) == f->value.end())
@@ -865,7 +820,6 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(	RangeAnalysisFlow* in,
 	return f;
 }
 
-
 Flow * RangeAnalysis::initialize() {
 	return new RangeAnalysisFlow(RangeAnalysisFlow::BOTTOM);
 }
@@ -873,8 +827,7 @@ Flow * RangeAnalysis::initialize() {
 RangeAnalysis::RangeAnalysis(Function & F) :
 		StaticAnalysis() {
 	this->top = new RangeAnalysisFlow(RangeAnalysisFlow::TOP);//Should be changed by subclasses of Flow to an instance of the subclass
-	this->bottom = new RangeAnalysisFlow(
-			RangeAnalysisFlow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
+	this->bottom = new RangeAnalysisFlow(RangeAnalysisFlow::BOTTOM);//Should be changed by subclasses of Flow to an instance of the subclass
 	this->functionName = F.getName();
 	buildCFG(F);
 }
@@ -882,43 +835,40 @@ RangeAnalysis::RangeAnalysis(Function & F) :
 //Utility function
 //Delete (set to top) all variables with different ranges. This is a utility function for merging, specifically for looping
 //control structures in the range analysis
-void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B)
-{
+void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B) {
 	for (map<string, RangeDomainElement>::iterator it = B->value.begin();
-				it != B->value.end(); it++) {
+			it != B->value.end(); it++) {
 
-/*			if (this->value.find(it->first) == this->value.end()) {
-				// They don't have the same key! We're good!
-				f->value[it->first] = B->value.find(it->first)->second;
-			} else {*/
-		if (!(A->value.find(it->first) == A->value.end()))
-		{
-				// Oh no! They do have the same key! We need to check if they have
-				// the same values! if they do then we're good
-				RangeDomainElement thisVal = A->value.find(it->first)->second;
-				RangeDomainElement BVal = B->value.find(it->first)->second;
+		/*			if (this->value.find(it->first) == this->value.end()) {
+		 // They don't have the same key! We're good!
+		 f->value[it->first] = B->value.find(it->first)->second;
+		 } else {*/
+		if (!(A->value.find(it->first) == A->value.end())) {
+			// Oh no! They do have the same key! We need to check if they have
+			// the same values! if they do then we're good
+			RangeDomainElement thisVal = A->value.find(it->first)->second;
+			RangeDomainElement BVal = B->value.find(it->first)->second;
 
-				//if (BVal == thisVal)
-				if(!RangeDomainElementisEqual(	(const RangeDomainElement*) &BVal,
-												(const RangeDomainElement*) &thisVal)	)
-				{
-					// Both branches had different value for this variable
-					//f->value[it->first] = BVal;
-					thisVal.top = true;
-					thisVal.bottom = false;
-					thisVal.lower = 0;
-					thisVal.undefined = true;
-					thisVal.upper = 0;
-					B->value[it->first] = thisVal;
-					A->value[it->first] = thisVal;
-
-				}
-				//else
-				// Nope! They have different values
-				// we need to omit this variable for
-				// the (implicit) "set"
+			//if (BVal == thisVal)
+			if (!RangeDomainElementisEqual((const RangeDomainElement*) &BVal,
+					(const RangeDomainElement*) &thisVal)) {
+				// Both branches had different value for this variable
+				//f->value[it->first] = BVal;
+				thisVal.top = true;
+				thisVal.bottom = false;
+				thisVal.lower = 0;
+				thisVal.undefined = true;
+				thisVal.upper = 0;
+				B->value[it->first] = thisVal;
+				A->value[it->first] = thisVal;
 
 			}
+			//else
+			// Nope! They have different values
+			// we need to omit this variable for
+			// the (implicit) "set"
+
+		}
 	}
 }
 

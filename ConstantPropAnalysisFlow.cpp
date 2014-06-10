@@ -47,21 +47,19 @@ string ConstantPropAnalysisFlow::jsonString() {
 	 }
 	 ss << " ] ";
 	 */
-
+	ss << "{";
 	int counter = 0;
 	for (; it != this->value.end(); it++) {
 		if (counter == 0) {
-			ss << "\"" << it->first << "\" : ";
+			ss << "[\"" << it->first << "\" : ";
 			float v = it->second;
-			ss << v << " ";
+			ss << v << "] ";
 		} else {
-			ss << ",\"" << it->first << "\" : ";
+			ss << ",[\"" << it->first << "\" : ";
 			float v = it->second;
-			ss << v << " ";
+			ss << v << "] ";
 		}
-
 		counter++;
-
 	}
 	ss << "}";
 //	errs() << "After jSonString()...\n";

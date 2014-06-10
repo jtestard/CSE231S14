@@ -16,6 +16,8 @@ clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENC
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/CSE/simplecp.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/rangeAnalysis/simplecp.cpp -o $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
+llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
 
 #Dummy optimization
 if [ "$1" == "dummy" ]
@@ -35,7 +37,7 @@ fi
 if [ "$1" == "constantPropagation" ]
 then
 	echo "CONSTANT PROPAGATION ANALYSIS OPTIMIZATION"
-	opt -load $LLVMLIB/LLVMHello.dylib -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
+	opt -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
 	mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
 	llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
 	opt -load $LLVMLIB/CSE231.dylib -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze
@@ -48,10 +50,10 @@ then
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
 	opt -load $LLVMLIB/CSE231.dylib -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
 fi
-
-#echo "DUMMY CONST PROP"
-#opt -load $LLVMLIB/CSE231.dylib -ConstantPropOptimization < $PROJ2BENCHMARKS/constantProp/simplecp.bc -analyze
-
-#opt -load $LLVMLIB/LLVMHello.dylib -mem2reg < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
-#mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
-#llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
+if [ "$1" == "RangeAnalysis" ]
+then
+	echo "RANGE ANALYSIS"
+	opt -mem2reg -instnamer $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc > $PROJ2BENCHMARKS/rangeAnalysis/named.bc
+	opt -load $LLVMLIB/CSE231.dylib -rangeAnalysisOptimization < $PROJ2BENCHMARKS/rangeAnalysis/named.bc -analyze
+	llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/named.bc
+fi

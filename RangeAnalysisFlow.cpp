@@ -25,7 +25,6 @@ bool RangeAnalysisFlow::equals(Flow* otherSuper)
 		if (other->value.find(key) == other->value.end())
 			return false;
 		RangeDomainElement otherVal = other->value.find(key)->second;
-//		if (otherVal != thisVal)
 		if(!RangeDomainElementisEqual(	(const RangeDomainElement*) &otherVal,
 										(const RangeDomainElement*) &thisVal)	)
 			return false;
@@ -42,60 +41,24 @@ string RangeAnalysisFlow::jsonString() {
 	//Value has something inside
 	stringstream ss;
 	map<string, RangeDomainElement>::const_iterator it = this->value.begin();
-	/*ss << "{\"" << it->first << "\" : [ ";
-	 set<string>::iterator its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << " ] ";
-	 */
-
 	int counter = 0;
+	ss << "{";
 	for (; it != this->value.end(); it++) {
 		if (counter == 0) {
-			ss << "\"" << it->first << "\" : ";
+			ss << "\"" << it->first << "\" : [";
 			RangeDomainElement v = it->second;
-			ss << v.lower << " " << v.upper << " ";
+			ss << v.lower << "," << v.upper << "] ";
 		} else {
-			ss << ",\"" << it->first << "\" : ";
+			ss << ",\"" << it->first << "\" : [";
 			RangeDomainElement v = it->second;
-			ss << v.lower << " " << v.upper << " ";
+			ss << v.lower << "," << v.upper << "] ";
 		}
 
 		counter++;
 
 	}
 	ss << "}";
-//	errs() << "After jSonString()...\n";
 	return ss.str();
-
-	/*
-	 *
-	 stringstream ss;
-	 map<string, set<string> >::const_iterator it = this->value.begin();
-	 ss << "{\"" << it->first << "\" : [ ";
-	 set<string>::iterator its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << " ] ";
-	 for (; it != this->value.end() ; it++) {
-	 ss << "\"" << it->first << "\" : [ ";
-	 its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << "] ";
-	 }
-	 ss << "}";
-	 return ss.str();
-	 *
-	 *
-	 *
-	 */
 }
 
 void RangeAnalysisFlow::copy(Flow* rhs) {

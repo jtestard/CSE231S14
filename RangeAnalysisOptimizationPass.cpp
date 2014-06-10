@@ -40,16 +40,8 @@ namespace {
     void print(raw_ostream &OS, const Module*) const {
 
     	//The pure static analysis. Functional testing
-    	OS << "CONSTANT PROPAGATION ANALYSES test : \n";
     	for (unsigned int i = 0 ; i < RangeAnalyses.size() ; i++){
-        	//OS << "Print CFG (without flow) : " << "\n";
-        	//RangeAnalyses[i]->JSONCFG(OS);
-        	//Run worklist algorithm
-//    		errs() << "Function Name : " << RangeAnalyses[i]->getFunctionName() << "\n";
-//    		errs() << "before runWorklist()...\n";
         	RangeAnalyses[i]->runWorklist();
-//        	errs() << "after runWorklist()...\n";
-        	//Check analysis results.
         	OS << "\nPrint CFG (with flow) : " << "\n";
         	RangeAnalyses[i]->JSONCFG(OS);
     	}
