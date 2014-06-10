@@ -15,7 +15,7 @@ Additionally, mem2reg pass performs SSA (static single assignment form) and a ve
 
 Let's have a look at another example that points that out. If we have a look at listing \ref{SSAFF} we'll notice that we have a similar example as before, but this time we also have an if-then-else statement that contains the set of assignments. By looking at the ll code, we'll notice that registers \%add and \%add1 are assigned inside the taken branch but they are not used from the phi node while merging so they cannot be spotted and therefore they cannot be deleted, but that doesn't cause any issues, because due to SSA they will not be re-written again but even if they get reused by reading the value from those registers their actual value is going to be the one that we kept, if we assigned another value to these registers (which will not happen) then as we mentioned earlier by re-assigning a new value to a key that already appears we basically delete and re-write this particular key, so there is nothing that could go wrong.
 
-Now let's talk about the merging. Things are really straight forward for \%c.0, both \%add2 and \%add4 have the same value (20), in this example so we will just assign this value to \%c.0, but this is not the case for \%d.0, since \%add3 and \%add5 have different values (namely: 30 and 29), we will not propagate any value to this register, additionally the details that held true for registers \%add and \%add1 hold true for the rest of the registers that have an assigned value so we don't have to delete them. 
+Now let's talk about the merging. Things are really straight forward for the key: \%c.0, both \%add2 and \%add4 have the same value (20), in this example so we will just assign this value to \%c.0, but this is not the case for \%d.0, since \%add3 and \%add5 have different values (namely: 30 and 29), we will not propagate any value to this register, additionally the details that held true for registers \%add and \%add1 hold true for the rest of the registers that have an assigned value so we don't have to delete them. 
 
 
 \begin{lstlisting}[caption=SSA preview, label=SSA]
@@ -72,7 +72,7 @@ if.end:                                           ; preds = %if.else, %if.then
   
   
 \subsection*{Supported Flow Functions}
-While, the majority of the teams only support integers and therefore they have only implemented a very small set of flow functions, we went one step further, by supporting diffent types of variables and therefore more opcodes and flow-functions. Specifically, we cover all the standard binary operators (opcodes:8-19), all the logical operators (opcodes: 20-25), all the cast operators that can be used on registers (opcodes:33-41) and of course phi nodes (opcode 48). 
+While, the majority of the teams only support integers and therefore they have only implemented a very small set of flow functions, we went one step further, by supporting different types of variables and therefore more opcodes and flow-functions. Specifically, we cover all the standard binary operators (opcodes:8-19), all the logical operators (opcodes: 20-25), all the cast operators that can be used on registers (opcodes:33-41) and of course phi nodes (opcode 48). 
 
 
 
@@ -84,14 +84,14 @@ Some interesting notes here are the following:
 \begin{itemize}
 
   \item Firstly, while we were trying to perform the flow function for the division (the operators for the different kinds of the divisions are: UDiv, SDiv and FDiv) we were thinking that we probably had to check if the divisor is equal to zero and print an error message in this case. As it turns out we don't have to because we are using floats to represent every number internally and in C++ diving with zero returns +/- inf if you are using floating point variables.
-  \item Secondly, we should mention that we had to include casts because of occassions like the sample program shown in listing \ref{casting}. In this example, we assume that 5 and 15 are floats but variable c is an integer, therefore we have to cast before we actually assign the result of the summation to c (or to be precise, to \%conv). The conclusion is that if we decide to support instructions with different types of variables then we have to support casts.
+  \item Secondly, we should mention that we had to include casts because of occasions like the sample program shown in listing \ref{casting}. In this example, we assume that 5 and 15 are floats but variable c is an integer, therefore we have to cast before we actually assign the result of the summation to c (or to be precise, to \%conv). The conclusion is that if we decide to support instructions with different types of variables then we have to support casts.
   
   \item Thirdly, while mem2reg usually outputs instructions like the one shown above where the register names are actual strings, we had some issues when we tried to run our passes on a mac. Particularly, instead of having registers like \%add3, \%sub1 and so on we had \%1, \%2 \ldots Which caused problems in our analyses. That probably happened because another LLVM/Clang version was installed on that machine but it can be easily solved if we added the flag -instnamer to our mem2reg pass.
 
 \end{itemize}
 
 
-\begin{lstlisting}[caption=value preservance inside casts, label=casting]
+\begin{lstlisting}[caption=value preservation inside casts, label=casting]
 // ... Piece of C++ code ...
 int c = 5.0f+15.0f;
 
@@ -102,22 +102,6 @@ int c = 5.0f+15.0f;
  %conv = fptosi float %add to i32
 
 \end{lstlisting}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

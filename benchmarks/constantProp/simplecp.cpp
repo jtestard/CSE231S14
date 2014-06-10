@@ -2,29 +2,28 @@
  
 int main()
 {
-  float a;
-  float b;
+  int a;
+  int b;
   int c;
   int d;
   int e;
   int temp = 0;
-  int g;
+  float g;
   int f;
 
   int h;
 
   a = 5;
   b = 15;
+  g = 15.0f;
 
   if(a==6){
 	  c = a+b;
-	  c = a+b;
-	  c = a+b;
-	  d = c+10;
+	  d = g+10;
   }
   else{
 	  c = a+b;
-	  d = c+9;
+	  d = g+10;
   }
 
   for(int i=0; i<10 ; i++){

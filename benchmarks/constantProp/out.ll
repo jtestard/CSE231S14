@@ -25,52 +25,49 @@ declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #1
 ; Function Attrs: nounwind uwtable
 define i32 @main() #2 {
 entry:
-  %cmp = fcmp oeq float 5.000000e+00, 6.000000e+00
+  %cmp = icmp eq i32 5, 6
   br i1 %cmp, label %if.then, label %if.else
 
 if.then:                                          ; preds = %entry
-  %add = fadd float 5.000000e+00, 1.500000e+01
-  %conv = fptosi float %add to i32
-  %add1 = fadd float 5.000000e+00, 1.500000e+01
-  %conv2 = fptosi float %add1 to i32
-  %add3 = fadd float 5.000000e+00, 1.500000e+01
-  %conv4 = fptosi float %add3 to i32
-  %add5 = add nsw i32 %conv4, 10
+  %add = add nsw i32 5, 15
+  %add1 = fadd float 1.500000e+01, 1.000000e+01
+  %conv = fptosi float %add1 to i32
   br label %if.end
 
 if.else:                                          ; preds = %entry
-  %add6 = fadd float 5.000000e+00, 1.500000e+01
-  %conv7 = fptosi float %add6 to i32
-  %add8 = add nsw i32 %conv7, 9
+  %add2 = add nsw i32 5, 15
+  %add3 = fadd float 1.500000e+01, 1.000000e+01
+  %conv4 = fptosi float %add3 to i32
   br label %if.end
 
 if.end:                                           ; preds = %if.else, %if.then
-  %c.0 = phi i32 [ %conv4, %if.then ], [ %conv7, %if.else ]
-  %d.0 = phi i32 [ %add5, %if.then ], [ %add8, %if.else ]
+  %d.0 = phi i32 [ %conv, %if.then ], [ %conv4, %if.else ]
+  %c.0 = phi i32 [ %add, %if.then ], [ %add2, %if.else ]
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %if.end
   %temp.0 = phi i32 [ 0, %if.end ], [ %inc, %for.inc ]
-  %i.0 = phi i32 [ 0, %if.end ], [ %inc10, %for.inc ]
-  %cmp9 = icmp slt i32 %i.0, 10
-  br i1 %cmp9, label %for.body, label %for.end
+  %i.0 = phi i32 [ 0, %if.end ], [ %inc6, %for.inc ]
+  %cmp5 = icmp slt i32 %i.0, 10
+  br i1 %cmp5, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
   %inc = add nsw i32 %temp.0, 1
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %inc10 = add nsw i32 %i.0, 1
+  %inc6 = add nsw i32 %i.0, 1
   br label %for.cond
 
 for.end:                                          ; preds = %for.cond
-  %conv11 = zext i16 2 to i32
-  %shr = ashr i32 %conv11, 2
-  %conv12 = trunc i32 %shr to i16
-  %add13 = add nsw i32 %c.0, 9
-  %add14 = add nsw i32 %d.0, %c.0
-  %add15 = add nsw i32 10, %c.0
-  %add16 = add nsw i32 %add15, %d.0
+  %conv7 = zext i16 2 to i32
+  %shr = ashr i32 %conv7, 2
+  %conv8 = trunc i32 %shr to i16
+  %add9 = add nsw i32 %c.0, 9
+  %add10 = add nsw i32 %d.0, %c.0
+  %add11 = add nsw i32 10, %c.0
+  %add12 = add nsw i32 %add11, %d.0
+  %conv13 = sitofp i32 %add12 to float
   ret i32 0
 }
 

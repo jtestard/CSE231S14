@@ -26,13 +26,13 @@ declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #1
 define i32 @main() #2 {
 entry:
   %retval = alloca i32, align 4
-  %a = alloca float, align 4
-  %b = alloca float, align 4
+  %a = alloca i32, align 4
+  %b = alloca i32, align 4
   %c = alloca i32, align 4
   %d = alloca i32, align 4
   %e = alloca i32, align 4
   %temp = alloca i32, align 4
-  %g = alloca i32, align 4
+  %g = alloca float, align 4
   %f = alloca i32, align 4
   %h = alloca i32, align 4
   %i = alloca i32, align 4
@@ -40,42 +40,33 @@ entry:
   %short2 = alloca i16, align 2
   store i32 0, i32* %retval
   store i32 0, i32* %temp, align 4
-  store float 5.000000e+00, float* %a, align 4
-  store float 1.500000e+01, float* %b, align 4
-  %0 = load float* %a, align 4
-  %cmp = fcmp oeq float %0, 6.000000e+00
+  store i32 5, i32* %a, align 4
+  store i32 15, i32* %b, align 4
+  store float 1.500000e+01, float* %g, align 4
+  %0 = load i32* %a, align 4
+  %cmp = icmp eq i32 %0, 6
   br i1 %cmp, label %if.then, label %if.else
 
 if.then:                                          ; preds = %entry
-  %1 = load float* %a, align 4
-  %2 = load float* %b, align 4
-  %add = fadd float %1, %2
-  %conv = fptosi float %add to i32
-  store i32 %conv, i32* %c, align 4
-  %3 = load float* %a, align 4
-  %4 = load float* %b, align 4
-  %add1 = fadd float %3, %4
-  %conv2 = fptosi float %add1 to i32
-  store i32 %conv2, i32* %c, align 4
-  %5 = load float* %a, align 4
-  %6 = load float* %b, align 4
-  %add3 = fadd float %5, %6
-  %conv4 = fptosi float %add3 to i32
-  store i32 %conv4, i32* %c, align 4
-  %7 = load i32* %c, align 4
-  %add5 = add nsw i32 %7, 10
-  store i32 %add5, i32* %d, align 4
+  %1 = load i32* %a, align 4
+  %2 = load i32* %b, align 4
+  %add = add nsw i32 %1, %2
+  store i32 %add, i32* %c, align 4
+  %3 = load float* %g, align 4
+  %add1 = fadd float %3, 1.000000e+01
+  %conv = fptosi float %add1 to i32
+  store i32 %conv, i32* %d, align 4
   br label %if.end
 
 if.else:                                          ; preds = %entry
-  %8 = load float* %a, align 4
-  %9 = load float* %b, align 4
-  %add6 = fadd float %8, %9
-  %conv7 = fptosi float %add6 to i32
-  store i32 %conv7, i32* %c, align 4
-  %10 = load i32* %c, align 4
-  %add8 = add nsw i32 %10, 9
-  store i32 %add8, i32* %d, align 4
+  %4 = load i32* %a, align 4
+  %5 = load i32* %b, align 4
+  %add2 = add nsw i32 %4, %5
+  store i32 %add2, i32* %c, align 4
+  %6 = load float* %g, align 4
+  %add3 = fadd float %6, 1.000000e+01
+  %conv4 = fptosi float %add3 to i32
+  store i32 %conv4, i32* %d, align 4
   br label %if.end
 
 if.end:                                           ; preds = %if.else, %if.then
@@ -83,43 +74,44 @@ if.end:                                           ; preds = %if.else, %if.then
   br label %for.cond
 
 for.cond:                                         ; preds = %for.inc, %if.end
-  %11 = load i32* %i, align 4
-  %cmp9 = icmp slt i32 %11, 10
-  br i1 %cmp9, label %for.body, label %for.end
+  %7 = load i32* %i, align 4
+  %cmp5 = icmp slt i32 %7, 10
+  br i1 %cmp5, label %for.body, label %for.end
 
 for.body:                                         ; preds = %for.cond
-  %12 = load i32* %temp, align 4
-  %inc = add nsw i32 %12, 1
+  %8 = load i32* %temp, align 4
+  %inc = add nsw i32 %8, 1
   store i32 %inc, i32* %temp, align 4
   br label %for.inc
 
 for.inc:                                          ; preds = %for.body
-  %13 = load i32* %i, align 4
-  %inc10 = add nsw i32 %13, 1
-  store i32 %inc10, i32* %i, align 4
+  %9 = load i32* %i, align 4
+  %inc6 = add nsw i32 %9, 1
+  store i32 %inc6, i32* %i, align 4
   br label %for.cond
 
 for.end:                                          ; preds = %for.cond
   store i16 2, i16* %short1, align 2
-  %14 = load i16* %short1, align 2
-  %conv11 = zext i16 %14 to i32
-  %shr = ashr i32 %conv11, 2
-  %conv12 = trunc i32 %shr to i16
-  store i16 %conv12, i16* %short2, align 2
-  %15 = load i32* %c, align 4
-  %add13 = add nsw i32 %15, 9
-  store i32 %add13, i32* %h, align 4
+  %10 = load i16* %short1, align 2
+  %conv7 = zext i16 %10 to i32
+  %shr = ashr i32 %conv7, 2
+  %conv8 = trunc i32 %shr to i16
+  store i16 %conv8, i16* %short2, align 2
+  %11 = load i32* %c, align 4
+  %add9 = add nsw i32 %11, 9
+  store i32 %add9, i32* %h, align 4
+  %12 = load i32* %d, align 4
+  %13 = load i32* %c, align 4
+  %add10 = add nsw i32 %12, %13
+  store i32 %add10, i32* %h, align 4
+  %14 = load i32* %c, align 4
+  %add11 = add nsw i32 10, %14
+  store i32 %add11, i32* %f, align 4
+  %15 = load i32* %f, align 4
   %16 = load i32* %d, align 4
-  %17 = load i32* %c, align 4
-  %add14 = add nsw i32 %16, %17
-  store i32 %add14, i32* %h, align 4
-  %18 = load i32* %c, align 4
-  %add15 = add nsw i32 10, %18
-  store i32 %add15, i32* %f, align 4
-  %19 = load i32* %f, align 4
-  %20 = load i32* %d, align 4
-  %add16 = add nsw i32 %19, %20
-  store i32 %add16, i32* %g, align 4
+  %add12 = add nsw i32 %15, %16
+  %conv13 = sitofp i32 %add12 to float
+  store float %conv13, float* %g, align 4
   ret i32 0
 }
 
