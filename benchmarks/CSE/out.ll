@@ -31,13 +31,13 @@ entry:
 if.then:                                          ; preds = %entry
   %add = fadd float 0x4015333340000000, 0x402E9999A0000000
   %conv = fptosi float %add to i32
-  %add1 = add nsw i32 %conv, 10
+  %add1 = add nsw i32 10, 10
   br label %if.end
 
 if.else:                                          ; preds = %entry
   %add2 = fadd float 0x4015333340000000, 0x402E9999A0000000
   %conv3 = fptosi float %add2 to i32
-  %add4 = add nsw i32 %conv3, 10
+  %add4 = add nsw i32 10, 10
   br label %if.end
 
 if.end:                                           ; preds = %if.else, %if.then

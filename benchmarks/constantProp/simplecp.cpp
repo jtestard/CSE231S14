@@ -2,28 +2,29 @@
  
 int main()
 {
-  int a;
-  int b;
-  int c;
-  int d;
+  float a;
+  float b;
+  short c;
+  int *d;
   int e;
   int temp = 0;
-  float g;
+  int g;
   int f;
 
   int h;
 
-  a = 5;
-  b = 15;
-  g = 15.0f;
+  a = 21474836470;
+  b = 214748364701;
 
   if(a==6){
 	  c = a+b;
-	  d = g+10;
+	  c = a+b;
+	  c = a+b;
+	  *d = c+10;
   }
   else{
 	  c = a+b;
-	  d = g+10;
+	  *d = c+9;
   }
 
   for(int i=0; i<10 ; i++){
@@ -40,11 +41,11 @@ int main()
 //  c = a+b;
 //  d = c+9;
   h = c+9;
-  h = d+c;
+  //h = d+c;
   f = 10+c;
 
 
-  g = f+d;
+  //g = f+d;
 
   //std::cout<<"d:"<<d+5<<std::endl;
   return 0;

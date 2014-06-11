@@ -40,6 +40,7 @@ entry:
   store i32 0, i32* %retval
   store float 0x4015333340000000, float* %a, align 4
   store float 0x402E9999A0000000, float* %b, align 4
+  store i32 10, i32* %g, align 4
   %0 = load float* %a, align 4
   %cmp = fcmp oeq float %0, 6.000000e+00
   br i1 %cmp, label %if.then, label %if.else
@@ -50,7 +51,7 @@ if.then:                                          ; preds = %entry
   %add = fadd float %1, %2
   %conv = fptosi float %add to i32
   store i32 %conv, i32* %c, align 4
-  %3 = load i32* %c, align 4
+  %3 = load i32* %g, align 4
   %add1 = add nsw i32 %3, 10
   store i32 %add1, i32* %d, align 4
   br label %if.end
@@ -61,7 +62,7 @@ if.else:                                          ; preds = %entry
   %add2 = fadd float %4, %5
   %conv3 = fptosi float %add2 to i32
   store i32 %conv3, i32* %c, align 4
-  %6 = load i32* %c, align 4
+  %6 = load i32* %g, align 4
   %add4 = add nsw i32 %6, 10
   store i32 %add4, i32* %d, align 4
   br label %if.end

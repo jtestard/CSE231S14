@@ -61,6 +61,8 @@ void StaticAnalysis::runWorklist() {
 		Flow* out = executeFlowFunction(	in,					//Contains all known variable mappings for the flow function
 											current->inst, 		//Instruction to perform flow function on
 											current->index	);	//Basic block index
+
+		errs()<<"out: "<<out->basic<<"\n";
 //TO IDENTIFY BLOCK
 		//Flow* out = executeFlowFunction(in,current->inst, current->index);
 		//		errs() << "Flow function executed...\n";
@@ -72,6 +74,7 @@ void StaticAnalysis::runWorklist() {
 			Flow* new_out = out->join(current->outgoing[i]->flow);
 //			errs() << "Joined with existing output...\n";
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
+			errs()<<"new_out: "<<new_out->basic<<"\n";
 			if (!(new_out->equals(current->outgoing[i]->flow))){
 				//errs() << "new output pushed to the worklist...\n";
 				current->outgoing[i]->flow->copy(new_out);
