@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 JUN 2014 15:09
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.5.30)  10 JUN 2014 23:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -796,6 +796,9 @@ Overfull \hbox (19.87332pt too wide) in paragraph at lines 101--102
  []
 
 ) (./available_expressions.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Underfull \hbox (badness 4872) in paragraph at lines 8--9
 []\OT1/cmr/m/n/10.95 The do-main for this anal-y-sis is: D =
  []
@@ -841,9 +844,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 37--44
 
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
 [8]
 Underfull \hbox (badness 10000) in paragraph at lines 54--56
 
@@ -861,6 +861,9 @@ Overfull \hbox (59.23352pt too wide) in paragraph at lines 99--117
  []
 
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
 Overfull \hbox (3.22327pt too wide) in paragraph at lines 150--151
 [][][][][][][][][][][][][] 
  []
@@ -870,12 +873,12 @@ Overfull \hbox (3.22327pt too wide) in paragraph at lines 152--153
 [][][][][][][][][][][][][] 
  []
 
-
+[10]
 Underfull \hbox (badness 10000) in paragraph at lines 169--170
 
  []
 
-[10]
+
 Overfull \hbox (3.22327pt too wide) in paragraph at lines 175--176
 [][][][][][][][][][][][][][][] 
  []
@@ -907,7 +910,9 @@ Overfull \hbox (8.77328pt too wide) in paragraph at lines 209--210
 [][][][][][][][][][][][][] 
  []
 
-) (./conclusion.tex) [11] (./main.aux)
+[11]) (./conclusion.tex) [12
+
+] (./main.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -919,7 +924,7 @@ Here is how much of TeX's memory you used:
  12146 multiletter control sequences out of 15000+600000
  14541 words of font info for 55 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 38i,20n,58p,1283b,1501s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,20n,58p,1283b,1604s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
@@ -937,10 +942,10 @@ ive/2013/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/2013/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/local/texlive/2013/te
 xmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (11 pages, 291470 bytes).
+Output written on main.pdf (12 pages, 291901 bytes).
 PDF statistics:
- 113 PDF objects out of 1000 (max. 8388607)
- 78 compressed objects within 1 object stream
+ 116 PDF objects out of 1000 (max. 8388607)
+ 80 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
