@@ -51,27 +51,7 @@
 bool AvailableExpressionAnalysis::isEqual(AvailableExpressionAnalysisFlow* in,
 		Instruction *inst) {
 
-	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
-			<< inst->getOpcodeName() << "\n";
-
-	Value *leftOperand = inst->getOperand(0);
-	Value *rightOperand = inst->getOperand(1);
-
-	errs()<<" left: "<<leftOperand->getName()<<" right: "<<rightOperand->getName()<<"\n";
 	typedef std::map<std::string, std::string>::iterator it_type;
-	errs() << "I'm in isEqual\n";
-	for (it_type it = in->value.begin(); it != in->value.end(); ++it) {
-		string key = it->first;
-		string value = it->second;
-
-		errs() << "key: " << key << " value: " << value << "\n";
-	}
-
-	//in->value.f
-
-//	if (in->value.find("%" + std::string(retVal->getName())){
-//
-//	}
 
 
 	unsigned opcode = inst->getOpcode();
@@ -148,7 +128,7 @@ Flow* AvailableExpressionAnalysis::executeFlowFunction(Flow *in,
 		output = new AvailableExpressionAnalysisFlow(inFlow);
 		break;
 	}
-	//errs() << "Instruction : " << *inst << ", Flow value : " << output->jsonString() << "\n";
+
 	return output;
 }
 
@@ -165,7 +145,7 @@ AvailableExpressionAnalysis::AvailableExpressionAnalysis(Function & F) :
 			AvailableExpressionAnalysisFlow::BOTTOM); //Should be changed by subclasses of Flow to an instance of the subclass
 	this->functionName = F.getName();
 	buildCFG(F);
-	//this->analysisMap
+
 }
 
 AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executeUnaryInst(
@@ -397,8 +377,8 @@ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executePhiInst(
 	map<string, string> value;
 	Value *K = instruction;
 	string regName = K->getName();
-	errs() << "Instruction : " << regName << " left " << leftOperand->getName()
-			<< " right " << rightOperand->getName() << "\n";
+//	errs() << "Instruction : " << regName << " left " << leftOperand->getName()
+//			<< " right " << rightOperand->getName() << "\n";
 
 	// Ok, cool! Both the right and the left operand is a variable...
 	if ((f->value.find("%" + std::string(leftOperand->getName()))
@@ -407,8 +387,8 @@ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executePhiInst(
 					== f->value.end())) {
 		// Oh no! Read the error message!
 
-		errs()
-				<< "No information was detected for one or both of the operators!\n";
+//		errs()
+//				<< "No information was detected for one or both of the operators!\n";
 
 	} else {
 		// Hmm, I guess we're good...
@@ -417,7 +397,7 @@ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executePhiInst(
 
 		string rightVal = f->value.find(
 				"%" + std::string(rightOperand->getName()))->second;
-		errs() << "leftVal: " << leftVal << "rightVal" << rightVal << "\n";
+//		errs() << "leftVal: " << leftVal << "rightVal" << rightVal << "\n";
 
 		// If the variables are not the same in the two branches then
 		// we can't propagate the constant.
@@ -428,8 +408,8 @@ AvailableExpressionAnalysisFlow* AvailableExpressionAnalysis::executePhiInst(
 			string resVal = leftVal;
 			AvailableExpressionAnalysisFlow* ff =
 					new AvailableExpressionAnalysisFlow();
-			errs() << leftVal << " " << rightVal << "\n";
-			errs() << "outcome: " << resVal << "\n";
+//			errs() << leftVal << " " << rightVal << "\n";
+//			errs() << "outcome: " << resVal << "\n";
 			value["%" + std::string(K->getName())] = resVal;
 			ff->value = value;
 			AvailableExpressionAnalysisFlow* tmp =

@@ -124,6 +124,7 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 //	errs()<< "I just entered into the sublcassed join... \n";
 
 //Join anything with top will give you top.
+
 	if (this->basic == TOP || other->basic == TOP)
 		return new ConstantPropAnalysisFlow(TOP);
 

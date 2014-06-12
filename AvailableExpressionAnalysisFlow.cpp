@@ -2,8 +2,7 @@
 
  * Flow.cpp
  *
- *  Created on: 2014-05-29
- *      Author: jtestard
+ *  Created by Costas Zarifis on 22/05/2014.
  */
 
 #include "AvailableExpressionAnalysisFlow.h"

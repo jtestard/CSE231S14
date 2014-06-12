@@ -1,5 +1,7 @@
 /*
  *
+ * Created by Costas Zarifis on 22/05/2014.
+ *
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
