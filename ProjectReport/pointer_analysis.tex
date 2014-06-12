@@ -49,7 +49,6 @@ F \sqcap F' & & \lra & & F \cap F' \quad \text{(set intersection)}
 \subsubsection{Flow Functions}
 We present here the scope of instructions covered by our pointer analysis. For each instruction, we define $F_{IN}$ and $F_{OUT}$ as the input and output of the flow functions for each instruction, respectively. All upper case literals are variables and all lower case literals are constants.
 
-{\footnotesize
 \begin{align*} 
 & X \la NULL & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
 & X \la Y + c & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
@@ -58,7 +57,7 @@ We present here the scope of instructions covered by our pointer analysis. For e
 & *X \la Y & : & & F_{OUT} = F_{IN} \cup \{W \ra Z | X \ra W \wedge Y \ra Z \} \\
 & X \la *Y & : & & F_{OUT} = F_{IN} \cup \{X \ra Z | Y \ra W \wedge W \ra Z \} 
 \end{align*}
-}%
+%
 
 Notice that scope of instructions covered could be larger and these out-of-scope instructions fall into two categories. Instructions such as $X \la c$ (where $X$ is a pointer variable) are explicitly forbidden in C++ language. Instructions such as $*X \ra *Y$ are legitimate candidates but where not implemented because of time constraints. 
 \subsection{Implementation}

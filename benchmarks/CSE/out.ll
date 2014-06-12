@@ -25,15 +25,30 @@ declare i32 @__cxa_atexit(void (i8*)*, i8*, i8*) #1
 ; Function Attrs: nounwind uwtable
 define i32 @main() #2 {
 entry:
-  %conv = zext i16 2 to i32
-  %shr = ashr i32 %conv, 2
-  %conv1 = trunc i32 %shr to i16
+  %cmp = fcmp oeq float 0x4015333340000000, 6.000000e+00
+  br i1 %cmp, label %if.then, label %if.else
+
+if.then:                                          ; preds = %entry
   %add = fadd float 0x4015333340000000, 0x402E9999A0000000
-  %conv2 = fptosi float %add to i32
-  %add3 = add nsw i32 %conv2, 9
-  %add4 = add nsw i32 %conv2, %add3
-  %add5 = add nsw i32 %conv2, %add3
-  %add6 = add nsw i32 %add5, %add3
+  %conv = fptosi float %add to i32
+  %add1 = add nsw i32 10, 10
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  %add2 = fadd float 0x4015333340000000, 0x402E9999A0000000
+  %conv3 = fptosi float %add2 to i32
+  %add4 = add nsw i32 10, 10
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %c.0 = phi i32 [ %conv, %if.then ], [ %conv3, %if.else ]
+  %d.0 = phi i32 [ %add1, %if.then ], [ %add4, %if.else ]
+  %conv5 = zext i16 2 to i32
+  %shr = ashr i32 %conv5, 2
+  %conv6 = trunc i32 %shr to i16
+  %add7 = add nsw i32 %c.0, %d.0
+  %add8 = add nsw i32 %c.0, %d.0
+  %add9 = add nsw i32 %add8, %d.0
   ret i32 0
 }
 

@@ -1,5 +1,7 @@
 /*
  *
+ * Created by Costas Zarifis on 22/05/2014.
+ *
  * Requirements :
  * 	-	Every static analysis must extend the StaticAnalysis class.
  * 	-	The listNode structure is used to store the results of the analysis.
@@ -29,9 +31,9 @@ using namespace llvm;
 using namespace std;
 
 //Static Analysis class
-class AvailableExpressionAnalysis : public StaticAnalysis {
+class AvailableExpressionAnalysis: public StaticAnalysis {
 
-public :
+public:
 
 	AvailableExpressionAnalysis(Function &F);
 	/*
@@ -47,28 +49,25 @@ public :
 	Flow* initialize();
 
 protected:
-	AvailableExpressionAnalysisFlow *executeFAddInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeAddInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeFSubInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeSubInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeFMulInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeMulInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeFDivInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeSDivInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-	AvailableExpressionAnalysisFlow *executeCastInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
 
-
-	AvailableExpressionAnalysisFlow *executeFOpInst(AvailableExpressionAnalysisFlow* in, Instruction* inst, unsigned opcode);
-	AvailableExpressionAnalysisFlow *executeOpInst(AvailableExpressionAnalysisFlow* in, Instruction* inst, unsigned opcode);
-	AvailableExpressionAnalysisFlow *executePhiInst(AvailableExpressionAnalysisFlow* in, Instruction* inst);
-
+	AvailableExpressionAnalysisFlow *executeUnaryInst(
+			AvailableExpressionAnalysisFlow* in, Instruction* inst,
+			unsigned opcode);
+	AvailableExpressionAnalysisFlow *executeFOpInst(
+			AvailableExpressionAnalysisFlow* in, Instruction* inst,
+			unsigned opcode);
+	AvailableExpressionAnalysisFlow *executeOpInst(
+			AvailableExpressionAnalysisFlow* in, Instruction* inst,
+			unsigned opcode);
+	AvailableExpressionAnalysisFlow *executePhiInst(
+			AvailableExpressionAnalysisFlow* in, Instruction* inst);
 
 private:
-	string computeOp(string leftVal, string rightVal, unsigned opcode);
-
-
+	string computeBinaryOp(string leftVal, string rightVal, unsigned opcode);
+	string computeUnaryOp(string leftVal, unsigned opcode);
+	bool isEqual(AvailableExpressionAnalysisFlow* in, Instruction *inst);
 	//Variables are represented as strings.
-	map<int, int > analysisMap;
+	map<string, string> analysisMap;
 
 };
 #endif

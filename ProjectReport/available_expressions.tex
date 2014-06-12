@@ -1,1 +1,78 @@
+Common subexpression elimination (CSE), is an optimization that searches for instances of identical expressions (i.e., they all evaluate to the same value), and analyzes whether it is worthwhile replacing them with a single variable holding the computed value. We covered CSE thoroughly in class, but in order to actually perform CSE we need to have the set of available expressions for a specific program, and this is what this pass does, it provides the set of expressions that don't have to be recomputed. This analysis is also top-down as every other analysis described here.
+
+
+\subsection*{Lattice, Flow \& Flow Functions}
+
+Once again, maps were used to represent the flow information. Specifically in this case, we used a map that had a string both as a key and as a value. Specifically, the key for a statement like this: "\%add2 = add nsw i32 \%add, \%d.0" would be this:"\%add2" and the value would be the following: "add nsw i32 \%add11, \%d.0". We initially had the reversed assignment but we soon figured out that it could result in a smaller set of out flow information. What this means is that we would end up having less possible choices to replace a certain expression with a variable (this could cause issues within branches).
+
+The domain for this analysis is: D = Powerset($\{x\ra E|x\in vars \wedge E\in expressions\}$). Again we didn't have to explicitly represent the lattice, it is implicitly described by the implemented flow functions and the functions that reside in the Flow class. All the methods (including the join) inside the Available Expression Analysis Flow class follow the same logic as they did in the Constant Propagation Analysis Flow. As previously stated, we are using the mem2reg pass and we run this analysis on the output of that pass, for the reasons why explained thoroughly in the "Stack-Allocated Variables to Registers, SSA and Merging" section. Since we are using SSA, we don't have to worry about re-assigning more than one expressions to a variable, therefore we don't have to delete elements from the map for that same reason. Basically, every time we process a new statement we add a new record in our map, if we have loops we simple re-assign the expression to a certain key until we reach a fixed point.
+
+
+
+
+The merging works similarly as before. Normally we would have to delete a certain key-value record if the value we received from the two branches was different, however due to SSA we don't have to worry about that. In order, to thoroughly cover merging let's have a look at listing \ref{mAEA}. In this example a, b, c and g are floating point variables and they get values 5 and 15 correspondingly. It is clear that the expression c = a+b appears in both branches, so $c\ra"a+b"$ should be maintained after the merging. In the ll code and particularly in the phi nodes we can clearly see that \%c.0 will be assigned to the expression "fadd float 1.500000e+01, 1.000000e+01" because both \%add and \%add2 will be pointing to the same expression. If there was even a slight difference to this expression then \%c.0 would not be added to the map.
+
+
+Now, let's have a look at variable d. As we mentioned previously a, b, c and g are floating point variables, but d is an integer. So that means that if we try to assign a float to d it will first be casted to an int. As we see in the ll code an intermediate statement is added by LLVM that performs the casting. Additionally, due to the SSA that takes place the addition will be assigned to \%add1 and \%add3 for the taken and the non-taken branch correspondingly. Furthermore, the casting expression will be assigned to \%conv and \%conv4 correspondingly for the two branches. However, when we reach the phi node we will try to perform the merging of these instructions but we will eventually end up not including \%d.0 to the output set, because the two expressions we will try to merge are the following: "fptosi float \%add1 to i32" and "fptosi float \%add3 to i32" and since they are not the same we will omit \%d.0. This is an interesting case that shows that passes should be run in a specific order. If we run this analysis then we run CSE and then re-run both in the same order this problem will be resolved.
+
+
+\begin{lstlisting}[caption=Merging in Available Expression Analysis preview, label=mAEA]
+// ... Piece of C++ code ...
+float g,a,b,c;
+int d;
+// ... More Code ...
+// A value is assigned to
+// a, b and g at this point
+// ... More Code ...
+  if(statement){
+	  c = a+b;
+	  d = g+10;
+  }
+  else{
+	  c = a+b;
+	  d = g+10;
+  }
+
+// ... Coresponding LL code after ...
+// ... mem2reg has been applied   ...
+
+if.then:                                          ; preds = %entry
+  %add = add nsw i32 5, 15
+  %add1 = fadd float 1.500000e+01, 1.000000e+01
+  %conv = fptosi float %add1 to i32
+  br label %if.end
+
+if.else:                                          ; preds = %entry
+  %add2 = add nsw i32 5, 15
+  %add3 = fadd float 1.500000e+01, 1.000000e+01
+  %conv4 = fptosi float %add3 to i32
+  br label %if.end
+
+if.end:                                           ; preds = %if.else, %if.then
+  %d.0 = phi i32 [ %conv, %if.then ], 
+        [ %conv4, %if.else ]
+  %c.0 = phi i32 [ %add, %if.then ], 
+        [ %add2, %if.else ]
+  br label %for.cond
+  
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
