@@ -764,7 +764,7 @@ RangeAnalysisFlow* RangeAnalysis::executeOpInst(RangeAnalysisFlow* in,
 				leftRange = f->value.find(leftOperand->getName())->second;
 				float rightVal = CIRight->getZExtValue();
 				rightRange.upper = rightVal;
-				rightRange.upper = rightVal;
+				rightRange.lower = rightVal;
 				resRange = computeOpRange(leftRange, rightRange, opcode);
 
 				//float resVal = leftVal + rightVal;

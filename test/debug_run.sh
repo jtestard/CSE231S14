@@ -7,7 +7,7 @@ export PROJ2BENCHMARKS="${CSE231SRC}/benchmarks"
 make all
 
 #Compile benchmarks
-#echo "COMPILING BENCHMARKS"
+echo "COMPILING BENCHMARKS"
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.cpp -o $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc
 llvm-dis $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc
@@ -16,6 +16,12 @@ clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENC
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/CSE/simplecp.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
+llvm-dis $PROJ2BENCHMARKS/CSE/simplecp.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/rangeAnalysis/simplecp.cpp -o $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
+llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
+opt -mem2reg $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc > $PROJ2BENCHMARKS/rangeAnalysis/memsimplecp.bc
+llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/memsimplecp.bc
 
 #Dummy optimization
 if [ "$1" == "dummy" ]
@@ -47,6 +53,14 @@ then
 	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
 	opt -load $LLVMLIB/CSE231.so -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
+fi
+
+if [ "$1" == "RangeAnalysis" ]
+then
+	echo "RANGE ANALYSIS"
+	opt -mem2reg -instnamer $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc > $PROJ2BENCHMARKS/rangeAnalysis/named.bc
+	opt -load $LLVMLIB/CSE231.so -rangeAnalysisOptimization < $PROJ2BENCHMARKS/rangeAnalysis/named.bc -analyze
+	llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/named.bc
 fi
 
 #echo "DUMMY CONST PROP"

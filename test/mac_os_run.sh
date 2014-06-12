@@ -16,6 +16,10 @@ clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/constantProp/simplecp.cpp -o $PROJ2BENC
 llvm-dis $PROJ2BENCHMARKS/constantProp/simplecp.bc
 clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/CSE/simplecp.cpp -o $PROJ2BENCHMARKS/CSE/simplecp.bc
 llvm-dis $PROJ2BENCHMARKS/CSE/simplecp.bc
+clang -O0 -emit-llvm -c $PROJ2BENCHMARKS/rangeAnalysis/simplecp.cpp -o clang $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
+llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc
+opt -mem2reg $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc > $PROJ2BENCHMARKS/memsimplecp.bc
+llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/memsimplecp.bc
 
 #Dummy optimization
 if [ "$1" == "dummy" ]

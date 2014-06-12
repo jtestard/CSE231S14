@@ -149,7 +149,7 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 		}
 	}
 
-	for (map<string, RangeDomainElement>::iterator it = other->value.begin();
+	/*for (map<string, RangeDomainElement>::iterator it = other->value.begin();
 			it != other->value.end(); it++) {
 
 		if (this->value.find(it->first) == this->value.end()) {
@@ -174,7 +174,7 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 			// the (implicit) "set"
 
 		}
-	}
+	}*/
 
 //	errs()<< "JOINING!\n";
 //	for (map<string, float>::iterator it = f->value.begin();
