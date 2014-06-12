@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 source startenv.sh
 export CSE231SRC="${CSE231ROOT}/llvm/src/lib/CSE231"
 export INSTRUMENTATION="${CSE231SRC}/instrumentation"
@@ -27,9 +27,8 @@ fi
 if [ "$1" == "pointerAnalysis" ]
 then
 	echo "POINTER ANALYSIS OPTIMIZATION"
-	#opt -load $LLVMLIB/CSE231.dylib -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze
-	opt -load $LLVMLIB/CSE231.dylib -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc -analyze
-	#opt -load $LLVMLIB/CSE231.dylib -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/gcd.bc -analyze >> gcd.json
+	opt -load $LLVMLIB/CSE231.dylib -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysis.bc -analyze >> $PROJ2BENCHMARKS/results/pointerAnalysisRegularTypes.output
+	opt -load $LLVMLIB/CSE231.dylib -pointerAnalysisOptimization < $PROJ2BENCHMARKS/pointerAnalysis/pointerAnalysisExtra.bc -analyze >> $PROJ2BENCHMARKS/results/pointerAnalysisFancyTypes.output
 fi
 
 if [ "$1" == "constantPropagation" ]
@@ -38,7 +37,7 @@ then
 	opt -mem2reg -instnamer < $PROJ2BENCHMARKS/constantProp/simplecp.bc > $PROJ2BENCHMARKS/constantProp/out.opt
 	mv $PROJ2BENCHMARKS/constantProp/out.opt $PROJ2BENCHMARKS/constantProp/out.bc
 	llvm-dis $PROJ2BENCHMARKS/constantProp/out.bc
-	opt -load $LLVMLIB/CSE231.dylib -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze
+	opt -load $LLVMLIB/CSE231.dylib -ConstantPropAnalysisOptimization < $PROJ2BENCHMARKS/constantProp/out.bc -analyze >> $PROJ2BENCHMARKS/results/constantProp.output
 fi
 if [ "$1" == "CSE" ]
 then
@@ -46,12 +45,12 @@ then
 	opt -load -instnamer $LLVMLIB/LLVMHello.dylib -mem2reg < $PROJ2BENCHMARKS/CSE/simplecp.bc > $PROJ2BENCHMARKS/CSE/out.opt
 	mv $PROJ2BENCHMARKS/CSE/out.opt $PROJ2BENCHMARKS/CSE/out.bc
 	llvm-dis $PROJ2BENCHMARKS/CSE/out.bc
-	opt -load $LLVMLIB/CSE231.dylib -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze
+	opt -load $LLVMLIB/CSE231.dylib -AvailableExpressionAnalysisOptimization < $PROJ2BENCHMARKS/CSE/out.bc -analyze >> $PROJ2BENCHMARKS/results/AvailableExpressions.output
 fi
 if [ "$1" == "RangeAnalysis" ]
 then
 	echo "RANGE ANALYSIS"
 	opt -mem2reg -instnamer $PROJ2BENCHMARKS/rangeAnalysis/simplecp.bc > $PROJ2BENCHMARKS/rangeAnalysis/named.bc
-	opt -load $LLVMLIB/CSE231.dylib -rangeAnalysisOptimization < $PROJ2BENCHMARKS/rangeAnalysis/named.bc -analyze
+	opt -load $LLVMLIB/CSE231.dylib -rangeAnalysisOptimization < $PROJ2BENCHMARKS/rangeAnalysis/named.bc -analyze >> $PROJ2BENCHMARKS/results/RangeAnalysis.output
 	llvm-dis $PROJ2BENCHMARKS/rangeAnalysis/named.bc
 fi

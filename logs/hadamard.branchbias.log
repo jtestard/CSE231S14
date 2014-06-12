@@ -1,6 +1,0 @@
-*******************************************
-PASS: The output matches the golden output!
-*******************************************
-FunctionName	Bias	Taken	Found
-fastWalshTransform	0.839243	710	846
-main	0.988417	256	259
