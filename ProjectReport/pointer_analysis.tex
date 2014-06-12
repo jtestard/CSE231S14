@@ -33,7 +33,8 @@ $X \la *Y$ &
 \label{pointerAnalysisTable}
 \end{table*}
 
-The pointer analysis which we implemented is only intra-procedural, although it could be easily extended across procedures through our framework. The pointer analysis theoretical framework has already been discussed in class and on the midterm, but the implemented work is more involved given that a single instruction may span across multiple instructions in LLVM bitcode. Our pointer analysis is C++ oriented. That is, we analyze C++ programs, and the LLVM bitcode is only the medium upon the analysis is performed.
+The pointer analysis which we implemented is only intra-procedural, although it could be easily extended across procedures through our framework. The pointer analysis theoretical framework has already been discussed in class and on the midterm, but the implemented work is more involved given that a single instruction may span across multiple instructions in LLVM bitcode. Our pointer analysis is C++ oriented. That is, we analyze C++ programs, and the LLVM bitcode is only the medium upon the analysis is performed. The pointer analysis client is implemented in the \code{PointerAnalysis} class (which extends the \code{StaticAnalysis} class), the \code{PointerAnalysisFlow} class (which extends the \code{Flow} class) and the \code{pointerAnalysisPass} (which can be called by \code{opt} and includes instances of the \code{PointerAnalysis} class).
+
 \subsection{Lattice \& Flow Functions}
 In order to define the pointer analysis flow in C++, we introduce the concept of \emph{pointer} and \emph{non-pointer} variables. The information computed at each edge (a.k.a flow) is represented by a map from pointer variables to variables (pointer or non-pointer). When defining the lattice, we disregard the typing restrictions of C++. These will become relevant in the implementation. 
 \subsubsection{Lattice}
@@ -47,6 +48,7 @@ F \sqcap F' & & \lra & & F \cap F' \quad \text{(set intersection)}
 \end{align*}
 \subsubsection{Flow Functions}
 We present here the scope of instructions covered by our pointer analysis. For each instruction, we define $F_{IN}$ and $F_{OUT}$ as the input and output of the flow functions for each instruction, respectively. All upper case literals are variables and all lower case literals are constants.
+
 {\footnotesize
 \begin{align*} 
 & X \la NULL & : & & F_{OUT} = F_{IN} - \{X \ra Z | Z \in Vars \} \\
@@ -60,5 +62,16 @@ We present here the scope of instructions covered by our pointer analysis. For e
 
 Notice that scope of instructions covered could be larger and these out-of-scope instructions fall into two categories. Instructions such as $X \la c$ (where $X$ is a pointer variable) are explicitly forbidden in C++ language. Instructions such as $*X \ra *Y$ are legitimate candidates but where not implemented because of time constraints. 
 \subsection{Implementation}
-Each mathematical instruction is identified by its corresponding C++ and LLVM code snippets, which are available on table \ref{pointerAnalysisTable}. When the \code{Flow* executeFlowFunction()} is executed, the instruction's opcode is parsed and the computation performed is selected using switch statements as follows :
+Each mathematical instruction is identified by its corresponding C++ and LLVM code snippets, which are available on table \ref{pointerAnalysisTable}. The table assumes the \emph{mem2reg} pass has not yet called been called, therefore all variable names are still available. Notice as well that the compilation of the C++ code shown on the left produces more LLVM instructions than those shown on the right. In particular, \code{alloca} instructions are not featured here. This is because these LLVM instructions displayed are sufficient to understand the behavior of the C++ code analyzed.
+
+However, the context flow graph refers to LLVM instructions, not C++ instructions. To complicate things, most of the LLVM instructions necessary for the analysis are combinations of \code{load} and \code{store} instructions with different operands. Fortunately, for each C++ instruction, the order of the equivalent LLVM instructions is deterministic, allowing us to recognize patterns across multiple consecutive instructions and understand which C++ instruction is described. 
+
+The \code{Flow* executeFlowFunction()} has the responsibility to recognize which pattern is being encountered and when it does, to delegate the processing work to some more specific method particular to the \code{PointerAnalysis} class.  
+When no pattern has been recognized, then the default behavior is to return a copy of the input flow.
+
+The computed information is represented in the \code{value} field of the \code{PointerAnalysisFlow} class. Each variable is represented by a string, and the variables that it points to by a set of strings. The \code{bool equals(Flow* other)} and \code{Flow* join(Flow* other)} methods implement a deep equality and a copy of the union respectively, of the \code{value} fields of \code{this} and \code{other} flow elements.
+
+\subsection*{Benchmarks Results}
+
+The test programs
 
