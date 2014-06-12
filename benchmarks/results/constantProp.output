@@ -331,3 +331,336 @@ Print CFG (with flow) :
 		]
 	}
 ]
+Printing analysis 'Constant Propagation Analysis Optimization Pass' for function 'main':
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  %tmp = fcmp oeq float 0x4214000000000000, 6.000000e+00",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  br i1 %tmp, label %bb1, label %bb10",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"},
+			{"Edge" : [2,13],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  %tmp2 = fadd float 0x4214000000000000, 0x4249000000000000",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [3,4],"Flow" : {["tmp2" : 2.36223e+11] }}
+		]
+	},
+	"4" : {
+		"representation" : "  %tmp3 = fptosi float %tmp2 to i16",
+		"incoming" : [
+			{"Edge" : [3,4],"Flow" : {["tmp2" : 2.36223e+11] }}
+		],
+		"outgoing" : [
+			{"Edge" : [4,5],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] }}
+		]
+	},
+	"5" : {
+		"representation" : "  %tmp4 = fadd float 0x4214000000000000, 0x4249000000000000",
+		"incoming" : [
+			{"Edge" : [4,5],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [5,6],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] }}
+		]
+	},
+	"6" : {
+		"representation" : "  %tmp5 = fptosi float %tmp4 to i16",
+		"incoming" : [
+			{"Edge" : [5,6],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] }}
+		],
+		"outgoing" : [
+			{"Edge" : [6,7],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] }}
+		]
+	},
+	"7" : {
+		"representation" : "  %tmp6 = fadd float 0x4214000000000000, 0x4249000000000000",
+		"incoming" : [
+			{"Edge" : [6,7],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [7,8],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] }}
+		]
+	},
+	"8" : {
+		"representation" : "  %tmp7 = fptosi float %tmp6 to i16",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] }}
+		],
+		"outgoing" : [
+			{"Edge" : [8,9],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] }}
+		]
+	},
+	"9" : {
+		"representation" : "  %tmp8 = sext i16 %tmp7 to i32",
+		"incoming" : [
+			{"Edge" : [8,9],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [9,10],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] ,["tmp8" : -2.14748e+09] }}
+		]
+	},
+	"10" : {
+		"representation" : "  %tmp9 = add nsw i32 %tmp8, 10",
+		"incoming" : [
+			{"Edge" : [9,10],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] ,["tmp8" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [10,11],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] ,["tmp8" : -2.14748e+09] ,["tmp9" : -2.14748e+09] }}
+		]
+	},
+	"11" : {
+		"representation" : "  store i32 %tmp9, i32* undef, align 4",
+		"incoming" : [
+			{"Edge" : [10,11],"Flow" : {["tmp2" : 2.36223e+11] ,["tmp3" : -2.14748e+09] ,["tmp4" : 2.36223e+11] ,["tmp5" : -2.14748e+09] ,["tmp6" : 2.36223e+11] ,["tmp7" : -2.14748e+09] ,["tmp8" : -2.14748e+09] ,["tmp9" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [11,12],"Flow" : "top"}
+		]
+	},
+	"12" : {
+		"representation" : "  br label %bb15",
+		"incoming" : [
+			{"Edge" : [11,12],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [12,19],"Flow" : "top"}
+		]
+	},
+	"13" : {
+		"representation" : "  %tmp11 = fadd float 0x4214000000000000, 0x4249000000000000",
+		"incoming" : [
+			{"Edge" : [2,13],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [13,14],"Flow" : {["tmp11" : 2.36223e+11] }}
+		]
+	},
+	"14" : {
+		"representation" : "  %tmp12 = fptosi float %tmp11 to i16",
+		"incoming" : [
+			{"Edge" : [13,14],"Flow" : {["tmp11" : 2.36223e+11] }}
+		],
+		"outgoing" : [
+			{"Edge" : [14,15],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] }}
+		]
+	},
+	"15" : {
+		"representation" : "  %tmp13 = sext i16 %tmp12 to i32",
+		"incoming" : [
+			{"Edge" : [14,15],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [15,16],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] ,["tmp13" : -2.14748e+09] }}
+		]
+	},
+	"16" : {
+		"representation" : "  %tmp14 = add nsw i32 %tmp13, 9",
+		"incoming" : [
+			{"Edge" : [15,16],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] ,["tmp13" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [16,17],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] ,["tmp13" : -2.14748e+09] ,["tmp14" : -2.14748e+09] }}
+		]
+	},
+	"17" : {
+		"representation" : "  store i32 %tmp14, i32* undef, align 4",
+		"incoming" : [
+			{"Edge" : [16,17],"Flow" : {["tmp11" : 2.36223e+11] ,["tmp12" : -2.14748e+09] ,["tmp13" : -2.14748e+09] ,["tmp14" : -2.14748e+09] }}
+		],
+		"outgoing" : [
+			{"Edge" : [17,18],"Flow" : "top"}
+		]
+	},
+	"18" : {
+		"representation" : "  br label %bb15",
+		"incoming" : [
+			{"Edge" : [17,18],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [18,19],"Flow" : "top"}
+		]
+	},
+	"19" : {
+		"representation" : "  %c.0 = phi i16 [ %tmp7, %bb1 ], [ %tmp12, %bb10 ]",
+		"incoming" : [
+			{"Edge" : [12,19],"Flow" : "top"},
+			{"Edge" : [18,19],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [19,20],"Flow" : "top"}
+		]
+	},
+	"20" : {
+		"representation" : "  br label %bb16",
+		"incoming" : [
+			{"Edge" : [19,20],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [20,21],"Flow" : "top"}
+		]
+	},
+	"21" : {
+		"representation" : "  %temp.0 = phi i32 [ 0, %bb15 ], [ %tmp19, %bb20 ]",
+		"incoming" : [
+			{"Edge" : [20,21],"Flow" : "top"},
+			{"Edge" : [28,21],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [21,22],"Flow" : "top"}
+		]
+	},
+	"22" : {
+		"representation" : "  %i.0 = phi i32 [ 0, %bb15 ], [ %tmp21, %bb20 ]",
+		"incoming" : [
+			{"Edge" : [21,22],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [22,23],"Flow" : "top"}
+		]
+	},
+	"23" : {
+		"representation" : "  %tmp17 = icmp slt i32 %i.0, 10",
+		"incoming" : [
+			{"Edge" : [22,23],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [23,24],"Flow" : "top"}
+		]
+	},
+	"24" : {
+		"representation" : "  br i1 %tmp17, label %bb18, label %bb22",
+		"incoming" : [
+			{"Edge" : [23,24],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [24,25],"Flow" : "top"},
+			{"Edge" : [24,29],"Flow" : "top"}
+		]
+	},
+	"25" : {
+		"representation" : "  %tmp19 = add nsw i32 %temp.0, 1",
+		"incoming" : [
+			{"Edge" : [24,25],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [25,26],"Flow" : "top"}
+		]
+	},
+	"26" : {
+		"representation" : "  br label %bb20",
+		"incoming" : [
+			{"Edge" : [25,26],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [26,27],"Flow" : "top"}
+		]
+	},
+	"27" : {
+		"representation" : "  %tmp21 = add nsw i32 %i.0, 1",
+		"incoming" : [
+			{"Edge" : [26,27],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [27,28],"Flow" : "top"}
+		]
+	},
+	"28" : {
+		"representation" : "  br label %bb16",
+		"incoming" : [
+			{"Edge" : [27,28],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [28,21],"Flow" : "top"}
+		]
+	},
+	"29" : {
+		"representation" : "  %tmp23 = zext i16 2 to i32",
+		"incoming" : [
+			{"Edge" : [24,29],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [29,30],"Flow" : "top"}
+		]
+	},
+	"30" : {
+		"representation" : "  %tmp24 = ashr i32 %tmp23, 2",
+		"incoming" : [
+			{"Edge" : [29,30],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [30,31],"Flow" : "top"}
+		]
+	},
+	"31" : {
+		"representation" : "  %tmp25 = trunc i32 %tmp24 to i16",
+		"incoming" : [
+			{"Edge" : [30,31],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [31,32],"Flow" : "top"}
+		]
+	},
+	"32" : {
+		"representation" : "  %tmp26 = sext i16 %c.0 to i32",
+		"incoming" : [
+			{"Edge" : [31,32],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [32,33],"Flow" : "top"}
+		]
+	},
+	"33" : {
+		"representation" : "  %tmp27 = add nsw i32 %tmp26, 9",
+		"incoming" : [
+			{"Edge" : [32,33],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [33,34],"Flow" : "top"}
+		]
+	},
+	"34" : {
+		"representation" : "  %tmp28 = sext i16 %c.0 to i32",
+		"incoming" : [
+			{"Edge" : [33,34],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [34,35],"Flow" : "top"}
+		]
+	},
+	"35" : {
+		"representation" : "  %tmp29 = add nsw i32 10, %tmp28",
+		"incoming" : [
+			{"Edge" : [34,35],"Flow" : "top"}
+		],
+		"outgoing" : [
+			{"Edge" : [35,36],"Flow" : "top"}
+		]
+	},
+	"36" : {
+		"representation" : "  ret i32 0",
+		"incoming" : [
+			{"Edge" : [35,36],"Flow" : "top"}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
