@@ -7,3 +7,5 @@ instrumentation/dynamic/*.bc
 *.bc
 *.aux
 *.log
+*.ll
+
