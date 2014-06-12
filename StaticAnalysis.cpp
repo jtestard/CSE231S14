@@ -39,15 +39,13 @@ void StaticAnalysis::runWorklist() {
 	while(!worklist.empty()){
 		//It is assumed that any node popped from the worklist has a complete "in" flow.
 		ListNode* current = worklist.front();
-//		errs() << "New node..\n";
 		//GET INPUT FLOW AND JOIN INTO UNIQUE FLOW
 		vector<Flow*> inputFlows;
 		for (unsigned int i = 0 ; i < current->incoming.size() ; i++) {
 			inputFlows.push_back(current->incoming[i]->flow);
 		}
-//		errs() << "Inflow collected...\n";
-		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
 
+		//Since all edges have been initialized to a flow, inputFlows[0] never generates an exception.
 		Flow* in = initialize();
 		in->copy(inputFlows[0]);
 		for (unsigned int i = 1 ; i < inputFlows.size(); i++){
@@ -55,28 +53,21 @@ void StaticAnalysis::runWorklist() {
 			delete in; //The output is a copy of the existing flows, therefore we dont want to keep the old verison of in.
 			in = f;
 		}
-//		errs() << "Inflow joined...\n";
 
 		//EXECUTE THE FLOW FUNCTION
 		Flow* out = executeFlowFunction(	in,					//Contains all known variable mappings for the flow function
 											current->inst, 		//Instruction to perform flow function on
 											current->index	);	//Basic block index
 
-		errs()<<"out: "<<out->basic<<"\n";
-//TO IDENTIFY BLOCK
-		//Flow* out = executeFlowFunction(in,current->inst, current->index);
-		//		errs() << "Flow function executed...\n";
 
 		//This will executed the flow function
 		for(unsigned int i = 0 ; i < current->outgoing.size(); i++) {
 			//GET NEW OUTPUT INFORMATION BY JOINING WITH EXISTING FLOW IN EDGE
-//			errs() << "About to join with existing output...\n";
 			Flow* new_out = out->join(current->outgoing[i]->flow);
-//			errs() << "Joined with existing output...\n";
 			//IF INFORMATION HAS CHANGED, THEN PUSH TO WORKLIST
-			errs()<<"new_out: "<<new_out->basic<<"\n";
+			errs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
 			if (!(new_out->equals(current->outgoing[i]->flow))){
-				//errs() << "new output pushed to the worklist...\n";
+				errs()<< current->index << " : new_out: "<<new_out->basic<<"\n";
 				current->outgoing[i]->flow->copy(new_out);
 				worklist.push(current->outgoing[i]->destination);
 			}

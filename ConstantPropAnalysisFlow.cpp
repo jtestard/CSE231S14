@@ -14,6 +14,8 @@
 bool ConstantPropAnalysisFlow::equals(Flow* otherSuper) {
 	ConstantPropAnalysisFlow* other =
 			static_cast<ConstantPropAnalysisFlow*>(otherSuper);
+	if (this->isBasic() || other->isBasic())
+		return this->basicEquals(other);
 	if (other->value.size() != this->value.size())
 		return false;
 	for (map<string, float>::const_iterator it = this->value.begin();
@@ -39,14 +41,6 @@ string ConstantPropAnalysisFlow::jsonString() {
 	//Value has something inside
 	stringstream ss;
 	map<string, float>::const_iterator it = this->value.begin();
-	/*ss << "{\"" << it->first << "\" : [ ";
-	 set<string>::iterator its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << " ] ";
-	 */
 	ss << "{";
 	int counter = 0;
 	for (; it != this->value.end(); it++) {
@@ -62,35 +56,7 @@ string ConstantPropAnalysisFlow::jsonString() {
 		counter++;
 	}
 	ss << "}";
-//	errs() << "After jSonString()...\n";
 	return ss.str();
-
-	/*
-	 *
-	 stringstream ss;
-	 map<string, set<string> >::const_iterator it = this->value.begin();
-	 ss << "{\"" << it->first << "\" : [ ";
-	 set<string>::iterator its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << " ] ";
-	 for (; it != this->value.end() ; it++) {
-	 ss << "\"" << it->first << "\" : [ ";
-	 its=it->second.begin();
-	 ss << *its << " "; its++;
-	 for (; its != it->second.end() ; its++) {
-	 ss << ", " << *its;
-	 }
-	 ss << "] ";
-	 }
-	 ss << "}";
-	 return ss.str();
-	 *
-	 *
-	 *
-	 */
 }
 
 void ConstantPropAnalysisFlow::copy(Flow* rhs) {
@@ -194,30 +160,6 @@ Flow* ConstantPropAnalysisFlow::join(Flow* otherSuper) {
 
 		}
 	}
-
-//	errs()<< "JOINING!\n";
-//	for (map<string, float>::iterator it = f->value.begin();
-//				it != f->value.end(); it++) {
-//		errs()<< it->first << " -> " << it->second << "\n";
-//	}
-
-	//Get all keys
-	/*set<string> keys;
-	 for (map<string, set<string> >::iterator it = this->value.begin() ; it != this->value.end() ; it++)
-	 keys.insert(it->first);
-	 for (map<string, set<string> >::iterator it = other->value.begin() ; it != other->value.end() ; it++)
-	 keys.insert(it->first);
-
-	 for (set<string>::iterator it = keys.begin() ; it != keys.end() ; it++) {
-	 string key = *it;
-	 set<string> values;
-	 for (set<string>::iterator j = this->value[key].begin(); j != this->value[key].end() ; j++)
-	 values.insert(*j);
-	 for (set<string>::iterator j = other->value[key].begin(); j != other->value[key].end() ; j++)
-	 values.insert(*j);
-	 f->value[key] = values;
-	 }
-	 */
 	return f;
 
 }

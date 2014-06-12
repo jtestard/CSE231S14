@@ -60,21 +60,9 @@
  * This method is expected to do much more when overloaded.
  */
 Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int NodeId){
-//	errs() << "Instruction Opcode : " << inst->getOpcode() << ", get name : "
-//			<< inst->getOpcodeName() << "\n";
 	ConstantPropAnalysisFlow* inFlow =
 			static_cast<ConstantPropAnalysisFlow*>(in);
 	ConstantPropAnalysisFlow * output;
-
-
-
-
-//	errs()<< "EXECUTING FUNCTION!\n";
-//	for (map<string, float>::iterator it = inFlow->value.begin();
-//			it != inFlow->value.end(); it++) {
-//		errs() << it->first << " -> " << it->second << "\n";
-//	}
-
 
 	switch (inst->getOpcode()) {
 
@@ -86,7 +74,6 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int
 	case SHL:
 	case LSHR:
 	case ASHR:
-		//output = executeAddInst(inFlow, inst);
 		output = executeOpInst(inFlow, inst, inst->getOpcode());
 		break;
 	case FADD:
@@ -94,7 +81,6 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int
 	case FMUL:
 	case FDIV:
 	case FREM:
-		//output = executeFDivInst(inFlow, inst);
 		output = executeFOpInst(inFlow, inst, inst->getOpcode());
 		break;
 
@@ -126,7 +112,6 @@ Flow* ConstantPropAnalysis::executeFlowFunction(Flow *in, Instruction *inst, int
 		// If I reach this point it means that I have a pointer...
 		// Return TOP!
 		output = retTop();
-		errs()<< "yo: "<< output->basic<<"\n";
 		break;
 
 
@@ -157,14 +142,7 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 	 CastInst *castInst = dyn_cast<CastInst>(instruction);
 
 
-	 	errs() << "Instruction Opcode : " << instruction->getOpcode() << ", get name : "
-	 			<< instruction->getOpcodeName() << "\n";
-
-
 	Value* casting = instruction->getOperand(0); //RO
-
-	errs() << "casting! \n";
-	errs() << castInst->getDestTy()<<"\n";
 
 
 	if (!dyn_cast<Constant>(retVal)) {
@@ -173,10 +151,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 			// Cool they are both variables. We just need to forward the value
 			if (f->value.find(casting->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
-
-				errs() << "Undefined variable!\n";
-				errs() << "Variable: " << casting->getName()
-						<< " was not found \n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -192,7 +166,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeCastInst(
 					forwardVal = (float) forwardVal;
 				else if (ttype->isIntegerTy()){
 					forwardVal = (int) forwardVal;
-					errs() << "integer size: "<< ttype->getIntegerBitWidth() <<"\n";
 				}
 
 				value[retVal->getName()] = forwardVal;
@@ -297,18 +270,11 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 	map<string, float> value;
 	Value *K = instruction;
 	string regName = K->getName();
-	errs() << "Instruction : " << regName << " left " << leftOperand->getName()
-			<< " right " << rightOperand->getName() << "\n";
 
 	// Ok, cool! Both the right and the left operand is a variable...
 	if ((f->value.find(leftOperand->getName()) == f->value.end())
 			| (f->value.find(rightOperand->getName()) == f->value.end())) {
 		// Oh no! Read the error message!
-		errs() << "Oh no! Something went terribly wrong!\n";
-		errs() << "Undefined variable!\n";
-		errs() << "Apparently the left operand of the op is";
-		errs() << " a variable but this is the first time we ";
-		errs() << "come across this variable!!\n";
 
 	} else {
 		// Hmm, I guess we're good...
@@ -323,8 +289,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executePhiInst(
 
 			float resVal = leftVal;
 			ConstantPropAnalysisFlow* ff = new ConstantPropAnalysisFlow();
-			errs() << leftVal << " " << rightVal << "\n";
-			errs() << "outcome: " << resVal << "\n";
 			value[K->getName()] = resVal;
 			ff->value = value;
 			ConstantPropAnalysisFlow* tmp =
@@ -349,8 +313,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 	map<string, float> value;
 	Value *K = instruction;
 	string regName = K->getName();
-//errs() << "Instruction : " << regName << " left " << leftOperand->getName()
-//		<< " right " << rightOperand->getName() << "\n";
 
 // Checking if left operand is a constant
 	if (ConstantFP *CILeft = dyn_cast<ConstantFP>(leftOperand)) {
@@ -377,11 +339,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 			// ok so the right operand is a variable
 			if (f->value.find(rightOperand->getName()) == f->value.end()) {
 				// Oh no! Read the error message!
-				errs() << "Oh no! Something went wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the right operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 			}
 
 			else {
@@ -414,12 +371,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 			//int leftVal = CILeft->getZExtValue();
 
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
-				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -445,12 +396,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeFOpInst(
 			// Ok, cool! Both the right and the left operand is a variable...
 			if ((f->value.find(leftOperand->getName()) == f->value.end())
 					| (f->value.find(rightOperand->getName()) == f->value.end())) {
-				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -515,12 +460,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 		} else {
 			// ok so the right operand is a variable
 			if (f->value.find(rightOperand->getName()) == f->value.end()) {
-				// Oh no! Read the error message!
-				errs() << "Oh no! Something went wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the right operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 
 			}
 
@@ -554,12 +493,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 			//int leftVal = CILeft->getZExtValue();
 
 			if (f->value.find(leftOperand->getName()) == f->value.end()) {
-				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...
@@ -585,12 +518,6 @@ ConstantPropAnalysisFlow* ConstantPropAnalysis::executeOpInst(
 			// Ok, cool! Both the right and the left operand is a variable...
 			if ((f->value.find(leftOperand->getName()) == f->value.end())
 					| (f->value.find(rightOperand->getName()) == f->value.end())) {
-				// Oh no! Read the error message!
-				errs() << "Oh no! Something went terribly wrong!\n";
-				errs() << "Undefined variable!\n";
-				errs() << "Apparently the left operand of the op is";
-				errs() << " a variable but this is the first time we ";
-				errs() << "come across this variable!!\n";
 
 			} else {
 				// Hmm, I guess we're good...

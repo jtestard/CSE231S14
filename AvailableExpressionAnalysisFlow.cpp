@@ -13,6 +13,8 @@
 bool AvailableExpressionAnalysisFlow::equals(Flow* otherSuper) {
 	AvailableExpressionAnalysisFlow* other =
 			static_cast<AvailableExpressionAnalysisFlow*>(otherSuper);
+	if (this->isBasic() || other->isBasic())
+		return this->basicEquals(other);
 	if (other->value.size() != this->value.size())
 		return false;
 	for (map<string, string>::const_iterator it = this->value.begin();

@@ -13,6 +13,8 @@
  */
 bool PointerAnalysisFlow::equals(Flow* otherSuper) {
 	PointerAnalysisFlow* other = static_cast<PointerAnalysisFlow*>(otherSuper);
+	if (this->isBasic() || other->isBasic())
+		return this->basicEquals(other);
 	if (other->value.size()!=this->value.size())
 			return false;
 	for (map<string, set<string> >::const_iterator it = this->value.begin(); it != this->value.end() ; it++) {

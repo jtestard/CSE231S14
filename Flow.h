@@ -49,6 +49,10 @@ public :
 	 */
 	virtual Flow* join(Flow* other);
 
+	bool isBasic();
+
+	bool basicEquals(Flow* other);
+
 	//You do not have to overload these constructors. You can create additional constructors with different signatures as well in your subclasses.
 	Flow();
 	Flow(string input);

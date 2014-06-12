@@ -15,6 +15,8 @@ bool RangeAnalysisFlow::equals(Flow* otherSuper)
 {
 	RangeAnalysisFlow* other =
 			static_cast<RangeAnalysisFlow*>(otherSuper);
+	if (this->isBasic() || other->isBasic())
+		return this->basicEquals(other);
 	if (other->value.size() != this->value.size())
 		return false;
 	for (map<string, RangeDomainElement>::const_iterator it = this->value.begin();

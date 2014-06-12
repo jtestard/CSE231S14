@@ -22,6 +22,14 @@ string Flow::jsonString(){
 	return "\"" + basic + "\"";
 }
 
+bool Flow::isBasic() {
+	return basic!="";
+}
+
+bool Flow::basicEquals(Flow* other){
+	return this->basic==other->basic;
+}
+
 void Flow::copy(Flow *rhs){
 	this->basic = rhs->basic;
 }
