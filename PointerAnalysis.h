@@ -32,6 +32,7 @@ class PointerAnalysis : public StaticAnalysis {
 public :
 
 	PointerAnalysis(Function &F);
+
 	/*
 	 * This method is called by the run worklist algorithm.
 	 * It has the responsability to figure out what kind of instruction is being used and how to generate the output flow from the input flow for
