@@ -1,0 +1,167 @@
+Printing analysis 'Pointer Analysis Optimization Pass' for function 'main':
+{"Function Name" : "main",
+"Analysis" : [
+	"1" : {
+		"representation" : "  %1 = alloca i32, align 4",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  %a = alloca i32, align 4",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  %b = alloca i32*, align 8",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [3,4],"Flow" : "bottom"}
+		]
+	},
+	"4" : {
+		"representation" : "  %c = alloca i32*, align 8",
+		"incoming" : [
+			{"Edge" : [3,4],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [4,5],"Flow" : "bottom"}
+		]
+	},
+	"5" : {
+		"representation" : "  %n = alloca %struct.Node, align 8",
+		"incoming" : [
+			{"Edge" : [4,5],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [5,6],"Flow" : "bottom"}
+		]
+	},
+	"6" : {
+		"representation" : "  %n_ptr = alloca %struct.Node*, align 8",
+		"incoming" : [
+			{"Edge" : [5,6],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [6,7],"Flow" : "bottom"}
+		]
+	},
+	"7" : {
+		"representation" : "  %d = alloca i8, align 1",
+		"incoming" : [
+			{"Edge" : [6,7],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [7,8],"Flow" : "bottom"}
+		]
+	},
+	"8" : {
+		"representation" : "  store i32 0, i32* %1",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [8,9],"Flow" : "bottom"}
+		]
+	},
+	"9" : {
+		"representation" : "  store i32 2, i32* %a, align 4",
+		"incoming" : [
+			{"Edge" : [8,9],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [9,10],"Flow" : "bottom"}
+		]
+	},
+	"10" : {
+		"representation" : "  store i32* %a, i32** %b, align 8",
+		"incoming" : [
+			{"Edge" : [9,10],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [10,11],"Flow" : {"b" : [ a  ] }}
+		]
+	},
+	"11" : {
+		"representation" : "  %2 = load i32** %b, align 8",
+		"incoming" : [
+			{"Edge" : [10,11],"Flow" : {"b" : [ a  ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [11,12],"Flow" : {"b" : [ a  ] }}
+		]
+	},
+	"12" : {
+		"representation" : "  %3 = getelementptr inbounds i32* %2, i64 1",
+		"incoming" : [
+			{"Edge" : [11,12],"Flow" : {"b" : [ a  ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [12,13],"Flow" : {"b" : [ a  ] }}
+		]
+	},
+	"13" : {
+		"representation" : "  store i32* %3, i32** %c, align 8",
+		"incoming" : [
+			{"Edge" : [12,13],"Flow" : {"b" : [ a  ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [13,14],"Flow" : {"b" : [ a  ] }}
+		]
+	},
+	"14" : {
+		"representation" : "  store %struct.Node* %n, %struct.Node** %n_ptr, align 8",
+		"incoming" : [
+			{"Edge" : [13,14],"Flow" : {"b" : [ a  ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [14,15],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		]
+	},
+	"15" : {
+		"representation" : "  store i8 98, i8* %d, align 1",
+		"incoming" : [
+			{"Edge" : [14,15],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [15,16],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		]
+	},
+	"16" : {
+		"representation" : "  %4 = getelementptr inbounds %struct.Node* %n, i32 0, i32 1",
+		"incoming" : [
+			{"Edge" : [15,16],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [16,17],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		]
+	},
+	"17" : {
+		"representation" : "  store i8* %d, i8** %4, align 8",
+		"incoming" : [
+			{"Edge" : [16,17],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		],
+		"outgoing" : [
+			{"Edge" : [17,18],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		]
+	},
+	"18" : {
+		"representation" : "  ret i32 0",
+		"incoming" : [
+			{"Edge" : [17,18],"Flow" : {"b" : [ a  ] , "n_ptr" : [ n ] }}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+}

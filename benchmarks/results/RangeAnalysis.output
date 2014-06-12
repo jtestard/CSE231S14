@@ -1,0 +1,79 @@
+Printing analysis 'Constant Propagation Analysis Optimization Pass' for function 'main':
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  %tmp = add nsw i32 5, 5",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"2" : {
+		"representation" : "  %tmp1 = icmp eq i32 5, 5",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"3" : {
+		"representation" : "  br i1 %tmp1, label %bb2, label %bb3",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [3,4],"Flow" : {"tmp" : [10,10] }},
+			{"Edge" : [3,5],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"4" : {
+		"representation" : "  br label %bb4",
+		"incoming" : [
+			{"Edge" : [3,4],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [4,6],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"5" : {
+		"representation" : "  br label %bb4",
+		"incoming" : [
+			{"Edge" : [3,5],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [5,6],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"6" : {
+		"representation" : "  %b.0 = phi i32 [ 2, %bb2 ], [ 3, %bb3 ]",
+		"incoming" : [
+			{"Edge" : [4,6],"Flow" : {"tmp" : [10,10] }},
+			{"Edge" : [5,6],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [6,7],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"7" : {
+		"representation" : "  %tmp5 = mul nsw i32 %b.0, 2",
+		"incoming" : [
+			{"Edge" : [6,7],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [7,8],"Flow" : {"tmp" : [10,10] }}
+		]
+	},
+	"8" : {
+		"representation" : "  ret i32 0",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : {"tmp" : [10,10] }}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
