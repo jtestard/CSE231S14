@@ -1,76 +1,148 @@
-Printing analysis 'Constant Propagation Analysis Optimization Pass' for function 'main':
+Printing analysis 'Range Analysis Optimization Pass' for function 'main':
 
 Print CFG (with flow) : 
 "Analysis" : [
 	"1" : {
-		"representation" : "  %tmp = add nsw i32 5, 5",
+		"representation" : "  %tmp = add nsw i32 100, 5",
 		"incoming" : [
 			{"Edge" : [1,1],"Flow" : "bottom"}
 		],
 		"outgoing" : [
-			{"Edge" : [1,2],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [1,2],"Flow" : {"tmp" : [105,105] }}
 		]
 	},
 	"2" : {
 		"representation" : "  %tmp1 = icmp eq i32 5, 5",
 		"incoming" : [
-			{"Edge" : [1,2],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [1,2],"Flow" : {"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [2,3],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [2,3],"Flow" : {"tmp" : [105,105] }}
 		]
 	},
 	"3" : {
 		"representation" : "  br i1 %tmp1, label %bb2, label %bb3",
 		"incoming" : [
-			{"Edge" : [2,3],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [2,3],"Flow" : {"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [3,4],"Flow" : {"tmp" : [10,10] }},
-			{"Edge" : [3,5],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [3,4],"Flow" : {"tmp" : [105,105] }},
+			{"Edge" : [3,5],"Flow" : {"tmp" : [105,105] }}
 		]
 	},
 	"4" : {
 		"representation" : "  br label %bb4",
 		"incoming" : [
-			{"Edge" : [3,4],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [3,4],"Flow" : {"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [4,6],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [4,6],"Flow" : {"tmp" : [105,105] }}
 		]
 	},
 	"5" : {
 		"representation" : "  br label %bb4",
 		"incoming" : [
-			{"Edge" : [3,5],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [3,5],"Flow" : {"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [5,6],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [5,6],"Flow" : {"tmp" : [105,105] }}
 		]
 	},
 	"6" : {
-		"representation" : "  %b.0 = phi i32 [ 2, %bb2 ], [ 3, %bb3 ]",
+		"representation" : "  %b.0 = phi i32 [ 2, %bb2 ], [ 10, %bb3 ]",
 		"incoming" : [
-			{"Edge" : [4,6],"Flow" : {"tmp" : [10,10] }},
-			{"Edge" : [5,6],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [4,6],"Flow" : {"tmp" : [105,105] }},
+			{"Edge" : [5,6],"Flow" : {"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [6,7],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [6,7],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] }}
 		]
 	},
 	"7" : {
-		"representation" : "  %tmp5 = mul nsw i32 %b.0, 2",
+		"representation" : "  %tmp5 = mul nsw i32 %b.0, 50",
 		"incoming" : [
-			{"Edge" : [6,7],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [6,7],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] }}
 		],
 		"outgoing" : [
-			{"Edge" : [7,8],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [7,8],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] }}
 		]
 	},
 	"8" : {
+		"representation" : "  %tmp6 = sdiv i32 %b.0, 25",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] }}
+		],
+		"outgoing" : [
+			{"Edge" : [8,9],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] }}
+		]
+	},
+	"9" : {
+		"representation" : "  %tmp7 = srem i32 %b.0, 25",
+		"incoming" : [
+			{"Edge" : [8,9],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] }}
+		],
+		"outgoing" : [
+			{"Edge" : [9,10],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] }}
+		]
+	},
+	"10" : {
+		"representation" : "  %tmp8 = add nsw i32 %b.0, 100",
+		"incoming" : [
+			{"Edge" : [9,10],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] }}
+		],
+		"outgoing" : [
+			{"Edge" : [10,11],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] }}
+		]
+	},
+	"11" : {
+		"representation" : "  %tmp9 = sub nsw i32 %b.0, 100",
+		"incoming" : [
+			{"Edge" : [10,11],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] }}
+		],
+		"outgoing" : [
+			{"Edge" : [11,12],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		]
+	},
+	"12" : {
+		"representation" : "  %tmp10 = ashr i32 %b.0, 2",
+		"incoming" : [
+			{"Edge" : [11,12],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		],
+		"outgoing" : [
+			{"Edge" : [12,13],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		]
+	},
+	"13" : {
+		"representation" : "  %tmp11 = shl i32 %b.0, 2",
+		"incoming" : [
+			{"Edge" : [12,13],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		],
+		"outgoing" : [
+			{"Edge" : [13,14],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		]
+	},
+	"14" : {
+		"representation" : "  %tmp12 = and i32 %b.0, 5",
+		"incoming" : [
+			{"Edge" : [13,14],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		],
+		"outgoing" : [
+			{"Edge" : [14,15],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		]
+	},
+	"15" : {
+		"representation" : "  %tmp13 = or i32 %b.0, 5",
+		"incoming" : [
+			{"Edge" : [14,15],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		],
+		"outgoing" : [
+			{"Edge" : [15,16],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
+		]
+	},
+	"16" : {
 		"representation" : "  ret i32 0",
 		"incoming" : [
-			{"Edge" : [7,8],"Flow" : {"tmp" : [10,10] }}
+			{"Edge" : [15,16],"Flow" : {"b.0" : [2,10] ,"tmp" : [105,105] ,"tmp10" : [0,2] ,"tmp11" : [8,40] ,"tmp5" : [100,500] ,"tmp6" : [0.08,0.4] ,"tmp7" : [2,10] ,"tmp8" : [102,110] ,"tmp9" : [-98,-90] }}
 		],
 		"outgoing" : [
 

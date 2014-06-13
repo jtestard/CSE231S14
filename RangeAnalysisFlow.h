@@ -33,8 +33,8 @@ typedef struct _RangeDomainElement{
 	bool undefined;
 	_RangeDomainElement()
 	{
-			upper = std::numeric_limits<float>::infinity();
-			lower = -std::numeric_limits<float>::infinity();
+			upper = 0;//BOTTOM IS 0 RANGEstd::numeric_limits<float>::infinity();
+			lower = 0;//BOTTOM IS 0 RANGE-std::numeric_limits<float>::infinity();
 			top = false;
 			bottom = true;
 			undefined = false;

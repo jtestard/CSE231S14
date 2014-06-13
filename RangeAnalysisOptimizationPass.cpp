@@ -51,4 +51,4 @@ namespace {
 }
 
 char RangeAnalysisOptimizationPass::ID = 0;
-static RegisterPass<RangeAnalysisOptimizationPass> X("rangeAnalysisOptimization", "Constant Propagation Analysis Optimization Pass", false, false);
+static RegisterPass<RangeAnalysisOptimizationPass> X("rangeAnalysisOptimization", "Range Analysis Optimization Pass", false, false);

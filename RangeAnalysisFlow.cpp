@@ -80,6 +80,7 @@ RangeAnalysisFlow::RangeAnalysisFlow(string input) :
 RangeAnalysisFlow::RangeAnalysisFlow(
 		RangeAnalysisFlow *flow) :
 		Flow(flow->basic) {
+	this->basic = flow->basic;
 	this->value = flow->value;
 }
 
@@ -106,101 +107,58 @@ Flow* RangeAnalysisFlow::join(Flow* otherSuper) {
 		return f;
 	}
 
+
 	//Join anything with top will give you top.
 	if (this->basic == TOP || other->basic == TOP)
 		return new RangeAnalysisFlow(TOP);
 
-	//Merge the input from both.
-	RangeAnalysisFlow* f = new RangeAnalysisFlow();
-
-	//f = other;
-	for (map<string, RangeDomainElement>::iterator it = this->value.begin();
-			it != this->value.end(); it++) {
-
-		if (other->value.find(it->first) == other->value.end()) {
-			// They don't have the same key! We're good!
-			f->value[it->first] = this->value.find(it->first)->second;
-		} else {
-			// Oh no! They do have the same key! We need to check if they have
-			// the same values! if they do then we're good
-			RangeDomainElement otherVal = other->value.find(it->first)->second;
-			RangeDomainElement thisVal = this->value.find(it->first)->second;
-
-			//if (otherVal == thisVal)
-			//take the largest range of the two values to be the new range
-			f->value[it->first] = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
-																			(const RangeDomainElement*) &thisVal);
-			/*
-			if(RangeDomainElementisEqual(	(const RangeDomainElement*) &otherVal,
-											(const RangeDomainElement*) &thisVal)	)
-				// OK, we can replicate the value since both branches
-				// had the same value for this variable
-				f->value[it->first] = otherVal;
-
-			else
-			{
-				f->value[it->first] = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
-																(const RangeDomainElement*) &thisVal);
-			}
-
-			*/
-			// Nope! They have different values
-			// we need to omit this variable for
-			// the (implicit) "set"
-
-		}
+//Merge the input from both.
+	RangeAnalysisFlow* f = new RangeAnalysisFlow(other);
+	for (map<string, RangeDomainElement>::iterator it = this->value.begin(); it != this->value.end(); it++) {
+				if (f->value.find(it->first) == f->value.end()) {
+					errs() << "New key\n";
+					// They don't have the same key! We're good!
+					f->value[it->first] = it->second;
+				} else {
+					errs() << "Existing key\n";
+					// Oh no! They do have the same key! We need to check if they have
+					// the same values! if they do then we're good
+					RangeDomainElement otherVal = other->value.find(it->first)->second;
+					RangeDomainElement thisVal = this->value.find(it->first)->second;
+					RangeDomainElement joinedVal = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
+							(const RangeDomainElement*) &thisVal);
+					f->value[it->first] = joinedVal;
+				}
 	}
 
-	/*for (map<string, RangeDomainElement>::iterator it = other->value.begin();
-			it != other->value.end(); it++) {
 
-		if (this->value.find(it->first) == this->value.end()) {
-			// They don't have the same key! We're good!
-			f->value[it->first] = other->value.find(it->first)->second;
-		} else {
-			// Oh no! They do have the same key! We need to check if they have
-			// the same values! if they do then we're good
-			RangeDomainElement thisVal = this->value.find(it->first)->second;
-			RangeDomainElement otherVal = other->value.find(it->first)->second;
 
-			//if (otherVal == thisVal)
-			if(RangeDomainElementisEqual(	(const RangeDomainElement*) &otherVal,
-											(const RangeDomainElement*) &thisVal)	)
-				// OK, we can replicate the value since both branches
-				// had the same value for this variable
-				f->value[it->first] = otherVal;
-
-			//else
-			// Nope! They have different values
-			// we need to omit this variable for
-			// the (implicit) "set"
-
-		}
-	}*/
-
-//	errs()<< "JOINING!\n";
-//	for (map<string, float>::iterator it = f->value.begin();
-//				it != f->value.end(); it++) {
-//		errs()<< it->first << " -> " << it->second << "\n";
+////DEBUG TO CHECK JOIN WORKS
+//int mycount, hiscount, lastcount;
+//mycount = this->value.size();
+//hiscount = other->value.size();
+////END DEBUG TO CHECK JOIN WORKS
+//
+//
+//	//f = other;
+//	for (map<string, RangeDomainElement>::iterator it = this->value.begin();
+//			it != this->value.end(); it++) {
+//
+//		if (other->value.find(it->first) == other->value.end()) {
+//			// They don't have the same key! We're good!
+//			f->value[it->first] = this->value.find(it->first)->second;
+//		} else {
+//			// Oh no! They do have the same key! We need to check if they have
+//			// the same values! if they do then we're good
+//			RangeDomainElement otherVal = other->value.find(it->first)->second;
+//			RangeDomainElement thisVal = this->value.find(it->first)->second;
+//			RangeDomainElement joinedVal = JoinRangeDomainElements(	(const RangeDomainElement*) &otherVal,
+//					(const RangeDomainElement*) &thisVal);
+//			f->value[it->first] = joinedVal;
+//		}
 //	}
+//lastcount = other->value.size();
 
-	//Get all keys
-	/*set<string> keys;
-	 for (map<string, set<string> >::iterator it = this->value.begin() ; it != this->value.end() ; it++)
-	 keys.insert(it->first);
-	 for (map<string, set<string> >::iterator it = other->value.begin() ; it != other->value.end() ; it++)
-	 keys.insert(it->first);
-
-	 for (set<string>::iterator it = keys.begin() ; it != keys.end() ; it++) {
-	 string key = *it;
-	 set<string> values;
-	 for (set<string>::iterator j = this->value[key].begin(); j != this->value[key].end() ; j++)
-	 values.insert(*j);
-	 for (set<string>::iterator j = other->value[key].begin(); j != other->value[key].end() ; j++)
-	 values.insert(*j);
-	 f->value[key] = values;
-	 }
-	 */
 	return f;
 
 }
@@ -219,12 +177,25 @@ RangeDomainElement JoinRangeDomainElements(const RangeDomainElement* A, const Ra
 
 	RangeDomainElement maxAB;
 
+	//Sanity checks. Return bottom if both A and B have not had bottom cleared
+	if((A->bottom == true) && (B->bottom == true))
+		return maxAB;	//Just return the default domain element, if no one was smart enough to clear bottom.
+	//Return B if A is bottom, since A has no range
+	if(A->bottom == true)
+		{return *B;}
+	//Return A if B is bottom, since B has no range
+	if(B->bottom == true)
+		{return *A;}
+
+
 	//If A has the lowest of the low range, make maxAB take that value.
 	maxAB.lower = (A->lower <= B->lower) ? A->lower : B->lower;
 	//If A has the highest of the high range, make maxAB take that value.
 	maxAB.upper = (A->upper >= B->upper) ? A->upper : B->upper;
 	//Preserve the TOP if it has been set in one of these variables
 	maxAB.top = (A->top | B->top);
+	//clear the BOTTOM if it has been cleared in both of these variables
+	maxAB.bottom = (A->bottom & B->bottom);
 
 	return maxAB;
 }

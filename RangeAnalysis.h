@@ -71,7 +71,7 @@ protected:
 							//Give a chance for some complex control to not be considered as a loop.
 
 public:
-	float computeOp(float leftVal, float rightVal, unsigned opcode);
+//	float computeOp(float leftVal, float rightVal, unsigned opcode);
 	RangeDomainElement computeOpRange(RangeDomainElement leftRange, RangeDomainElement rightRange, unsigned opcode);
 
 
@@ -82,5 +82,10 @@ public:
 //Helper function to set variables with a different range but the same name to top
 //This is used during merge control flow as a way of dealing with infinite range analysis loops
 void DeleteDifferentRanges(RangeAnalysisFlow* A, RangeAnalysisFlow* B);
+
+//Used to resolve an operand value wherever possible to a float. Will give up in some cases
+//Probably
+RangeDomainElement getOperandValue(Value* Operand);
+
 
 #endif

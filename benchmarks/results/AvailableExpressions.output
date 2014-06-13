@@ -1,0 +1,475 @@
+Printing analysis 'Available Expression Analysis Optimization Pass' for function '__cxx_global_var_init':
+CONSTANT PROPAGATION ANALYSES test : 
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #1",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  ret void",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+Printing analysis 'Available Expression Analysis Optimization Pass' for function 'main':
+CONSTANT PROPAGATION ANALYSES test : 
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #1",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  ret void",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  %1 = fcmp oeq float 0x4015333340000000, 6.000000e+00",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  br i1 %1, label %2, label %6",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"},
+			{"Edge" : [2,7],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  %3 = fadd float 0x4015333340000000, 0x402E9999A0000000",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [3,4],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"4" : {
+		"representation" : "  %4 = fptosi float %3 to i32",
+		"incoming" : [
+			{"Edge" : [3,4],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [4,5],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"5" : {
+		"representation" : "  %5 = add nsw i32 10, 10",
+		"incoming" : [
+			{"Edge" : [4,5],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [5,6],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"6" : {
+		"representation" : "  br label %10",
+		"incoming" : [
+			{"Edge" : [5,6],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [6,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"7" : {
+		"representation" : "  %7 = fadd float 0x4015333340000000, 0x402E9999A0000000",
+		"incoming" : [
+			{"Edge" : [2,7],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [7,8],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"8" : {
+		"representation" : "  %8 = fptosi float %7 to i32",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [8,9],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"9" : {
+		"representation" : "  %9 = add nsw i32 10, 10",
+		"incoming" : [
+			{"Edge" : [8,9],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [9,10],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"10" : {
+		"representation" : "  br label %10",
+		"incoming" : [
+			{"Edge" : [9,10],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [10,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"11" : {
+		"representation" : "  %c.0 = phi i32 [ %4, %2 ], [ %8, %6 ]",
+		"incoming" : [
+			{"Edge" : [6,11],"Flow" : "%" : fadd 5.3, 15.3 }},
+			{"Edge" : [10,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [11,12],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"12" : {
+		"representation" : "  %d.0 = phi i32 [ %5, %2 ], [ %9, %6 ]",
+		"incoming" : [
+			{"Edge" : [11,12],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [12,13],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"13" : {
+		"representation" : "  %11 = zext i16 2 to i32",
+		"incoming" : [
+			{"Edge" : [12,13],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [13,14],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"14" : {
+		"representation" : "  %12 = ashr i32 %11, 2",
+		"incoming" : [
+			{"Edge" : [13,14],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [14,15],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"15" : {
+		"representation" : "  %13 = trunc i32 %12 to i16",
+		"incoming" : [
+			{"Edge" : [14,15],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [15,16],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"16" : {
+		"representation" : "  %14 = add nsw i32 %c.0, %d.0",
+		"incoming" : [
+			{"Edge" : [15,16],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [16,17],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"17" : {
+		"representation" : "  %15 = add nsw i32 %c.0, %d.0",
+		"incoming" : [
+			{"Edge" : [16,17],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [17,18],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"18" : {
+		"representation" : "  %16 = add nsw i32 %15, %d.0",
+		"incoming" : [
+			{"Edge" : [17,18],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [18,19],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"19" : {
+		"representation" : "  ret i32 0",
+		"incoming" : [
+			{"Edge" : [18,19],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+Printing analysis 'Available Expression Analysis Optimization Pass' for function '_GLOBAL__I_a':
+CONSTANT PROPAGATION ANALYSES test : 
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* @_ZStL8__ioinit)",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  %1 = call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init"* @_ZStL8__ioinit, i32 0, i32 0), i8* @__dso_handle) #1",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  ret void",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  %1 = fcmp oeq float 0x4015333340000000, 6.000000e+00",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  br i1 %1, label %2, label %6",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [2,3],"Flow" : "bottom"},
+			{"Edge" : [2,7],"Flow" : "bottom"}
+		]
+	},
+	"3" : {
+		"representation" : "  %3 = fadd float 0x4015333340000000, 0x402E9999A0000000",
+		"incoming" : [
+			{"Edge" : [2,3],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [3,4],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"4" : {
+		"representation" : "  %4 = fptosi float %3 to i32",
+		"incoming" : [
+			{"Edge" : [3,4],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [4,5],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"5" : {
+		"representation" : "  %5 = add nsw i32 10, 10",
+		"incoming" : [
+			{"Edge" : [4,5],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [5,6],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"6" : {
+		"representation" : "  br label %10",
+		"incoming" : [
+			{"Edge" : [5,6],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [6,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"7" : {
+		"representation" : "  %7 = fadd float 0x4015333340000000, 0x402E9999A0000000",
+		"incoming" : [
+			{"Edge" : [2,7],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [7,8],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"8" : {
+		"representation" : "  %8 = fptosi float %7 to i32",
+		"incoming" : [
+			{"Edge" : [7,8],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [8,9],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"9" : {
+		"representation" : "  %9 = add nsw i32 10, 10",
+		"incoming" : [
+			{"Edge" : [8,9],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [9,10],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"10" : {
+		"representation" : "  br label %10",
+		"incoming" : [
+			{"Edge" : [9,10],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [10,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		]
+	},
+	"11" : {
+		"representation" : "  %c.0 = phi i32 [ %4, %2 ], [ %8, %6 ]",
+		"incoming" : [
+			{"Edge" : [6,11],"Flow" : "%" : fadd 5.3, 15.3 }},
+			{"Edge" : [10,11],"Flow" : "%" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [11,12],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"12" : {
+		"representation" : "  %d.0 = phi i32 [ %5, %2 ], [ %9, %6 ]",
+		"incoming" : [
+			{"Edge" : [11,12],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [12,13],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"13" : {
+		"representation" : "  %11 = zext i16 2 to i32",
+		"incoming" : [
+			{"Edge" : [12,13],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [13,14],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"14" : {
+		"representation" : "  %12 = ashr i32 %11, 2",
+		"incoming" : [
+			{"Edge" : [13,14],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [14,15],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"15" : {
+		"representation" : "  %13 = trunc i32 %12 to i16",
+		"incoming" : [
+			{"Edge" : [14,15],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [15,16],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"16" : {
+		"representation" : "  %14 = add nsw i32 %c.0, %d.0",
+		"incoming" : [
+			{"Edge" : [15,16],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [16,17],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"17" : {
+		"representation" : "  %15 = add nsw i32 %c.0, %d.0",
+		"incoming" : [
+			{"Edge" : [16,17],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [17,18],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"18" : {
+		"representation" : "  %16 = add nsw i32 %15, %d.0",
+		"incoming" : [
+			{"Edge" : [17,18],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+			{"Edge" : [18,19],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		]
+	},
+	"19" : {
+		"representation" : "  ret i32 0",
+		"incoming" : [
+			{"Edge" : [18,19],"Flow" : "%" : fadd 5.3, 15.3 ,"%c.0" : fadd 5.3, 15.3 ,"%d.0" : fadd 5.3, 15.3 }}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
+
+Print CFG (with flow) : 
+"Analysis" : [
+	"1" : {
+		"representation" : "  call void @__cxx_global_var_init()",
+		"incoming" : [
+			{"Edge" : [1,1],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		]
+	},
+	"2" : {
+		"representation" : "  ret void",
+		"incoming" : [
+			{"Edge" : [1,2],"Flow" : "bottom"}
+		],
+		"outgoing" : [
+
+		]
+	}
+]
