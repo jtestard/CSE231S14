@@ -1,0 +1,56 @@
+\relax 
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}The interface}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}The Context Flow Graph}{1}}
+\newlabel{CFG}{{1}{1}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {1}Context Flow Graph}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}The Flow Class}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}The Static Analysis Class}{2}}
+\newlabel{worklist}{{2}{3}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {2}Worklist Algorithm}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}The AnalysisPass}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Pointer Analysis}{3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Lattice \& Flow Functions}{3}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Pointer Analysis Instruction coverage\relax }}{4}}
+\providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
+\newlabel{pointerAnalysisTable}{{1}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.1}Lattice}{4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.1.2}Flow Functions}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Implementation}{4}}
+<<<<<<< HEAD
+\newlabel{PAFF}{{3}{4}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}PointerAnalysis Flow Functions}{4}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Constant Propagation}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Available Expressions}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Range Analysis}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces A Range analysis merge. Unlike constant propagation, $x$ becomes all possible values at $in_c$ and not top. \relax }}{5}}
+\newlabel{RngMergeNode}{{1}{5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Lattice \& Flow Functions}{5}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.1}Lattice and the Join}{5}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces The range analysis Join. A heuristic is used to quickly reach a fixed point for the loop body statements.\relax }}{6}}
+\newlabel{LoopDetectHeuristic}{{2}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {6.1.2}Flow Functions}{6}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Implementation}{6}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Range analysis flow functions\relax }}{7}}
+\newlabel{rangeAnalysisTable}{{2}{7}}
+\newlabel{PAFF}{{4}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}Range analysis flow functions}{7}}
+\newlabel{PAFF}{{5}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}Heuristic loop detector $h(in)$}{8}}
+\newlabel{PAFF}{{6}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Per domain element join}{8}}
+=======
+\@writefile{toc}{\contentsline {section}{\numberline {4}Constant Propagation}{4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Lattice, Flow \& Flow Functions}{5}}
+\newlabel{SSA}{{3}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {3}SSA preview}{6}}
+\newlabel{SSAFF}{{4}{6}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {4}SSA within a branch preview}{6}}
+\newlabel{casting}{{5}{7}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {5}value preservation inside casts}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Available Expressions}{7}}
+\newlabel{mAEA}{{6}{8}}
+\@writefile{lol}{\contentsline {lstlisting}{\numberline {6}Merging in Available Expression Analysis preview}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Range Analysis}{8}}
+>>>>>>> b29c30874503a1b718c997e2b278ad06d9ceeb56
+\@writefile{toc}{\contentsline {section}{\numberline {7}Conclusion}{8}}

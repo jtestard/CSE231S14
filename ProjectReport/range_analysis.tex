@@ -58,8 +58,8 @@ The set join is complicated for range analysis so extra discussion is provided a
 Let $Vars$ be the set of C++ variables present in the program. Given two flows $F,F'$, we have :
 \begin{align*}
 F \sqsubseteq & F'  & \lra & & F \subseteq F' \\
-\top & & \lra & & \{ X \ra \{-\infty; +\infty\} | \forall X \in Vars \}\\ 
-\bot & & \lra & & \emptyset \\ 
+\bot & & \lra & & \{ X \ra \{-\infty; +\infty\} | \forall X \in Vars \}\\ 
+\top & & \lra & & \emptyset \\ 
 F \sqcup F' & & \lra & & (F \ra h(F)) \cup (F'\ra h(F')) \\
 F \sqcap F' & & \lra & & F \cap F'
 \end{align*}
